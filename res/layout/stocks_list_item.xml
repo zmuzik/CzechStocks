@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/stockNameTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:scrollHorizontally="true"
+        android:ellipsize="end"
+        android:maxLines="1"        
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/percentTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="%"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/stockDeltaTV"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/percentTV"
+        android:gravity="right"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/stockPriceTV"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/stockDeltaTV"
+        android:gravity="right"
+        android:textSize="18sp" />
+
+</RelativeLayout>
