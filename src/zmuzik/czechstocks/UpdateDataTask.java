@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -19,39 +17,40 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 public class UpdateDataTask extends AsyncTask {
 
+	private final String TAG = this.getClass().getSimpleName();
+	CzechStocksApp app;
+	
 	private static final String STOCKS_URL = "http://162.252.242.87:3001/stocks.json";
 	private final int HTTP_OK = 200;
-	private final String TAG = this.getClass().getSimpleName();
-	private StockDao stockDao;
-	private StocksListFragment fragment;
+
+	UpdateDataTask(Context context) {
+		app = (CzechStocksApp) context;
+	}
 
 	@Override
 	protected Object doInBackground(Object... params) {
-		//XXX
-		fragment = (StocksListFragment) params[0];
-		stockDao = (StockDao) params[1];
-
 		String response = downloadStockData(STOCKS_URL);
 		saveStocksToDb(response);
 		return null;
 	}
-	
+
 	@Override
 	protected void onPostExecute(Object result) {
-		//super.onPostExecute(result);
-		fragment.refreshData();
+		if (app != null && app.getMainActivity() != null) {
+			app.getMainActivity().refreshFragments();
+		}
 	}
 
 	public void saveStocksToDb(String serverResponse) {
 		try {
 			JSONArray stocksJsonArray = new JSONArray(serverResponse);
-			stockDao.deleteAll();
+			app.getStockDao().deleteAll();
 			for (int i = 0; i < stocksJsonArray.length(); i++) {
 				JSONObject jsonObject = stocksJsonArray.getJSONObject(i);
 
@@ -62,7 +61,7 @@ public class UpdateDataTask extends AsyncTask {
 				Date stamp = new SimpleDateFormat("M.d.yyyy HH:mm").parse(jsonObject.getString("stamp"));
 
 				Stock stock = new Stock(null, isin, name, price, delta, stamp);
-				stockDao.insert(stock);
+				app.getStockDao().insert(stock);
 
 				Log.i(TAG, jsonObject.toString());
 			}

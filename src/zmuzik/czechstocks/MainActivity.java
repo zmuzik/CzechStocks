@@ -2,33 +2,33 @@ package zmuzik.czechstocks;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-import zmuzik.czechstocks.DaoMaster.DevOpenHelper;
+import zmuzik.czechstocks.R.layout;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
-	final String TAG = this.getClass().getSimpleName();
-	final String DB_NAME = "czech-stocks-db";
 
-	SQLiteDatabase db;
-	DaoMaster daoMaster;
-	DaoSession daoSession;
-	StockDao stockDao;
-	StockListItemDao stockListItemDao;
+	final String TAG = this.getClass().getSimpleName();
+	CzechStocksApp app;
+	MenuItem mRefreshMenuItem;
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -47,10 +47,12 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		app = (CzechStocksApp) getApplicationContext();
+		app.setMainActiviy(this);
+
+		new UpdateDataTask(app).execute();
+
 		setContentView(R.layout.activity_main);
-
-		initDb();
-
 		// Set up the action bar.
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -83,20 +85,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		}
 	}
 
-	void initDb() {
-		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this.getApplicationContext(), "czech-stocks-db", null);
-		db = helper.getWritableDatabase();
-		daoMaster = new DaoMaster(db);
-		daoSession = daoMaster.newSession();
-		stockDao = daoSession.getStockDao();
-		stockListItemDao = daoSession.getStockListItemDao();
-
-		StockDao.createTable(db, true);
-		StockListItemDao.createTable(db, true);
-		PortfolioItemDao.createTable(db, true);
-
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -111,10 +99,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			actionEditStockList();
 			break;
 		case R.id.action_refresh:
-			actionRefresh();
-			break;
-		case R.id.action_settings:
-			actionSettings();
+			mRefreshMenuItem = item;
+			setMovingRefreshIcon();
+			actionDataRefresh();
 			break;
 		default:
 			break;
@@ -124,8 +111,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	}
 
 	void actionEditStockList() {
-		List<Stock> allStocks = stockDao.loadAll();
-		List<StockListItem> allStockListItems = stockListItemDao.loadAll();
+		List<Stock> allStocks = app.getStockDao().loadAll();
+		List<StockListItem> allStockListItems = app.getStockListItemDao().loadAll();
 		ArrayList<String> allStockListItemsStrings = new ArrayList<String>();
 		for (StockListItem item : allStockListItems) {
 			allStockListItemsStrings.add(item.getIsin());
@@ -157,10 +144,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				stockListItemDao.deleteAll();
+				app.getStockListItemDao().deleteAll();
 				for (int i = 0; i < selectedStocks.length; i++) {
 					if (selectedStocks[i]) {
-						stockListItemDao.insert(new StockListItem((long) i, stockIsins[i]));
+						app.getStockListItemDao().insert(new StockListItem((long) i, stockIsins[i]));
 					}
 				}
 				refreshFragments();
@@ -170,8 +157,24 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		builder.show();
 	}
 
-	void actionRefresh() {
-		Toast.makeText(this, "Add or remove selected", Toast.LENGTH_SHORT).show();
+	void actionDataRefresh() {
+		new UpdateDataTask(app).execute();
+	}
+
+	void setMovingRefreshIcon() {
+		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		ImageView iv = (ImageView) inflater.inflate(layout.refresh_action_view, null);
+		Animation rotation = AnimationUtils.loadAnimation(this, R.anim.clockwise_refresh);
+		rotation.setRepeatCount(Animation.INFINITE);
+		iv.startAnimation(rotation);
+		mRefreshMenuItem.setActionView(iv);
+	}
+	
+	void setStaticRefreshIcon() {
+		if (mRefreshMenuItem != null && mRefreshMenuItem.getActionView() != null) {
+			mRefreshMenuItem.getActionView().clearAnimation();
+			mRefreshMenuItem.setActionView(null);
+        }
 	}
 
 	void actionSettings() {
@@ -179,6 +182,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	}
 
 	void refreshFragments() {
+		setStaticRefreshIcon();
 		StocksListFragment fragment = (StocksListFragment) mSectionsPagerAdapter.getItem(0);
 		fragment.refreshData();
 	}
@@ -236,7 +240,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
 		@Override
 		public CharSequence getPageTitle(int position) {
-			Locale l = Locale.getDefault();
 			switch (position) {
 			case 0:
 				return getString(R.string.tab_title_section1);
