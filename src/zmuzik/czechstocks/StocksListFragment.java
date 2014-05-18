@@ -22,7 +22,7 @@ public class StocksListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		app=(CzechStocksApp) this.getActivity().getApplicationContext();
+		app = (CzechStocksApp) this.getActivity().getApplicationContext();
 		refreshData();
 	}
 
@@ -62,7 +62,12 @@ public class StocksListFragment extends ListFragment {
 				return decFormater.format(doubleAmount);
 			case R.id.stockDeltaTV:
 				doubleAmount = Double.valueOf(text);
-				return decFormater.format(doubleAmount);
+				if (doubleAmount > 0) {
+					v.setTextAppearance(app, R.style.greenNumber);
+				} else if (doubleAmount < 0) {
+					v.setTextAppearance(app, R.style.redNumber);
+				}
+				return decFormater.format(doubleAmount) + "%";
 			}
 			return text;
 		}

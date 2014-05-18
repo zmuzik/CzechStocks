@@ -17,4 +17,12 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="greenNumber">
+        <item name="android:textColor">#00DD00</item>
+    </style>
+
+    <style name="redNumber">
+        <item name="android:textColor">#DD0000</item>
+    </style>
+
 </resources>

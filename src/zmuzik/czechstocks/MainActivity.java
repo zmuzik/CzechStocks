@@ -169,12 +169,12 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		iv.startAnimation(rotation);
 		mRefreshMenuItem.setActionView(iv);
 	}
-	
+
 	void setStaticRefreshIcon() {
 		if (mRefreshMenuItem != null && mRefreshMenuItem.getActionView() != null) {
 			mRefreshMenuItem.getActionView().clearAnimation();
 			mRefreshMenuItem.setActionView(null);
-        }
+		}
 	}
 
 	void actionSettings() {
