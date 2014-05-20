@@ -118,12 +118,17 @@ public class PortfolioListFragment extends ListFragment {
 				dialogBuilder.setPositiveButton(res.getString(R.string.button_save),
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								PortfolioItemDao pid = app.getPortfolioItemDao();
-								PortfolioItem pi = pid.loadByRowId(rowid);
-								pi.setPrice(Double.valueOf(priceET.getText().toString()));
-								pi.setQuantity(Integer.valueOf(quantityET.getText().toString()));
-								pid.update(pi);
-								refreshData();
+								double price = Double.valueOf(priceET.getText().toString());
+								int quantity = Integer.valueOf(quantityET.getText().toString());
+								if (price > 0 && quantity > 0) {
+									PortfolioItemDao pid = app.getPortfolioItemDao();
+									PortfolioItem pi = pid.loadByRowId(rowid);
+									pi.setPrice(price);
+									pi.setQuantity(quantity);
+									pid.update(pi);
+									refreshData();
+								}
+
 								dialog.dismiss();
 							}
 						});

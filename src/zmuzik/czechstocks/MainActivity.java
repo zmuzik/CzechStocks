@@ -186,14 +186,18 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				PortfolioItemDao pid = app.getPortfolioItemDao();
 				PortfolioItem pi = new PortfolioItem();
 
-				int position = spinner.getSelectedItemPosition();
-				Stock stock = allStocks.get(position);
+				int quantity = Integer.valueOf(quantityET.getText().toString());
+				double price = Double.valueOf(priceET.getText().toString());
+				if (quantity > 0 && price > 0) {
+					int position = spinner.getSelectedItemPosition();
+					Stock stock = allStocks.get(position);
 
-				pi.setIsin(stock.getIsin());
-				pi.setPrice(Double.valueOf(priceET.getText().toString()));
-				pi.setQuantity(Integer.valueOf(quantityET.getText().toString()));
-				pid.insert(pi);
-				refreshFragments();
+					pi.setIsin(stock.getIsin());
+					pi.setPrice(price);
+					pi.setQuantity(quantity);
+					pid.insert(pi);
+					refreshFragments();
+				}
 				dialog.dismiss();
 			}
 		});
