@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
@@ -30,7 +31,14 @@ public class PortfolioListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		app = (CzechStocksApp) this.getActivity().getApplicationContext();
+
 		refreshData();
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.portfolio_fragment, container, false);
+		return view;
 	}
 
 	public void refreshData() {
@@ -74,48 +82,51 @@ public class PortfolioListFragment extends ListFragment {
 
 				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
 				LayoutInflater inflater = getActivity().getLayoutInflater();
-				
-				LinearLayout parentLayout = (LinearLayout)inflater.inflate(R.layout.edit_portfolio_item_dialog, null);
-				
-				TextView titleTV = (TextView)parentLayout.getChildAt(0);
-				final EditText quantityET = (EditText)((LinearLayout)parentLayout.getChildAt(1)).getChildAt(1);
-				final EditText priceET = (EditText)((LinearLayout)parentLayout.getChildAt(2)).getChildAt(1);
-				
+
+				LinearLayout parentLayout = (LinearLayout) inflater.inflate(R.layout.edit_portfolio_item_dialog, null);
+
+				TextView titleTV = (TextView) parentLayout.getChildAt(0);
+				final EditText quantityET = (EditText) ((LinearLayout) parentLayout.getChildAt(1)).getChildAt(1);
+				final EditText priceET = (EditText) ((LinearLayout) parentLayout.getChildAt(2)).getChildAt(1);
+
 				quantityET.setText(String.valueOf(quantity));
 				priceET.setText(String.valueOf(origPrice));
 				titleTV.setText(stockName);
-				
+
 				dialogBuilder.setTitle(R.string.edit_remove_title);
 				dialogBuilder.setView(parentLayout);
-				
-				dialogBuilder.setCancelable(true);
-				
-				dialogBuilder.setNegativeButton(res.getString(R.string.button_cancel), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.dismiss();
-					}
-				});
-				
-				dialogBuilder.setNeutralButton(res.getString(R.string.button_remove), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						PortfolioItemDao pid = app.getPortfolioItemDao();
-						pid.deleteByKey(rowid);
-						refreshData();
-						dialog.dismiss();
-					}
-				});
 
-				dialogBuilder.setPositiveButton(res.getString(R.string.button_save), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						PortfolioItemDao pid = app.getPortfolioItemDao();
-						PortfolioItem pi = pid.loadByRowId(rowid);
-						pi.setPrice(Double.valueOf(priceET.getText().toString()));
-						pi.setQuantity(Integer.valueOf(quantityET.getText().toString()));
-						pid.update(pi);
-						refreshData();
-						dialog.dismiss();
-					}
-				});
+				dialogBuilder.setCancelable(true);
+
+				dialogBuilder.setNegativeButton(res.getString(R.string.button_cancel),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.dismiss();
+							}
+						});
+
+				dialogBuilder.setNeutralButton(res.getString(R.string.button_remove),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								PortfolioItemDao pid = app.getPortfolioItemDao();
+								pid.deleteByKey(rowid);
+								refreshData();
+								dialog.dismiss();
+							}
+						});
+
+				dialogBuilder.setPositiveButton(res.getString(R.string.button_save),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								PortfolioItemDao pid = app.getPortfolioItemDao();
+								PortfolioItem pi = pid.loadByRowId(rowid);
+								pi.setPrice(Double.valueOf(priceET.getText().toString()));
+								pi.setQuantity(Integer.valueOf(quantityET.getText().toString()));
+								pid.update(pi);
+								refreshData();
+								dialog.dismiss();
+							}
+						});
 
 				AlertDialog dialog = dialogBuilder.create();
 				dialog.show();

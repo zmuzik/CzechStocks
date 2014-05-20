@@ -185,13 +185,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			public void onClick(DialogInterface dialog, int which) {
 				PortfolioItemDao pid = app.getPortfolioItemDao();
 				PortfolioItem pi = new PortfolioItem();
-				
+
 				int position = spinner.getSelectedItemPosition();
 				Stock stock = allStocks.get(position);
-				
+
 				pi.setIsin(stock.getIsin());
 				pi.setPrice(Double.valueOf(priceET.getText().toString()));
-				pi.setQuantity(Integer.valueOf(quantityET.getText().toString() ));
+				pi.setQuantity(Integer.valueOf(quantityET.getText().toString()));
 				pid.insert(pi);
 				refreshFragments();
 				dialog.dismiss();
@@ -240,7 +240,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				mSectionsPagerAdapter.portfolioListFragment.refreshData();
 			}
 		}
-		setStaticRefreshIcon();
 	}
 
 	@Override

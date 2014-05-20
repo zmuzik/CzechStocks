@@ -9,7 +9,9 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.LinearLayout;
@@ -31,6 +33,12 @@ public class StocksListFragment extends ListFragment {
 		app = (CzechStocksApp) this.getActivity().getApplicationContext();
 		refreshData();
 	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.stocks_list_fragment, container, false);
+		return view;
+	}
 
 	public void refreshData() {
 		String select = "SELECT _id, NAME, DELTA, PRICE FROM STOCK_LIST;";
@@ -41,7 +49,8 @@ public class StocksListFragment extends ListFragment {
 		cursorAdapter = new StocksCursorAdapter(this.getActivity(), R.layout.stocks_list_item, cursor, from, to);
 		setListAdapter(cursorAdapter);
 	}
-
+	
+	
 	@Override
 	public void onListItemClick(ListView l, View v, int pos, long id) {
 		getListView().setItemChecked(pos, true);

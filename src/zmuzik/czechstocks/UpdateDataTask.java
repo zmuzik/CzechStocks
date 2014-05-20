@@ -14,20 +14,27 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 public class UpdateDataTask extends AsyncTask {
 
 	private final String TAG = this.getClass().getSimpleName();
 	CzechStocksApp app;
-	
+	private boolean mDownloadError = false;
+
 	private static final String STOCKS_URL = "http://162.252.242.87:3001/stocks.json";
 	private final int HTTP_OK = 200;
+	private final int CONNECTION_TIMEOUT = 8000;
+	private final int SOCKET_TIMEOUT = 8000;
 
 	UpdateDataTask(Context context) {
 		app = (CzechStocksApp) context;
@@ -36,14 +43,21 @@ public class UpdateDataTask extends AsyncTask {
 	@Override
 	protected Object doInBackground(Object... params) {
 		String response = downloadStockData(STOCKS_URL);
-		saveStocksToDb(response);
+		if (!mDownloadError) {
+			saveStocksToDb(response);
+		}
 		return null;
 	}
 
 	@Override
 	protected void onPostExecute(Object result) {
 		if (app != null && app.getMainActivity() != null) {
-			app.getMainActivity().refreshFragments();
+			app.getMainActivity().setStaticRefreshIcon();
+			if (mDownloadError) {
+				Toast.makeText(app, R.string.toas_check_net, Toast.LENGTH_LONG).show();
+			} else {
+				app.getMainActivity().refreshFragments();
+			}
 		}
 	}
 
@@ -72,8 +86,18 @@ public class UpdateDataTask extends AsyncTask {
 
 	public String downloadStockData(String url) {
 		StringBuilder builder = new StringBuilder();
-		HttpClient client = new DefaultHttpClient();
+
+		HttpParams httpParameters = new BasicHttpParams();
+
+		int timeoutConnection = CONNECTION_TIMEOUT;
+		HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+
+		int timeoutSocket = SOCKET_TIMEOUT;
+		HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+
+		HttpClient client = new DefaultHttpClient(httpParameters);
 		HttpGet httpGet = new HttpGet(url);
+
 		try {
 			HttpResponse response = client.execute(httpGet);
 			StatusLine statusLine = response.getStatusLine();
@@ -90,8 +114,10 @@ public class UpdateDataTask extends AsyncTask {
 				Log.e(TAG, "Failed to download file");
 			}
 		} catch (ClientProtocolException e) {
+			mDownloadError = true;
 			e.printStackTrace();
 		} catch (IOException e) {
+			mDownloadError = true;
 			e.printStackTrace();
 		}
 		return builder.toString();

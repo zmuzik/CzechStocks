@@ -94,7 +94,7 @@ public class CzechStocksApp extends Application {
 		}
 	}
 
-	private boolean isTableEmpty(SQLiteDatabase db, String tableName) {
+	boolean isTableEmpty(SQLiteDatabase db, String tableName) {
 		if (tableName == null || db == null || !db.isOpen()) {
 			return false;
 		}
