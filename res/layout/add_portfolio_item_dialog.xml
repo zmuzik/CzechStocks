@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Spinner
+        android:id="@+id/chooseStockSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:padding="10dp"
+        android:prompt="@string/choose_stock_prompt" />
+
+    <EditText
+        android:id="@+id/numberOfStocksET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/number_of_stocks_hint"
+        android:inputType="number"
+        android:padding="10dp" >
+    </EditText>
+
+    <EditText
+        android:id="@+id/averagePriceET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/average_price_hint"
+        android:inputType="numberDecimal"
+        android:padding="10dp" />
+
+</LinearLayout>

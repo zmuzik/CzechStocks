@@ -12,7 +12,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -21,29 +20,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.Spinner;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
-	final String TAG = this.getClass().getSimpleName();
-	CzechStocksApp app;
-	MenuItem mRefreshMenuItem;
+	private final String TAG = this.getClass().getSimpleName();
+	private CzechStocksApp app;
 
-	/**
-	 * The {@link android.support.v4.view.PagerAdapter} that will provide
-	 * fragments for each of the sections. We use a {@link FragmentPagerAdapter}
-	 * derivative, which will keep every loaded fragment in memory. If this
-	 * becomes too memory intensive, it may be best to switch to a
-	 * {@link android.support.v13.app.FragmentStatePagerAdapter}.
-	 */
-	SectionsPagerAdapter mSectionsPagerAdapter;
+	private SectionsPagerAdapter mSectionsPagerAdapter;
+	private ViewPager mViewPager;
+	private MenuItem mRefreshMenuItem;
 
-	/**
-	 * The {@link ViewPager} that will host the section contents.
-	 */
-	ViewPager mViewPager;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,10 +68,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
 		// For each of the sections in the app, add a tab to the action bar.
 		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-			// Create a tab with text corresponding to the page title defined by
-			// the adapter. Also specify this Activity object, which implements
-			// the TabListener interface, as the callback (listener) for when
-			// this tab is selected.
 			actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
 		}
 	}
@@ -96,7 +83,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_edit:
-			actionEditStockList();
+			if (mViewPager.getCurrentItem() == 0) {
+				actionEditStockList();
+			} else {
+				actionAddPortfolioItem();
+			}
 			break;
 		case R.id.action_refresh:
 			mRefreshMenuItem = item;
@@ -157,6 +148,47 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		builder.show();
 	}
 
+	void actionAddPortfolioItem() {
+		List<Stock> allStocks = app.getStockDao().loadAll();
+		ArrayList<String> stockNames = new ArrayList<String>();
+		for (Stock item : allStocks) {
+			stockNames.add(item.getName());
+		}
+
+		// init builder
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.add_portfolio_item_dialog_title);
+		builder.setCancelable(true);
+
+		// set and inflate layout
+		LayoutInflater inflater = LayoutInflater.from(this);
+		builder.setView(inflater.inflate(R.layout.add_portfolio_item_dialog, null));
+
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				;
+			}
+		});
+
+		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				;
+			}
+		});
+
+		AlertDialog dialog = builder.create();
+		dialog.show();
+		
+		EditText et = (EditText) findViewById(R.id.averagePriceET);
+		
+		Spinner spinner = (Spinner) findViewById (R.id.chooseStockSpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String> (app, android.R.layout.simple_spinner_dropdown_item, stockNames);
+        //spinner.setAdapter(adapter);
+		
+	}
+
 	void actionDataRefresh() {
 		new UpdateDataTask(app).execute();
 	}
@@ -177,14 +209,16 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		}
 	}
 
-	void actionSettings() {
-		Toast.makeText(this, "Settings selected", Toast.LENGTH_SHORT).show();
-	}
-
 	void refreshFragments() {
+		if (mSectionsPagerAdapter != null) {
+			if (mSectionsPagerAdapter.stocksListFragment != null) {
+				mSectionsPagerAdapter.stocksListFragment.refreshData();
+			}
+			if (mSectionsPagerAdapter.portfolioListFragment != null) {
+				mSectionsPagerAdapter.portfolioListFragment.refreshData();
+			}
+		}
 		setStaticRefreshIcon();
-		StocksListFragment fragment = (StocksListFragment) mSectionsPagerAdapter.getItem(0);
-		fragment.refreshData();
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public class StocksListFragment extends ListFragment {
 	}
 
 	public void refreshData() {
-		String select = "select t1._id as _id, t1.name as NAME, t1.delta as DELTA, t1.price as PRICE from stock t1, stock_list_item t2 where t1.isin = t2.isin order by t1.name collate localized asc;";
+		String select = "SELECT _id, NAME, DELTA, PRICE FROM STOCK_LIST;";
 		cursor = app.getDb().rawQuery(select, null);
 		String[] from = { "NAME", "DELTA", "PRICE" };
 		int[] to = { R.id.stockNameTV, R.id.stockDeltaTV, R.id.stockPriceTV };
@@ -46,7 +46,7 @@ public class StocksListFragment extends ListFragment {
 		private DecimalFormat decFormater = new DecimalFormat("#######0.00");
 
 		public StocksCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
-			super(context, layout, c, from, to);
+			super(context, layout, c, from, to, 0);
 		}
 
 		@Override

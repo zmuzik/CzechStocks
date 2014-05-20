@@ -35,6 +35,12 @@ public class CzechStocksApp extends Application {
 		mStockListItemDao = mDaoSession.getStockListItemDao();
 		mPortfolioItemDao = mDaoSession.getPortfolioItemDao();
 
+		fillTableStockListItem();
+		createStockListView();
+		createPortfolioView();
+	}
+	
+	private void fillTableStockListItem() {
 		if (isTableEmpty(mDb, "STOCK_LIST_ITEM")) {
 			Log.i(TAG, "Filling STOCK_LIST_ITEM table with default values, because it's empty.");
 			for (String isin : getResources().getStringArray(R.array.default_quotes_list)) {
@@ -43,12 +49,56 @@ public class CzechStocksApp extends Application {
 			}
 		}
 	}
+	
+	private void createStockListView() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("create view if not exists STOCK_LIST as ");
+		sb.append("select ");
+		sb.append("t1._id, ");
+		sb.append("t1.name as NAME, ");
+		sb.append("t1.delta as DELTA, ");
+		sb.append("t1.price as PRICE ");
+		sb.append("from stock t1, ");
+		sb.append("stock_list_item t2 ");
+		sb.append("where t1.isin = t2.isin ");
+		sb.append("order by t1.name collate localized asc; ");
+		
+		try {
+			mDb.execSQL(sb.toString());
+		} catch (Exception e) {
+			Log.e("Error while creating view STOCK_LIST", e.toString());
+			e.printStackTrace();
+		}
+	}
+
+	private void createPortfolioView() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("create view if not exists PORTFOLIO as ");
+		sb.append("select ");
+		sb.append("p._id, ");
+		sb.append("s.name as name, ");
+		sb.append("s.price as current_price, ");
+		sb.append("((s.price - p.price)/p.price)*100 as delta, ");
+		sb.append("p.quantity as quantity, ");
+		sb.append("p.price as original_price, ");
+		sb.append("(s.price - p.price) * p.quantity as profit ");
+		sb.append("from stock s, portfolio_item p ");
+		sb.append("where s.isin = p.isin ");
+		sb.append("order by s._id;");
+
+		try {
+			mDb.execSQL(sb.toString());
+		} catch (Exception e) {
+			Log.e("Error while creating view PORTFOLIO", e.toString());
+			e.printStackTrace();
+		}
+	}
 
 	private boolean isTableEmpty(SQLiteDatabase db, String tableName) {
 		if (tableName == null || db == null || !db.isOpen()) {
 			return false;
 		}
-		Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM "+tableName, null);
+		Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + tableName, null);
 		if (!cursor.moveToFirst()) {
 			return false;
 		}
@@ -76,11 +126,11 @@ public class CzechStocksApp extends Application {
 	PortfolioItemDao getPortfolioItemDao() {
 		return mPortfolioItemDao;
 	}
-	
+
 	void setMainActiviy(MainActivity a) {
 		mMainActivity = a;
 	}
-	
+
 	MainActivity getMainActivity() {
 		return mMainActivity;
 	}

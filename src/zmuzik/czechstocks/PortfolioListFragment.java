@@ -14,27 +14,26 @@ import android.widget.TextView;
 public class PortfolioListFragment extends ListFragment {
 	final String TAG = this.getClass().getSimpleName();
 	CzechStocksApp app;
-	StocksCursorAdapter cursorAdapter;
+	PortfolioCursorAdapter cursorAdapter;
 	private Cursor cursor;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		app = (CzechStocksApp) this.getActivity().getApplicationContext();
-		
-		String nameColumn = StockDao.Properties.Name.columnName;
-		String orderBy = nameColumn + " COLLATE LOCALIZED ASC";
-		String[] selColumns = { "_id", StockDao.Properties.Name.columnName, StockDao.Properties.Price.columnName,
-				StockDao.Properties.Delta.columnName };
-		cursor = app.getDb().query(app.getStockDao().getTablename(), selColumns, null, null, null, null, orderBy);
+		refreshData();
+	}
 
-		String[] from = { StockDao.Properties.Name.columnName, StockDao.Properties.Delta.columnName,
-				StockDao.Properties.Price.columnName };
-		int[] to = { R.id.stockNameTV, R.id.stockDeltaTV, R.id.stockPriceTV };
+	public void refreshData() {
+		String select = "select _id, NAME, CURRENT_PRICE, DELTA, QUANTITY, ORIGINAL_PRICE, PROFIT from PORTFOLIO;";
+		cursor = app.getDb().rawQuery(select, null);
+		String[] from = { "NAME", "DELTA", "QUANTITY", "ORIGINAL_PRICE", "PROFIT" };
 
-		StocksCursorAdapter adapter = new StocksCursorAdapter(this.getActivity(), R.layout.stocks_list_item, cursor,
-				from, to);
-		setListAdapter(adapter);
+		int[] to = { R.id.portfolioStockNameTV, R.id.portfolioDeltaTV, R.id.portfolioQuantityTV,
+				R.id.portfolioOriginalPriceTV, R.id.portfolioProfitTV };
+
+		cursorAdapter = new PortfolioCursorAdapter(this.getActivity(), R.layout.portfolio_item, cursor, from, to);
+		setListAdapter(cursorAdapter);
 	}
 
 	@Override
@@ -42,11 +41,11 @@ public class PortfolioListFragment extends ListFragment {
 		getListView().setItemChecked(pos, true);
 	}
 
-	class StocksCursorAdapter extends SimpleCursorAdapter {
+	class PortfolioCursorAdapter extends SimpleCursorAdapter {
 
 		private DecimalFormat decFormater = new DecimalFormat("#######0.00");
 
-		public StocksCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
+		public PortfolioCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
 			super(context, layout, c, from, to);
 		}
 
@@ -58,12 +57,32 @@ public class PortfolioListFragment extends ListFragment {
 		private String convText(TextView v, String text) {
 			double doubleAmount;
 			switch (v.getId()) {
-			case R.id.stockPriceTV:
+			case R.id.portfolioOriginalPriceTV:
 				doubleAmount = Double.valueOf(text);
-				return decFormater.format(doubleAmount);
-			case R.id.stockDeltaTV:
+				return " " + decFormater.format(doubleAmount) + " " + getResources().getString(R.string.currency);
+
+			case R.id.portfolioProfitTV:
 				doubleAmount = Double.valueOf(text);
-				return decFormater.format(doubleAmount);
+				if (doubleAmount > 0) {
+					v.setTextAppearance(app, R.style.greenNumber);
+				} else if (doubleAmount < 0) {
+					v.setTextAppearance(app, R.style.redNumber);
+				}
+				return decFormater.format(doubleAmount) + " " + getResources().getString(R.string.currency);
+
+			case R.id.portfolioDeltaTV:
+				doubleAmount = Double.valueOf(text);
+				if (doubleAmount > 0) {
+					v.setTextAppearance(app, R.style.greenNumber);
+				} else if (doubleAmount < 0) {
+					v.setTextAppearance(app, R.style.redNumber);
+				}
+				return decFormater.format(doubleAmount) + "%";
+
+			case R.id.portfolioQuantityTV:
+				int quantity = Integer.valueOf(text);
+				return text + " " + getResources().getQuantityString(R.plurals.pieces_bought_at, quantity);
+
 			}
 			return text;
 		}
