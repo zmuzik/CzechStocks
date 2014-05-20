@@ -2,26 +2,38 @@
 <resources>
 
     <string name="app_name">Czech Stocks</string>
+    
     <string name="tab_title_section1">Quotes</string>
     <string name="tab_title_section2">Portfolio</string>
+    
     <string name="action_edit">Edit</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>
-    <string name="add_stocks_dialog_title">Edit Quotes List</string>
+    
+    <string name="add_stocks_dialog_title">Add Quotes to List</string>
     <string name="add_portfolio_item_dialog_title">Add Portfolio Item</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
+    
+    <string name="remove_title">Remove</string>
+    <string name="edit_remove_title">Edit or Remove</string>
+    
+    <string name="remove_stock_from_quotes_list">Remove %1$s from the quotes list?</string>
+    
+    <string name="button_ok">OK</string>
+    <string name="button_save">Save</string>
+    <string name="button_remove">Remove</string>
+    <string name="button_cancel">Cancel</string>
+    
     <string name="choose_stock_prompt">Pick a stock</string>
     <string name="number_of_stocks_hint">Number of stocks</string>
     <string name="average_price_hint">Average price</string>
     
     <string name="currency">CZK</string>
-    
+
     <plurals name="pieces_bought_at">
         <item quantity="one">pc at</item>
         <item quantity="other">pcs at</item>
     </plurals>
-    
+
     <string-array name="default_quotes_list">
         <item>BMG200452024</item> <!-- CETV -->
         <item>CZ0005112300</item> <!-- ČEZ -->

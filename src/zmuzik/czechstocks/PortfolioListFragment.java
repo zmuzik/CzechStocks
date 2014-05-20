@@ -46,7 +46,7 @@ public class PortfolioListFragment extends ListFragment {
 		private DecimalFormat decFormater = new DecimalFormat("#######0.00");
 
 		public PortfolioCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
-			super(context, layout, c, from, to);
+			super(context, layout, c, from, to, 0);
 		}
 
 		@Override
@@ -63,18 +63,18 @@ public class PortfolioListFragment extends ListFragment {
 
 			case R.id.portfolioProfitTV:
 				doubleAmount = Double.valueOf(text);
-				if (doubleAmount > 0) {
+				if (doubleAmount >= 0) {
 					v.setTextAppearance(app, R.style.greenNumber);
-				} else if (doubleAmount < 0) {
+				} else {
 					v.setTextAppearance(app, R.style.redNumber);
 				}
 				return decFormater.format(doubleAmount) + " " + getResources().getString(R.string.currency);
 
 			case R.id.portfolioDeltaTV:
 				doubleAmount = Double.valueOf(text);
-				if (doubleAmount > 0) {
+				if (doubleAmount >= 0) {
 					v.setTextAppearance(app, R.style.greenNumber);
-				} else if (doubleAmount < 0) {
+				} else {
 					v.setTextAppearance(app, R.style.redNumber);
 				}
 				return decFormater.format(doubleAmount) + "%";

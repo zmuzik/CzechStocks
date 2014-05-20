@@ -5,6 +5,7 @@ import java.util.List;
 
 import zmuzik.czechstocks.R.layout;
 import android.app.ActionBar;
+import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -34,14 +35,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	private ViewPager mViewPager;
 	private MenuItem mRefreshMenuItem;
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		app = (CzechStocksApp) getApplicationContext();
 		app.setMainActiviy(this);
-
-		new UpdateDataTask(app).execute();
 
 		setContentView(R.layout.activity_main);
 		// Set up the action bar.
@@ -72,6 +70,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		}
 	}
 
+	public boolean onPrepareOptionsMenu(Menu menu) {
+	    super.onPrepareOptionsMenu(menu);
+		mRefreshMenuItem = menu.findItem(R.id.action_refresh);
+		actionDataRefresh();
+	    return true;
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -91,7 +96,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			break;
 		case R.id.action_refresh:
 			mRefreshMenuItem = item;
-			setMovingRefreshIcon();
 			actionDataRefresh();
 			break;
 		default:
@@ -132,7 +136,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			}
 		});
 
-		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				app.getStockListItemDao().deleteAll();
@@ -164,14 +168,14 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		LayoutInflater inflater = LayoutInflater.from(this);
 		builder.setView(inflater.inflate(R.layout.add_portfolio_item_dialog, null));
 
-		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				;
 			}
 		});
 
-		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+		builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				;
@@ -180,16 +184,18 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
 		AlertDialog dialog = builder.create();
 		dialog.show();
-		
+
 		EditText et = (EditText) findViewById(R.id.averagePriceET);
-		
-		Spinner spinner = (Spinner) findViewById (R.id.chooseStockSpinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String> (app, android.R.layout.simple_spinner_dropdown_item, stockNames);
-        //spinner.setAdapter(adapter);
-		
+
+		Spinner spinner = (Spinner) findViewById(R.id.chooseStockSpinner);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(app, android.R.layout.simple_spinner_dropdown_item,
+				stockNames);
+		// spinner.setAdapter(adapter);
+
 	}
 
 	void actionDataRefresh() {
+		setMovingRefreshIcon();
 		new UpdateDataTask(app).execute();
 	}
 
@@ -223,23 +229,19 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
 	@Override
 	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-		// When the given tab is selected, switch to the corresponding page in
-		// the ViewPager.
 		mViewPager.setCurrentItem(tab.getPosition());
 	}
 
 	@Override
-	public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+		;
 	}
 
 	@Override
-	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		;
 	}
 
-	/**
-	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-	 * one of the sections/tabs/pages.
-	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 		StocksListFragment stocksListFragment;

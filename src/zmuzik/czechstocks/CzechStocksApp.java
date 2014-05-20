@@ -54,14 +54,14 @@ public class CzechStocksApp extends Application {
 		StringBuffer sb = new StringBuffer();
 		sb.append("create view if not exists STOCK_LIST as ");
 		sb.append("select ");
-		sb.append("t1._id, ");
-		sb.append("t1.name as NAME, ");
-		sb.append("t1.delta as DELTA, ");
-		sb.append("t1.price as PRICE ");
-		sb.append("from stock t1, ");
-		sb.append("stock_list_item t2 ");
-		sb.append("where t1.isin = t2.isin ");
-		sb.append("order by t1.name collate localized asc; ");
+		sb.append("sli._id, ");
+		sb.append("s.name as NAME, ");
+		sb.append("s.delta as DELTA, ");
+		sb.append("s.price as PRICE ");
+		sb.append("from stock s, ");
+		sb.append("stock_list_item sli ");
+		sb.append("where s.isin = sli.isin ");
+		sb.append("order by s.name collate localized asc; ");
 		
 		try {
 			mDb.execSQL(sb.toString());
