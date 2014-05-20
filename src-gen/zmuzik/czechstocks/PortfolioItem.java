@@ -10,8 +10,7 @@ public class PortfolioItem {
     /** Not-null value. */
     private String isin;
     private double price;
-    /** Not-null value. */
-    private String quantity;
+    private int quantity;
 
     public PortfolioItem() {
     }
@@ -20,7 +19,7 @@ public class PortfolioItem {
         this.id = id;
     }
 
-    public PortfolioItem(Long id, String isin, double price, String quantity) {
+    public PortfolioItem(Long id, String isin, double price, int quantity) {
         this.id = id;
         this.isin = isin;
         this.price = price;
@@ -53,13 +52,11 @@ public class PortfolioItem {
         this.price = price;
     }
 
-    /** Not-null value. */
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 

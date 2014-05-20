@@ -26,7 +26,7 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Isin = new Property(1, String.class, "isin", false, "ISIN");
         public final static Property Price = new Property(2, double.class, "price", false, "PRICE");
-        public final static Property Quantity = new Property(3, String.class, "quantity", false, "QUANTITY");
+        public final static Property Quantity = new Property(3, int.class, "quantity", false, "QUANTITY");
     };
 
 
@@ -45,7 +45,7 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, Long> {
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'ISIN' TEXT NOT NULL ," + // 1: isin
                 "'PRICE' REAL NOT NULL ," + // 2: price
-                "'QUANTITY' TEXT NOT NULL );"); // 3: quantity
+                "'QUANTITY' INTEGER NOT NULL );"); // 3: quantity
     }
 
     /** Drops the underlying database table. */
@@ -65,7 +65,7 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, Long> {
         }
         stmt.bindString(2, entity.getIsin());
         stmt.bindDouble(3, entity.getPrice());
-        stmt.bindString(4, entity.getQuantity());
+        stmt.bindLong(4, entity.getQuantity());
     }
 
     /** @inheritdoc */
@@ -81,7 +81,7 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // isin
             cursor.getDouble(offset + 2), // price
-            cursor.getString(offset + 3) // quantity
+            cursor.getInt(offset + 3) // quantity
         );
         return entity;
     }
@@ -92,7 +92,7 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setIsin(cursor.getString(offset + 1));
         entity.setPrice(cursor.getDouble(offset + 2));
-        entity.setQuantity(cursor.getString(offset + 3));
+        entity.setQuantity(cursor.getInt(offset + 3));
      }
     
     /** @inheritdoc */

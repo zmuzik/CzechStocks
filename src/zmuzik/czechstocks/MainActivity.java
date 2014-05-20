@@ -24,7 +24,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
@@ -71,12 +73,12 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	}
 
 	public boolean onPrepareOptionsMenu(Menu menu) {
-	    super.onPrepareOptionsMenu(menu);
+		super.onPrepareOptionsMenu(menu);
 		mRefreshMenuItem = menu.findItem(R.id.action_refresh);
 		actionDataRefresh();
-	    return true;
+		return true;
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -153,11 +155,22 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	}
 
 	void actionAddPortfolioItem() {
-		List<Stock> allStocks = app.getStockDao().loadAll();
+		final List<Stock> allStocks = app.getStockDao().loadAll();
 		ArrayList<String> stockNames = new ArrayList<String>();
 		for (Stock item : allStocks) {
 			stockNames.add(item.getName());
 		}
+
+		LayoutInflater inflater = this.getLayoutInflater();
+		LinearLayout parentLayout = (LinearLayout) inflater.inflate(R.layout.add_portfolio_item_dialog, null);
+
+		final Spinner spinner = (Spinner) parentLayout.getChildAt(0);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(app, android.R.layout.simple_spinner_dropdown_item,
+				stockNames);
+		spinner.setAdapter(adapter);
+
+		final EditText quantityET = (EditText) parentLayout.getChildAt(1);
+		final EditText priceET = (EditText) parentLayout.getChildAt(2);
 
 		// init builder
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -165,32 +178,35 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		builder.setCancelable(true);
 
 		// set and inflate layout
-		LayoutInflater inflater = LayoutInflater.from(this);
-		builder.setView(inflater.inflate(R.layout.add_portfolio_item_dialog, null));
+		builder.setView(parentLayout);
 
 		builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				;
+				PortfolioItemDao pid = app.getPortfolioItemDao();
+				PortfolioItem pi = new PortfolioItem();
+				
+				int position = spinner.getSelectedItemPosition();
+				Stock stock = allStocks.get(position);
+				
+				pi.setIsin(stock.getIsin());
+				pi.setPrice(Double.valueOf(priceET.getText().toString()));
+				pi.setQuantity(Integer.valueOf(quantityET.getText().toString() ));
+				pid.insert(pi);
+				refreshFragments();
+				dialog.dismiss();
 			}
 		});
 
 		builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				;
+				dialog.dismiss();
 			}
 		});
 
 		AlertDialog dialog = builder.create();
 		dialog.show();
-
-		EditText et = (EditText) findViewById(R.id.averagePriceET);
-
-		Spinner spinner = (Spinner) findViewById(R.id.chooseStockSpinner);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(app, android.R.layout.simple_spinner_dropdown_item,
-				stockNames);
-		// spinner.setAdapter(adapter);
 
 	}
 

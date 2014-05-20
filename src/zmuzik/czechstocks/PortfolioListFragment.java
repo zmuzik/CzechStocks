@@ -1,12 +1,21 @@
 package zmuzik.czechstocks;
 
 import java.text.DecimalFormat;
+import java.util.StringTokenizer;
 
+import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -39,6 +48,80 @@ public class PortfolioListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int pos, long id) {
 		getListView().setItemChecked(pos, true);
+	}
+
+	public void onActivityCreated(Bundle savedState) {
+		super.onActivityCreated(savedState);
+
+		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				Resources res = getResources();
+				final long rowid = arg3;
+
+				LinearLayout itemRow1 = ((LinearLayout) ((LinearLayout) arg1).getChildAt(0));
+				LinearLayout itemRow2 = ((LinearLayout) ((LinearLayout) arg1).getChildAt(1));
+				String stockName = ((TextView) itemRow1.getChildAt(0)).getText().toString();
+
+				String quantityString = ((TextView) itemRow2.getChildAt(0)).getText().toString();
+				StringTokenizer st = new StringTokenizer(quantityString, " ");
+				int quantity = Integer.valueOf(st.nextToken());
+
+				String origPriceString = ((TextView) itemRow2.getChildAt(1)).getText().toString();
+				st = new StringTokenizer(origPriceString, " ");
+				double origPrice = Double.valueOf(st.nextToken());
+
+				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+				LayoutInflater inflater = getActivity().getLayoutInflater();
+				
+				LinearLayout parentLayout = (LinearLayout)inflater.inflate(R.layout.edit_portfolio_item_dialog, null);
+				
+				TextView titleTV = (TextView)parentLayout.getChildAt(0);
+				final EditText quantityET = (EditText)((LinearLayout)parentLayout.getChildAt(1)).getChildAt(1);
+				final EditText priceET = (EditText)((LinearLayout)parentLayout.getChildAt(2)).getChildAt(1);
+				
+				quantityET.setText(String.valueOf(quantity));
+				priceET.setText(String.valueOf(origPrice));
+				titleTV.setText(stockName);
+				
+				dialogBuilder.setTitle(R.string.edit_remove_title);
+				dialogBuilder.setView(parentLayout);
+				
+				dialogBuilder.setCancelable(true);
+				
+				dialogBuilder.setNegativeButton(res.getString(R.string.button_cancel), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+					}
+				});
+				
+				dialogBuilder.setNeutralButton(res.getString(R.string.button_remove), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						PortfolioItemDao pid = app.getPortfolioItemDao();
+						pid.deleteByKey(rowid);
+						refreshData();
+						dialog.dismiss();
+					}
+				});
+
+				dialogBuilder.setPositiveButton(res.getString(R.string.button_save), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						PortfolioItemDao pid = app.getPortfolioItemDao();
+						PortfolioItem pi = pid.loadByRowId(rowid);
+						pi.setPrice(Double.valueOf(priceET.getText().toString()));
+						pi.setQuantity(Integer.valueOf(quantityET.getText().toString()));
+						pid.update(pi);
+						refreshData();
+						dialog.dismiss();
+					}
+				});
+
+				AlertDialog dialog = dialogBuilder.create();
+				dialog.show();
+				return true;
+			}
+		});
 	}
 
 	class PortfolioCursorAdapter extends SimpleCursorAdapter {
