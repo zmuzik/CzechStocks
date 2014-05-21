@@ -1,6 +1,7 @@
 package zmuzik.czechstocks;
 
 import java.text.DecimalFormat;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 import android.app.AlertDialog;
@@ -42,7 +43,11 @@ public class PortfolioListFragment extends ListFragment {
 	}
 
 	public void refreshData() {
-		String select = "select _id, NAME, CURRENT_PRICE, DELTA, QUANTITY, ORIGINAL_PRICE, PROFIT from PORTFOLIO;";
+		String select = "select _id, NAME, CURRENT_PRICE, DELTA, QUANTITY, ORIGINAL_PRICE, PROFIT from TOTAL_PORTFOLIO;";
+		if (app.isTableEmpty(app.getDb(), "PORTFOLIO")) {
+			select = "select _id, NAME, CURRENT_PRICE, DELTA, QUANTITY, ORIGINAL_PRICE, PROFIT from PORTFOLIO;";
+		}
+		
 		cursor = app.getDb().rawQuery(select, null);
 		String[] from = { "NAME", "DELTA", "QUANTITY", "ORIGINAL_PRICE", "PROFIT" };
 
@@ -73,13 +78,18 @@ public class PortfolioListFragment extends ListFragment {
 				String stockName = ((TextView) itemRow1.getChildAt(0)).getText().toString();
 
 				String quantityString = ((TextView) itemRow2.getChildAt(0)).getText().toString();
+				
+				if ("".equals(quantityString)) {
+					return false;
+				}
+				
 				StringTokenizer st = new StringTokenizer(quantityString, " ");
 				int quantity = Integer.valueOf(st.nextToken());
 
 				String origPriceString = ((TextView) itemRow2.getChildAt(1)).getText().toString();
 				st = new StringTokenizer(origPriceString, " ");
-				
-			    double origPrice = app.getDoubleValue(st.nextToken());
+
+				double origPrice = app.getDoubleValue(st.nextToken());
 
 				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
 				LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -159,7 +169,11 @@ public class PortfolioListFragment extends ListFragment {
 			switch (v.getId()) {
 			case R.id.portfolioOriginalPriceTV:
 				doubleAmount = app.getDoubleValue(text);
-				return " " + decFormater.format(doubleAmount) + " " + getResources().getString(R.string.currency);
+				if (doubleAmount == 0) {
+					return "";
+				} else {
+					return " " + decFormater.format(doubleAmount) + " " + getResources().getString(R.string.currency);					
+				}
 
 			case R.id.portfolioProfitTV:
 				doubleAmount = app.getDoubleValue(text);
@@ -181,8 +195,20 @@ public class PortfolioListFragment extends ListFragment {
 
 			case R.id.portfolioQuantityTV:
 				int quantity = Integer.valueOf(text);
-				return text + " " + getResources().getQuantityString(R.plurals.pieces_bought_at, quantity);
-
+				if (quantity == 0) {
+					return "";
+				} else {
+					return text + " " + getResources().getQuantityString(R.plurals.pieces_bought_at, quantity);					
+				}
+			case R.id.portfolioStockNameTV:
+				if ("TOTAL".equals(text)) {
+					Locale locale = getResources().getConfiguration().locale;
+					if (locale.getLanguage().equals("cs")) {
+						return "CELKEM";
+					} else {
+						return text;
+					}
+				}
 			}
 			return text;
 		}

@@ -43,6 +43,7 @@ public class CzechStocksApp extends Application {
 		fillTableStockListItem();
 		createStockListView();
 		createPortfolioView();
+		createTotalPortfolioView();
 	}
 
 	private void fillTableStockListItem() {
@@ -99,6 +100,30 @@ public class CzechStocksApp extends Application {
 		}
 	}
 
+	private void createTotalPortfolioView() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("create view if not exists TOTAL_PORTFOLIO as ");
+		sb.append("select _id, name, current_price, delta, quantity, original_price, profit from ( ");
+		sb.append("select _id, name, current_price, delta, quantity, original_price, profit from portfolio ");
+		sb.append("union ");
+		sb.append("select ");
+		sb.append("max(_id) +1 as _id, ");
+		sb.append("\"TOTAL\" as name, ");
+		sb.append("0 as price, ");
+		sb.append("sum(profit)/sum(quantity*original_price)*100 as delta, ");
+		sb.append("0 as quantity, ");
+		sb.append("0 as original_price, ");
+		sb.append("sum(profit) as profit ");
+		sb.append("from portfolio); ");
+
+		try {
+			mDb.execSQL(sb.toString());
+		} catch (Exception e) {
+			Log.e("Error while creating view PORTFOLIO", e.toString());
+			e.printStackTrace();
+		}
+	}
+
 	boolean isTableEmpty(SQLiteDatabase db, String tableName) {
 		if (tableName == null || db == null || !db.isOpen()) {
 			return false;
@@ -113,6 +138,10 @@ public class CzechStocksApp extends Application {
 	}
 
 	double getDoubleValue(String s) {
+		if (s == null || "".equals(s)) {
+			return (double) 0;
+		}
+
 		if (mLocale == null) {
 			mLocale = getResources().getConfiguration().locale;
 		}
