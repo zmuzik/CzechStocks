@@ -22,7 +22,8 @@
     <string name="currency">Kč</string>
     <string name="no_data_portfolio">K přidání akcií do portfolia použijte ikonu +</string>
     <string name="toas_check_net">Síťová chyba, zkontrolujte připojení k internetu.</string>
-
+	<string name="no_data_stocks_list">Stahuji aktuální data ze serveru. Pokud to trvá příliš dlouho, zkontrolujte vaše internetové připojení.</string>
+	
     <plurals name="pieces_bought_at">
         <item quantity="one">kus za</item>
         <item quantity="few">kusy po</item>
