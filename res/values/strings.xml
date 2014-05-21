@@ -21,7 +21,6 @@
     <string name="average_price_hint">Average price</string>
     <string name="currency">CZK</string>
     <string name="no_data_portfolio">Add items to portfolio by taping the + icon.</string>
-    <string name="no_data_stocks_list">Attempting to download stock quotes from server. If this lasts too long, check your Intenet connection.</string>
     <string name="toas_check_net">Network error, check your internet connection</string>
 
     <plurals name="pieces_bought_at">

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">České akcie</string>
+    <string name="tab_title_section1">Kurzy</string>
+    <string name="tab_title_section2">Portfolio</string>
+    <string name="action_edit">Editace</string>
+    <string name="action_refresh">Aktualizace</string>
+    <string name="action_settings">Nastavení</string>
+    <string name="add_stocks_dialog_title">Přidat kurz</string>
+    <string name="add_portfolio_item_dialog_title">Přidat položku portfolia</string>
+    <string name="remove_title">Odstranit</string>
+    <string name="edit_remove_title">Editovat/Odstranit</string>
+    <string name="remove_stock_from_quotes_list">Odstranit %1$s z kurzovního lístku?</string>
+    <string name="button_ok">OK</string>
+    <string name="button_save">Uložit</string>
+    <string name="button_remove">Odstranit</string>
+    <string name="button_cancel">Zpět</string>
+    <string name="choose_stock_prompt">Vyber akcii</string>
+    <string name="number_of_stocks_hint">Počet akcií</string>
+    <string name="average_price_hint">Průměrná cena</string>
+    <string name="currency">Kč</string>
+    <string name="no_data_portfolio">K přidání akcií do portfolia použijte ikonu +</string>
+    <string name="toas_check_net">Síťová chyba, zkontrolujte připojení k internetu.</string>
+
+    <plurals name="pieces_bought_at">
+        <item quantity="one">kus za</item>
+        <item quantity="few">kusy po</item>
+        <item quantity="other">kusů po</item>
+    </plurals>
+
+    <string-array name="default_quotes_list">
+        <item>BMG200452024</item> <!-- CETV -->
+        <item>CZ0005112300</item> <!-- ČEZ -->
+        <item>CZ0005123620</item> <!-- E4U -->
+        <item>AT0000652011</item> <!-- ERSTE GROUP BANK -->
+        <item>NL0009604859</item> <!-- FORTUNA -->
+        <item>CZ0008019106</item> <!-- KOMERČNÍ BANKA -->
+        <item>GB00B42CTW68</item> <!-- NWR -->
+        <item>LU0122624777</item> <!-- ORCO -->
+        <item>LU0275164910</item> <!-- PEGAS NONWOVENS -->
+        <item>CS0008418869</item> <!-- PHILIP MORRIS ČR -->
+        <item>GB00BF5SDZ96</item> <!-- STOCK -->
+        <item>CZ0009093209</item> <!-- TELEFÓNICA C.R. -->
+        <item>SK1120010287</item> <!-- TMR -->
+        <item>CZ0009091500</item> <!-- UNIPETROL -->
+        <item>AT0000908504</item> <!-- VIG -->
+    </string-array>
+
+</resources>
