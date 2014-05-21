@@ -187,7 +187,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				PortfolioItem pi = new PortfolioItem();
 
 				int quantity = Integer.valueOf(quantityET.getText().toString());
-				double price = Double.valueOf(priceET.getText().toString());
+				double price = app.getDoubleValue(priceET.getText().toString());
 				if (quantity > 0 && price > 0) {
 					int position = spinner.getSelectedItemPosition();
 					Stock stock = allStocks.get(position);

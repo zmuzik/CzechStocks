@@ -1,5 +1,9 @@
 package zmuzik.czechstocks;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
+
 import zmuzik.czechstocks.DaoMaster.DevOpenHelper;
 import android.app.Application;
 import android.database.Cursor;
@@ -16,6 +20,7 @@ public class CzechStocksApp extends Application {
 	private StockListItemDao mStockListItemDao;
 	private PortfolioItemDao mPortfolioItemDao;
 	private MainActivity mMainActivity;
+	private Locale mLocale;
 
 	@Override
 	public void onCreate() {
@@ -39,7 +44,7 @@ public class CzechStocksApp extends Application {
 		createStockListView();
 		createPortfolioView();
 	}
-	
+
 	private void fillTableStockListItem() {
 		if (isTableEmpty(mDb, "STOCK_LIST_ITEM")) {
 			Log.i(TAG, "Filling STOCK_LIST_ITEM table with default values, because it's empty.");
@@ -49,7 +54,7 @@ public class CzechStocksApp extends Application {
 			}
 		}
 	}
-	
+
 	private void createStockListView() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("create view if not exists STOCK_LIST as ");
@@ -62,7 +67,7 @@ public class CzechStocksApp extends Application {
 		sb.append("stock_list_item sli ");
 		sb.append("where s.isin = sli.isin ");
 		sb.append("order by s.name collate localized asc; ");
-		
+
 		try {
 			mDb.execSQL(sb.toString());
 		} catch (Exception e) {
@@ -105,6 +110,20 @@ public class CzechStocksApp extends Application {
 		int count = cursor.getInt(0);
 		cursor.close();
 		return count == 0;
+	}
+
+	double getDoubleValue(String s) {
+		if (mLocale == null) {
+			mLocale = getResources().getConfiguration().locale;
+		}
+		NumberFormat format = NumberFormat.getInstance(mLocale);
+		Number number;
+		try {
+			number = format.parse(s);
+		} catch (ParseException e) {
+			number = Double.valueOf(s);
+		}
+		return number.doubleValue();
 	}
 
 	SQLiteDatabase getDb() {

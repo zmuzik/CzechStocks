@@ -78,7 +78,8 @@ public class PortfolioListFragment extends ListFragment {
 
 				String origPriceString = ((TextView) itemRow2.getChildAt(1)).getText().toString();
 				st = new StringTokenizer(origPriceString, " ");
-				double origPrice = Double.valueOf(st.nextToken());
+				
+			    double origPrice = app.getDoubleValue(st.nextToken());
 
 				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
 				LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -118,7 +119,7 @@ public class PortfolioListFragment extends ListFragment {
 				dialogBuilder.setPositiveButton(res.getString(R.string.button_save),
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								double price = Double.valueOf(priceET.getText().toString());
+								double price = app.getDoubleValue(priceET.getText().toString());
 								int quantity = Integer.valueOf(quantityET.getText().toString());
 								if (price > 0 && quantity > 0) {
 									PortfolioItemDao pid = app.getPortfolioItemDao();
@@ -157,11 +158,11 @@ public class PortfolioListFragment extends ListFragment {
 			double doubleAmount;
 			switch (v.getId()) {
 			case R.id.portfolioOriginalPriceTV:
-				doubleAmount = Double.valueOf(text);
+				doubleAmount = app.getDoubleValue(text);
 				return " " + decFormater.format(doubleAmount) + " " + getResources().getString(R.string.currency);
 
 			case R.id.portfolioProfitTV:
-				doubleAmount = Double.valueOf(text);
+				doubleAmount = app.getDoubleValue(text);
 				if (doubleAmount >= 0) {
 					v.setTextAppearance(app, R.style.greenNumber);
 				} else {
@@ -170,7 +171,7 @@ public class PortfolioListFragment extends ListFragment {
 				return decFormater.format(doubleAmount) + " " + getResources().getString(R.string.currency);
 
 			case R.id.portfolioDeltaTV:
-				doubleAmount = Double.valueOf(text);
+				doubleAmount = app.getDoubleValue(text);
 				if (doubleAmount >= 0) {
 					v.setTextAppearance(app, R.style.greenNumber);
 				} else {

@@ -109,10 +109,10 @@ public class StocksListFragment extends ListFragment {
 			double doubleAmount;
 			switch (v.getId()) {
 			case R.id.stockPriceTV:
-				doubleAmount = Double.valueOf(text);
+				doubleAmount = app.getDoubleValue(text);
 				return decFormater.format(doubleAmount);
 			case R.id.stockDeltaTV:
-				doubleAmount = Double.valueOf(text);
+				doubleAmount = app.getDoubleValue(text);
 				if (doubleAmount >= 0) {
 					v.setTextAppearance(app, R.style.greenNumber);
 				} else {
