@@ -31,7 +31,7 @@ public class UpdateDataTask extends AsyncTask {
 	CzechStocksApp app;
 	private boolean mDownloadError = false;
 
-	private static final String STOCKS_URL = "http://162.252.242.87:3001/stocks.json";
+	private static final String STOCKS_URL = "http://185.8.238.141/czechstocks/api/stocks.json";
 	private final int HTTP_OK = 200;
 	private final int CONNECTION_TIMEOUT = 8000;
 	private final int SOCKET_TIMEOUT = 8000;
