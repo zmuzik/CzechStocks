@@ -23,6 +23,7 @@
     <string name="no_data_portfolio">Add items to portfolio by taping the + icon.</string>
     <string name="toas_check_net">Network error, check your internet connection</string>
     <string name="no_data_stocks_list">Attempting to download stock quotes from server. If this lasts too long, check your Intenet connection.</string>
+    <string name="last_updated_info">Last updated: %1$s\nData from: %2$s</string>
 
     <plurals name="pieces_bought_at">
         <item quantity="one">pc at</item>
@@ -40,6 +41,7 @@
         <item>LU0122624777</item> <!-- ORCO -->
         <item>LU0275164910</item> <!-- PEGAS NONWOVENS -->
         <item>CS0008418869</item> <!-- PHILIP MORRIS ČR -->
+        <item>CZ0005124420</item> <!-- PLG -->
         <item>GB00BF5SDZ96</item> <!-- STOCK -->
         <item>CZ0009093209</item> <!-- TELEFÓNICA C.R. -->
         <item>SK1120010287</item> <!-- TMR -->

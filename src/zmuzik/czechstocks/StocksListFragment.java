@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ public class StocksListFragment extends ListFragment {
 
 	final String TAG = this.getClass().getSimpleName();
 	CzechStocksApp app;
+	TextView mLastUpdateInfoTV;
 
 	StocksCursorAdapter cursorAdapter;
 	private Cursor cursor;
@@ -37,6 +39,7 @@ public class StocksListFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.stocks_list_fragment, container, false);
+		mLastUpdateInfoTV = (TextView)((RelativeLayout)view).getChildAt(2);
 		return view;
 	}
 
@@ -48,6 +51,10 @@ public class StocksListFragment extends ListFragment {
 
 		cursorAdapter = new StocksCursorAdapter(this.getActivity(), R.layout.stocks_list_item, cursor, from, to);
 		setListAdapter(cursorAdapter);
+		
+		if (mLastUpdateInfoTV != null)  {
+			mLastUpdateInfoTV.setText(app.getlastUpdateInfoString());
+		}
 	}
 	
 	
@@ -98,6 +105,8 @@ public class StocksListFragment extends ListFragment {
 
 		public StocksCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
 			super(context, layout, c, from, to, 0);
+			//XXX
+			//decFormater.set
 		}
 
 		@Override

@@ -1,9 +1,9 @@
 package zmuzik.czechstocks;
 
+import com.crashlytics.android.Crashlytics;
 import java.util.ArrayList;
 import java.util.List;
 
-import zmuzik.czechstocks.R.layout;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
@@ -26,7 +26,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
@@ -40,6 +39,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Crashlytics.start(this);
 		app = (CzechStocksApp) getApplicationContext();
 		app.setMainActiviy(this);
 
@@ -221,7 +221,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
 	void setMovingRefreshIcon() {
 		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		ImageView iv = (ImageView) inflater.inflate(layout.refresh_action_view, null);
+		ImageView iv = (ImageView) inflater.inflate(R.layout.refresh_action_view, null);
 		Animation rotation = AnimationUtils.loadAnimation(this, R.anim.clockwise_refresh);
 		rotation.setRepeatCount(Animation.INFINITE);
 		iv.startAnimation(rotation);
