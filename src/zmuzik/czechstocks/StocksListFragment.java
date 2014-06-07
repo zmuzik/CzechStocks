@@ -25,9 +25,7 @@ public class StocksListFragment extends ListFragment {
 	final String TAG = this.getClass().getSimpleName();
 	CzechStocksApp app;
 	TextView mLastUpdateInfoTV;
-
 	StocksCursorAdapter cursorAdapter;
-	private Cursor cursor;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +43,7 @@ public class StocksListFragment extends ListFragment {
 
 	public void refreshData() {
 		String select = "SELECT _id, NAME, DELTA, PRICE FROM STOCK_LIST;";
-		cursor = app.getDb().rawQuery(select, null);
+		Cursor cursor = app.getDb().rawQuery(select, null);
 		String[] from = { "NAME", "DELTA", "PRICE" };
 		int[] to = { R.id.stockNameTV, R.id.stockDeltaTV, R.id.stockPriceTV };
 

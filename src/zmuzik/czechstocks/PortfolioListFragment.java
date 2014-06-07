@@ -19,26 +19,28 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 public class PortfolioListFragment extends ListFragment {
+	
 	final String TAG = this.getClass().getSimpleName();
 	CzechStocksApp app;
+	TextView mLastUpdateInfoTV;
 	PortfolioCursorAdapter cursorAdapter;
-	private Cursor cursor;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		app = (CzechStocksApp) this.getActivity().getApplicationContext();
-
 		refreshData();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.portfolio_fragment, container, false);
+		mLastUpdateInfoTV = (TextView)((RelativeLayout)view).getChildAt(2);
 		return view;
 	}
 
@@ -48,7 +50,7 @@ public class PortfolioListFragment extends ListFragment {
 			select = "select _id, NAME, CURRENT_PRICE, DELTA, QUANTITY, ORIGINAL_PRICE, PROFIT from PORTFOLIO;";
 		}
 		
-		cursor = app.getDb().rawQuery(select, null);
+		Cursor cursor = app.getDb().rawQuery(select, null);
 		String[] from = { "NAME", "DELTA", "QUANTITY", "ORIGINAL_PRICE", "PROFIT" };
 
 		int[] to = { R.id.portfolioStockNameTV, R.id.portfolioDeltaTV, R.id.portfolioQuantityTV,
@@ -56,6 +58,10 @@ public class PortfolioListFragment extends ListFragment {
 
 		cursorAdapter = new PortfolioCursorAdapter(this.getActivity(), R.layout.portfolio_item, cursor, from, to);
 		setListAdapter(cursorAdapter);
+		
+		if (mLastUpdateInfoTV != null)  {
+			mLastUpdateInfoTV.setText(app.getlastUpdateInfoString());
+		}
 	}
 
 	@Override

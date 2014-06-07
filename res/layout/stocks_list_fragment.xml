@@ -21,6 +21,8 @@
         android:id="@+id/lastUpdateInfoStListTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:background="#FF20252A"
+        android:textAppearance="?android:textAppearanceSmall" />
 
 </RelativeLayout>

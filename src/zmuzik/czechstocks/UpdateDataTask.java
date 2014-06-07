@@ -45,6 +45,7 @@ public class UpdateDataTask extends AsyncTask {
 		String response = downloadStockData(STOCKS_URL);
 		if (!mDownloadError) {
 			saveStocksToDb(response);
+			app.setLastUpdatedTime();
 		}
 		return null;
 	}
