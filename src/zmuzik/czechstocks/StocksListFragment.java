@@ -101,12 +101,14 @@ public class StocksListFragment extends ListFragment {
 
 	class StocksCursorAdapter extends SimpleCursorAdapter {
 
-		private DecimalFormat decFormater = new DecimalFormat("#######0.00");
+		private DecimalFormat decFormater;
 
 		public StocksCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
 			super(context, layout, c, from, to, 0);
-			//XXX
-			//decFormater.set
+			decFormater = new DecimalFormat();
+			decFormater.setMinimumIntegerDigits(1);
+			decFormater.setMinimumFractionDigits(2);
+			decFormater.setMaximumFractionDigits(2);
 		}
 
 		@Override

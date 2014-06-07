@@ -153,10 +153,14 @@ public class PortfolioListFragment extends ListFragment {
 
 	class PortfolioCursorAdapter extends SimpleCursorAdapter {
 
-		private DecimalFormat decFormater = new DecimalFormat("#######0.00");
+		private DecimalFormat decFormater;
 
 		public PortfolioCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
 			super(context, layout, c, from, to, 0);
+			decFormater = new DecimalFormat();
+			decFormater.setMinimumIntegerDigits(1);
+			decFormater.setMinimumFractionDigits(2);
+			decFormater.setMaximumFractionDigits(2);
 		}
 
 		@Override
