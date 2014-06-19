@@ -147,7 +147,7 @@ public class CzechStocksApp extends Application {
 	
 	private String getLastUpdatedTime() {
 		try {
-			SimpleDateFormat formater = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
+			SimpleDateFormat formater = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 			return formater.format(mLastUpdated);
 		} catch (Throwable t) {
 			return null;
@@ -162,7 +162,7 @@ public class CzechStocksApp extends Application {
 		if (!cursor.moveToFirst()) {
 			return null;
 		}
-		SimpleDateFormat formater = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
+		SimpleDateFormat formater = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 		Date lastDataTime = new Date(Long.parseLong(cursor.getString(0)));
 		return formater.format(lastDataTime);
 	}

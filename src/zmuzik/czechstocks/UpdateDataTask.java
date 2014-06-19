@@ -73,7 +73,7 @@ public class UpdateDataTask extends AsyncTask {
 				String name = jsonObject.getString("name");
 				double price = jsonObject.getDouble("price");
 				double delta = jsonObject.getDouble("delta");
-				Date stamp = new SimpleDateFormat("M.d.yyyy HH:mm").parse(jsonObject.getString("stamp"));
+				Date stamp = new SimpleDateFormat("d.M.yyyy HH:mm").parse(jsonObject.getString("stamp"));
 
 				Stock stock = new Stock(null, isin, name, price, delta, stamp);
 				app.getStockDao().insert(stock);
