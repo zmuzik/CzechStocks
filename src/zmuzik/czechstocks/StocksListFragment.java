@@ -33,6 +33,11 @@ public class StocksListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		app = (CzechStocksApp) this.getActivity().getApplicationContext();
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
 		refreshData();
 	}
 

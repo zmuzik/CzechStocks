@@ -38,7 +38,13 @@ public class PortfolioListFragment extends ListFragment {
 		app = (CzechStocksApp) this.getActivity().getApplicationContext();
 		refreshData();
 	}
-
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		refreshData();
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.portfolio_fragment, container, false);
