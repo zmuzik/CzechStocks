@@ -17,12 +17,51 @@
         android:gravity="center"
         android:text="@string/no_data_portfolio" />
 
-    <TextView
-        android:id="@+id/lastUpdateInfoPortTV"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#FF20252A"
-        android:textAppearance="?android:textAppearanceSmall" />
+        android:background="#FF24292F"
+        android:orientation="horizontal"
+        android:textAppearance="?android:textAppearanceSmall" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2sp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/lastUpdatedLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/last_updated" />
+
+            <TextView
+                android:id="@+id/dataFromLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/data_from" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5sp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/lastUpdatedValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/dataFromValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="" />
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package zmuzik.czechstocks;
 
+import java.security.acl.LastOwnerException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,6 +12,7 @@ import android.app.Application;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.style.LeadingMarginSpan;
 import android.util.Log;
 
 public class CzechStocksApp extends Application {
@@ -18,14 +20,14 @@ public class CzechStocksApp extends Application {
 	private final String TAG = this.getClass().getSimpleName();
 	private final String DB_NAME = "czech-stocks-db";
 	private Date mLastUpdated;
-	
+
 	private SQLiteDatabase mDb;
 	private DaoSession mDaoSession;
 	private StockDao mStockDao;
 	private StockListItemDao mStockListItemDao;
 	private PortfolioItemDao mPortfolioItemDao;
 	private MainActivity mMainActivity;
-	
+
 	private Locale mLocale;
 
 	@Override
@@ -129,44 +131,42 @@ public class CzechStocksApp extends Application {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	public String getlastUpdateInfoString() {
-		Resources res = getResources();
-		String lastUpdatedTime = getLastUpdatedTime();
-		String lastDataTime = getLastDataTime();
-		if (lastUpdatedTime != null && lastDataTime != null) {
-			return String.format(res.getString(R.string.last_updated_info), lastUpdatedTime, lastDataTime);
-		}
-		return null;
-	}
-	
+
 	public void setLastUpdatedTime() {
 		mLastUpdated = new Date();
 	}
-	
-	private String getLastUpdatedTime() {
+
+	protected String getLastUpdatedTime() {
 		try {
+			if (mLastUpdated == null) {
+				return null;
+			}
 			SimpleDateFormat formater = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 			return formater.format(mLastUpdated);
-		} catch (Throwable t) {
+		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
 
-	private String getLastDataTime() {
-		if (mDb == null || !mDb.isOpen()) {
+	protected String getDataFromTime() {
+		try {
+			if (mDb == null || !mDb.isOpen()) {
+				return null;
+			}
+			Cursor cursor = mDb.rawQuery("SELECT STAMP FROM STOCK WHERE _id = 1", null);
+			if (!cursor.moveToFirst()) {
+				return null;
+			}
+			SimpleDateFormat formater = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+			Date lastDataTime = new Date(Long.parseLong(cursor.getString(0)));
+			return formater.format(lastDataTime);
+		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
-		Cursor cursor = mDb.rawQuery("SELECT STAMP FROM STOCK WHERE _id = 1", null);
-		if (!cursor.moveToFirst()) {
-			return null;
-		}
-		SimpleDateFormat formater = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		Date lastDataTime = new Date(Long.parseLong(cursor.getString(0)));
-		return formater.format(lastDataTime);
 	}
-	
+
 	boolean isTableEmpty(SQLiteDatabase db, String tableName) {
 		if (tableName == null || db == null || !db.isOpen()) {
 			return false;

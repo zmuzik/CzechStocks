@@ -26,7 +26,8 @@ public class StocksListFragment extends ListFragment {
 
 	final String TAG = this.getClass().getSimpleName();
 	CzechStocksApp app;
-	TextView mLastUpdateInfoTV;
+	TextView mLastUpdateTime;
+	TextView mDataFromTime;
 	StocksCursorAdapter cursorAdapter;
 
 	@Override
@@ -34,7 +35,7 @@ public class StocksListFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 		app = (CzechStocksApp) this.getActivity().getApplicationContext();
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -44,7 +45,8 @@ public class StocksListFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.stocks_list_fragment, container, false);
-		mLastUpdateInfoTV = (TextView) ((RelativeLayout) view).getChildAt(2);
+		mLastUpdateTime = (TextView) view.findViewById(R.id.lastUpdatedValue);
+		mDataFromTime = (TextView) view.findViewById(R.id.dataFromValue);
 		return view;
 	}
 
@@ -53,7 +55,7 @@ public class StocksListFragment extends ListFragment {
 		Cursor cursor = app.getDb().rawQuery(select, null);
 		String[] from = { "NAME", "DELTA", "PRICE" };
 		int[] to = { R.id.stockNameTV, R.id.stockDeltaTV, R.id.stockPriceTV };
-		
+
 		if (cursor != null) {
 			Crashlytics.setInt("stockListSize", cursor.getCount());
 			Crashlytics.setBool("stockListCursorNull", false);
@@ -64,8 +66,11 @@ public class StocksListFragment extends ListFragment {
 		cursorAdapter = new StocksCursorAdapter(app, R.layout.stocks_list_item, cursor, from, to);
 		setListAdapter(cursorAdapter);
 
-		if (mLastUpdateInfoTV != null) {
-			mLastUpdateInfoTV.setText(app.getlastUpdateInfoString());
+		if (mLastUpdateTime != null) {
+			mLastUpdateTime.setText(app.getLastUpdatedTime());
+		}
+		if (mDataFromTime != null) {
+			mDataFromTime.setText(app.getDataFromTime());
 		}
 	}
 

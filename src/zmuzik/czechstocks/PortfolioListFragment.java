@@ -26,10 +26,11 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 public class PortfolioListFragment extends ListFragment {
-	
+
 	final String TAG = this.getClass().getSimpleName();
 	CzechStocksApp app;
-	TextView mLastUpdateInfoTV;
+	TextView mLastUpdateTime;
+	TextView mDataFromTime;
 	PortfolioCursorAdapter cursorAdapter;
 
 	@Override
@@ -38,17 +39,18 @@ public class PortfolioListFragment extends ListFragment {
 		app = (CzechStocksApp) this.getActivity().getApplicationContext();
 		refreshData();
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
 		refreshData();
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.portfolio_fragment, container, false);
-		mLastUpdateInfoTV = (TextView)((RelativeLayout)view).getChildAt(2);
+		mLastUpdateTime = (TextView) view.findViewById(R.id.lastUpdatedValue);
+		mDataFromTime = (TextView) view.findViewById(R.id.dataFromValue);
 		return view;
 	}
 
@@ -57,7 +59,7 @@ public class PortfolioListFragment extends ListFragment {
 		if (app.isTableEmpty(app.getDb(), "PORTFOLIO")) {
 			select = "select _id, NAME, CURRENT_PRICE, DELTA, QUANTITY, ORIGINAL_PRICE, PROFIT from PORTFOLIO;";
 		}
-		
+
 		Cursor cursor = app.getDb().rawQuery(select, null);
 		String[] from = { "NAME", "DELTA", "QUANTITY", "ORIGINAL_PRICE", "PROFIT" };
 
@@ -68,14 +70,17 @@ public class PortfolioListFragment extends ListFragment {
 			Crashlytics.setInt("portfolioSize", cursor.getCount());
 			Crashlytics.setBool("portfolioCursorNull", false);
 		} else {
-			Crashlytics.setBool("portfolioCursorNull", true);			
+			Crashlytics.setBool("portfolioCursorNull", true);
 		}
-		
+
 		cursorAdapter = new PortfolioCursorAdapter(app, R.layout.portfolio_item, cursor, from, to);
 		setListAdapter(cursorAdapter);
-		
-		if (mLastUpdateInfoTV != null)  {
-			mLastUpdateInfoTV.setText(app.getlastUpdateInfoString());
+
+		if (mLastUpdateTime != null) {
+			mLastUpdateTime.setText(app.getLastUpdatedTime());
+		}
+		if (mDataFromTime != null) {
+			mDataFromTime.setText(app.getDataFromTime());
 		}
 	}
 
@@ -99,11 +104,11 @@ public class PortfolioListFragment extends ListFragment {
 				String stockName = ((TextView) itemRow1.getChildAt(0)).getText().toString();
 
 				String quantityString = ((TextView) itemRow2.getChildAt(0)).getText().toString();
-				
+
 				if ("".equals(quantityString)) {
 					return false;
 				}
-				
+
 				StringTokenizer st = new StringTokenizer(quantityString, " ");
 				int quantity = Integer.valueOf(st.nextToken());
 
@@ -197,7 +202,7 @@ public class PortfolioListFragment extends ListFragment {
 				if (doubleAmount == 0) {
 					return "";
 				} else {
-					return " " + decFormater.format(doubleAmount) + " " + getResources().getString(R.string.currency);					
+					return " " + decFormater.format(doubleAmount) + " " + getResources().getString(R.string.currency);
 				}
 
 			case R.id.portfolioProfitTV:
@@ -223,7 +228,7 @@ public class PortfolioListFragment extends ListFragment {
 				if (quantity == 0) {
 					return "";
 				} else {
-					return text + " " + getResources().getQuantityString(R.plurals.pieces_bought_at, quantity);					
+					return text + " " + getResources().getQuantityString(R.plurals.pieces_bought_at, quantity);
 				}
 			case R.id.portfolioStockNameTV:
 				if ("TOTAL".equals(text)) {

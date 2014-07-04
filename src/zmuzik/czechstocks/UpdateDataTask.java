@@ -78,7 +78,7 @@ public class UpdateDataTask extends AsyncTask {
 				Stock stock = new Stock(null, isin, name, price, delta, stamp);
 				app.getStockDao().insert(stock);
 
-				Log.i(TAG, jsonObject.toString());
+				//Log.i(TAG, jsonObject.toString());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
