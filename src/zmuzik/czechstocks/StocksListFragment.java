@@ -20,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
 public class StocksListFragment extends ListFragment {
 
 	final String TAG = this.getClass().getSimpleName();
@@ -33,11 +35,11 @@ public class StocksListFragment extends ListFragment {
 		app = (CzechStocksApp) this.getActivity().getApplicationContext();
 		refreshData();
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.stocks_list_fragment, container, false);
-		mLastUpdateInfoTV = (TextView)((RelativeLayout)view).getChildAt(2);
+		mLastUpdateInfoTV = (TextView) ((RelativeLayout) view).getChildAt(2);
 		return view;
 	}
 
@@ -46,16 +48,22 @@ public class StocksListFragment extends ListFragment {
 		Cursor cursor = app.getDb().rawQuery(select, null);
 		String[] from = { "NAME", "DELTA", "PRICE" };
 		int[] to = { R.id.stockNameTV, R.id.stockDeltaTV, R.id.stockPriceTV };
-
-		cursorAdapter = new StocksCursorAdapter(this.getActivity(), R.layout.stocks_list_item, cursor, from, to);
-		setListAdapter(cursorAdapter);
 		
-		if (mLastUpdateInfoTV != null)  {
+		if (cursor != null) {
+			Crashlytics.setInt("stockListSize", cursor.getCount());
+			Crashlytics.setBool("stockListCursorNull", false);
+		} else {
+			Crashlytics.setBool("stockListCursorNull", true);
+		}
+
+		cursorAdapter = new StocksCursorAdapter(app, R.layout.stocks_list_item, cursor, from, to);
+		setListAdapter(cursorAdapter);
+
+		if (mLastUpdateInfoTV != null) {
 			mLastUpdateInfoTV.setText(app.getlastUpdateInfoString());
 		}
 	}
-	
-	
+
 	@Override
 	public void onListItemClick(ListView l, View v, int pos, long id) {
 		getListView().setItemChecked(pos, true);
@@ -71,18 +79,18 @@ public class StocksListFragment extends ListFragment {
 				Resources res = getResources();
 				final StockListItem sli = new StockListItem(arg3);
 				final StockListItemDao sliDao = app.getStockListItemDao();
-				String stockName =  ((TextView)((LinearLayout) arg1).getChildAt(0)).getText().toString();
+				String stockName = ((TextView) ((LinearLayout) arg1).getChildAt(0)).getText().toString();
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 				builder.setTitle(R.string.remove_title);
 				builder.setMessage(String.format(res.getString(R.string.remove_stock_from_quotes_list), stockName));
 				builder.setCancelable(true);
-				
+
 				builder.setNegativeButton(res.getString(R.string.button_cancel), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.dismiss();
 					}
 				});
-				
+
 				builder.setPositiveButton(res.getString(R.string.button_ok), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						sliDao.delete(sli);

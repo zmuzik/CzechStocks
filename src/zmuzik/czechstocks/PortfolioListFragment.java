@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
+import com.crashlytics.android.Crashlytics;
+
 import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.content.Context;
@@ -56,7 +58,14 @@ public class PortfolioListFragment extends ListFragment {
 		int[] to = { R.id.portfolioStockNameTV, R.id.portfolioDeltaTV, R.id.portfolioQuantityTV,
 				R.id.portfolioOriginalPriceTV, R.id.portfolioProfitTV };
 
-		cursorAdapter = new PortfolioCursorAdapter(this.getActivity(), R.layout.portfolio_item, cursor, from, to);
+		if (cursor != null) {
+			Crashlytics.setInt("portfolioSize", cursor.getCount());
+			Crashlytics.setBool("portfolioCursorNull", false);
+		} else {
+			Crashlytics.setBool("portfolioCursorNull", true);			
+		}
+		
+		cursorAdapter = new PortfolioCursorAdapter(app, R.layout.portfolio_item, cursor, from, to);
 		setListAdapter(cursorAdapter);
 		
 		if (mLastUpdateInfoTV != null)  {
