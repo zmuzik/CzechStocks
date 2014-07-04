@@ -20,6 +20,8 @@ import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.crashlytics.android.Crashlytics;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -81,7 +83,7 @@ public class UpdateDataTask extends AsyncTask {
 				//Log.i(TAG, jsonObject.toString());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Crashlytics.logException(e);
 		}
 	}
 
@@ -114,12 +116,9 @@ public class UpdateDataTask extends AsyncTask {
 			} else {
 				Log.e(TAG, "Failed to download file");
 			}
-		} catch (ClientProtocolException e) {
+		} catch (Exception e) {
 			mDownloadError = true;
-			e.printStackTrace();
-		} catch (IOException e) {
-			mDownloadError = true;
-			e.printStackTrace();
+			Crashlytics.logException(e);
 		}
 		return builder.toString();
 	}

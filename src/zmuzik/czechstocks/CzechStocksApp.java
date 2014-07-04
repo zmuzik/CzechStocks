@@ -1,6 +1,5 @@
 package zmuzik.czechstocks;
 
-import java.security.acl.LastOwnerException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,11 +8,11 @@ import java.util.Locale;
 
 import zmuzik.czechstocks.DaoMaster.DevOpenHelper;
 import android.app.Application;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.style.LeadingMarginSpan;
 import android.util.Log;
+
+import com.crashlytics.android.Crashlytics;
 
 public class CzechStocksApp extends Application {
 
@@ -81,7 +80,7 @@ public class CzechStocksApp extends Application {
 			mDb.execSQL(sb.toString());
 		} catch (Exception e) {
 			Log.e("Error while creating view STOCK_LIST", e.toString());
-			e.printStackTrace();
+			Crashlytics.logException(e);
 		}
 	}
 
@@ -104,7 +103,7 @@ public class CzechStocksApp extends Application {
 			mDb.execSQL(sb.toString());
 		} catch (Exception e) {
 			Log.e("Error while creating view PORTFOLIO", e.toString());
-			e.printStackTrace();
+			Crashlytics.logException(e);
 		}
 	}
 
@@ -128,7 +127,7 @@ public class CzechStocksApp extends Application {
 			mDb.execSQL(sb.toString());
 		} catch (Exception e) {
 			Log.e("Error while creating view PORTFOLIO", e.toString());
-			e.printStackTrace();
+			Crashlytics.logException(e);
 		}
 	}
 
@@ -144,7 +143,7 @@ public class CzechStocksApp extends Application {
 			SimpleDateFormat formater = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 			return formater.format(mLastUpdated);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Crashlytics.logException(e);
 			return null;
 		}
 	}
@@ -162,7 +161,7 @@ public class CzechStocksApp extends Application {
 			Date lastDataTime = new Date(Long.parseLong(cursor.getString(0)));
 			return formater.format(lastDataTime);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Crashlytics.logException(e);
 			return null;
 		}
 	}
@@ -193,6 +192,7 @@ public class CzechStocksApp extends Application {
 		try {
 			number = format.parse(s);
 		} catch (ParseException e) {
+			Crashlytics.logException(e);
 			number = Double.valueOf(s);
 		}
 		return number.doubleValue();
