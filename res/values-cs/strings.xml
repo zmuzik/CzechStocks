@@ -18,7 +18,9 @@
     <string name="button_cancel">Zpět</string>
     <string name="choose_stock_prompt">Vyber akcii</string>
     <string name="number_of_stocks_hint">Počet akcií</string>
+    <string name="number_of_stocks_null">Počet akcií nebyl vyplněn</string>
     <string name="average_price_hint">Průměrná cena</string>
+    <string name="average_price_null">Průměrná cena nebyla vyplněna</string>
     <string name="currency">Kč</string>
     <string name="no_data_portfolio">K přidání akcií do portfolia použijte ikonu +</string>
     <string name="toas_check_net">Síťová chyba, zkontrolujte připojení k internetu.</string>

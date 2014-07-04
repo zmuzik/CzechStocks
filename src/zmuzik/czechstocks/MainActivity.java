@@ -1,6 +1,5 @@
 package zmuzik.czechstocks;
 
-import com.crashlytics.android.Crashlytics;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +12,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -26,6 +26,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.crashlytics.android.Crashlytics;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
@@ -183,15 +186,24 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				String quantityString = quantityET.getText().toString();
+				String priceString = priceET.getText().toString();
+				Resources res = getResources();
+				if (quantityString == null || "".equals(quantityString)) {
+					Toast.makeText(app, res.getString(R.string.number_of_stocks_null), Toast.LENGTH_LONG).show();
+					return;
+				}
+				if (priceString == null || "".equals(priceString)) {
+					Toast.makeText(app, res.getString(R.string.average_price_null), Toast.LENGTH_LONG).show();
+					return;
+				}
 				PortfolioItemDao pid = app.getPortfolioItemDao();
 				PortfolioItem pi = new PortfolioItem();
-
-				int quantity = Integer.valueOf(quantityET.getText().toString());
+				int quantity = Integer.valueOf(quantityString);
 				double price = app.getDoubleValue(priceET.getText().toString());
 				if (quantity > 0 && price > 0) {
 					int position = spinner.getSelectedItemPosition();
 					Stock stock = allStocks.get(position);
-
 					pi.setIsin(stock.getIsin());
 					pi.setPrice(price);
 					pi.setQuantity(quantity);
@@ -199,6 +211,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					refreshFragments();
 				}
 				dialog.dismiss();
+
 			}
 		});
 
