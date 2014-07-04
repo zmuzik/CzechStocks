@@ -192,7 +192,6 @@ public class CzechStocksApp extends Application {
 		try {
 			number = format.parse(s);
 		} catch (ParseException e) {
-			Crashlytics.logException(e);
 			number = Double.valueOf(s);
 		}
 		return number.doubleValue();
