@@ -16,11 +16,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+
+import zmuzik.czechstocks.db.StockListItem;
+import zmuzik.czechstocks.db.StockListItemDao;
 
 public class StocksListFragment extends ListFragment {
 

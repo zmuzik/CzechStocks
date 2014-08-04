@@ -21,9 +21,11 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+
+import zmuzik.czechstocks.db.PortfolioItem;
+import zmuzik.czechstocks.db.PortfolioItemDao;
 
 public class PortfolioListFragment extends ListFragment {
 

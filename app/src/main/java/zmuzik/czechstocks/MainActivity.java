@@ -30,6 +30,11 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
+import zmuzik.czechstocks.db.PortfolioItem;
+import zmuzik.czechstocks.db.PortfolioItemDao;
+import zmuzik.czechstocks.db.Stock;
+import zmuzik.czechstocks.db.StockListItem;
+
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
 	private final String TAG = this.getClass().getSimpleName();

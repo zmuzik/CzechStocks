@@ -6,7 +6,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import zmuzik.czechstocks.DaoMaster.DevOpenHelper;
+import zmuzik.czechstocks.db.DaoMaster;
+import zmuzik.czechstocks.db.DaoMaster.DevOpenHelper;
+import zmuzik.czechstocks.db.DaoSession;
+import zmuzik.czechstocks.db.PortfolioItemDao;
+import zmuzik.czechstocks.db.StockDao;
+import zmuzik.czechstocks.db.StockListItem;
+import zmuzik.czechstocks.db.StockListItemDao;
+
 import android.app.Application;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
