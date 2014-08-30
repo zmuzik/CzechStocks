@@ -20,11 +20,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -88,7 +85,7 @@ public class UpdateDataTask extends AsyncTask {
         }
     }
 
-    public String downloadStockDataOld(String url) {
+    public String downloadStockData(String url) {
         StringBuilder builder = new StringBuilder();
 
         HttpParams httpParameters = new BasicHttpParams();
@@ -122,60 +119,5 @@ public class UpdateDataTask extends AsyncTask {
             Crashlytics.logException(e);
         }
         return builder.toString();
-    }
-
-    public String downloadStockDataOld(String urlString) {
-        InputStream input = null;
-        HttpURLConnection connection = null;
-        try {
-            URL url = new URL(urlString);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
-
-            // expect HTTP 200 OK, so we don't mistakenly save error report
-            // instead of the file
-            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                Log.e(TAG, "Server returned HTTP " + connection.getResponseCode()
-                        + " " + connection.getResponseMessage());
-                return null;
-            }
-
-            // this will be useful to display download percentage
-            // might be -1: server did not report the length
-            int fileLength = connection.getContentLength();
-
-            // download the file
-            input = connection.getInputStream();
-            Log.i(TAG, "Starting downloading file from " + urlString);
-            byte data[] = new byte[4096];
-            long total = 0;
-            int count;
-            while ((count = input.read(data)) != -1) {
-                // allow canceling with back button
-                if (isCancelled()) {
-                    input.close();
-                    return null;
-                }
-                total += count;
-                output.write(data, 0, count);
-            }
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
-            return null;
-        } finally {
-            try {
-                if (input != null) {
-                    input.close();
-                }
-            } catch (IOException ignored) {
-                Log.e(TAG, "Error while closing io streams");
-            }
-
-            if (connection != null) {
-                connection.disconnect();
-            }
-        }
-        Log.i(TAG, "Data saved to " + targetPath);
-        return targetPath;
     }
 }
