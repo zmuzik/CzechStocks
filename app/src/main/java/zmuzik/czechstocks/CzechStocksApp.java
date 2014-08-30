@@ -13,6 +13,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import zmuzik.czechstocks.dao.DaoMaster;
+import zmuzik.czechstocks.dao.DaoSession;
+import zmuzik.czechstocks.dao.PortfolioItemDao;
+import zmuzik.czechstocks.dao.StockDao;
+import zmuzik.czechstocks.dao.StockListItem;
+import zmuzik.czechstocks.dao.StockListItemDao;
+
 public class CzechStocksApp extends Application {
 
     private final String TAG = this.getClass().getSimpleName();

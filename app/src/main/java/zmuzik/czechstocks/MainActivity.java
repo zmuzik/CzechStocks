@@ -30,6 +30,11 @@ import com.crashlytics.android.Crashlytics;
 import java.util.ArrayList;
 import java.util.List;
 
+import zmuzik.czechstocks.dao.PortfolioItem;
+import zmuzik.czechstocks.dao.PortfolioItemDao;
+import zmuzik.czechstocks.dao.Stock;
+import zmuzik.czechstocks.dao.StockListItem;
+
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
     private final String TAG = this.getClass().getSimpleName();

@@ -24,6 +24,9 @@ import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
+import zmuzik.czechstocks.dao.PortfolioItem;
+import zmuzik.czechstocks.dao.PortfolioItemDao;
+
 public class PortfolioListFragment extends ListFragment {
 
     final String TAG = this.getClass().getSimpleName();

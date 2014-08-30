@@ -21,6 +21,9 @@ import com.crashlytics.android.Crashlytics;
 
 import java.text.DecimalFormat;
 
+import zmuzik.czechstocks.dao.StockListItem;
+import zmuzik.czechstocks.dao.StockListItemDao;
+
 public class StocksListFragment extends ListFragment {
 
     final String TAG = this.getClass().getSimpleName();

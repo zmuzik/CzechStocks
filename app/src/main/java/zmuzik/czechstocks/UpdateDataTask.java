@@ -25,6 +25,8 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import zmuzik.czechstocks.dao.Stock;
+
 public class UpdateDataTask extends AsyncTask {
 
     private final String TAG = this.getClass().getSimpleName();

@@ -9,7 +9,7 @@ import de.greenrobot.daogenerator.Schema;
 public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
-        Schema schema = new Schema(1, "zmuzik.czechstocks");
+        Schema schema = new Schema(1, "zmuzik.czechstocks.dao");
 
         Entity stock = schema.addEntity("Stock");
         stock.addIdProperty();
