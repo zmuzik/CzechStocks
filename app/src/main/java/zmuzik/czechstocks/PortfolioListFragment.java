@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.crashlytics.android.Crashlytics;
 
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
@@ -57,11 +58,12 @@ public class PortfolioListFragment extends ListFragment {
     }
 
     public void refreshData() {
-        String select = "select _id, NAME, CURRENT_PRICE, DELTA, QUANTITY, ORIGINAL_PRICE, PROFIT from TOTAL_PORTFOLIO;";
-        if (app.isTableEmpty(app.getDb(), "PORTFOLIO")) {
-            select = "select _id, NAME, CURRENT_PRICE, DELTA, QUANTITY, ORIGINAL_PRICE, PROFIT from PORTFOLIO;";
-        }
+//        String select = "select _id, NAME, CURRENT_PRICE, DELTA, QUANTITY, ORIGINAL_PRICE, PROFIT from TOTAL_PORTFOLIO;";
+//        if (app.isTableEmpty(app.getDb(), "PORTFOLIO")) {
+//            select = "select _id, NAME, CURRENT_PRICE, DELTA, QUANTITY, ORIGINAL_PRICE, PROFIT from PORTFOLIO;";
+//        }
 
+        String select = "select _id, NAME, CURRENT_PRICE, DELTA, QUANTITY, ORIGINAL_PRICE, PROFIT from PORTFOLIO;";
         Cursor cursor = app.getDb().rawQuery(select, null);
         String[] from = {"NAME", "DELTA", "QUANTITY", "ORIGINAL_PRICE", "PROFIT"};
 
@@ -100,6 +102,11 @@ public class PortfolioListFragment extends ListFragment {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 Resources res = getResources();
                 final long rowid = arg3;
+
+                PortfolioItemDao pid = app.getDaoSession().getPortfolioItemDao();
+                List<PortfolioItem> portfolioItems = pid.loadAll();
+                PortfolioItem clickedItem = portfolioItems.get(arg2);
+                final String isin = clickedItem.getIsin();
 
                 LinearLayout itemRow1 = ((LinearLayout) ((LinearLayout) arg1).getChildAt(0));
                 LinearLayout itemRow2 = ((LinearLayout) ((LinearLayout) arg1).getChildAt(1));
@@ -147,8 +154,8 @@ public class PortfolioListFragment extends ListFragment {
                 dialogBuilder.setNeutralButton(res.getString(R.string.button_remove),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                PortfolioItemDao pid = app.getPortfolioItemDao();
-                                pid.deleteByKey(rowid);
+                                PortfolioItemDao pid = app.getDaoSession().getPortfolioItemDao();
+                                pid.deleteByKey(isin);
                                 refreshData();
                                 dialog.dismiss();
                             }
@@ -160,7 +167,7 @@ public class PortfolioListFragment extends ListFragment {
                                 double price = app.getDoubleValue(priceET.getText().toString());
                                 int quantity = Integer.valueOf(quantityET.getText().toString());
                                 if (price > 0 && quantity > 0) {
-                                    PortfolioItemDao pid = app.getPortfolioItemDao();
+                                    PortfolioItemDao pid = app.getDaoSession().getPortfolioItemDao();
                                     PortfolioItem pi = pid.loadByRowId(rowid);
                                     pi.setPrice(price);
                                     pi.setQuantity(quantity);

@@ -24,8 +24,7 @@ public class MyDaoGenerator {
         portfolioItem.addIntProperty("quantity").notNull();
 
         Entity stockListItem = schema.addEntity("StockListItem");
-        stockListItem.addIdProperty();
-        stockListItem.addStringProperty("isin").notNull();
+        stockListItem.addStringProperty("isin").notNull().primaryKey();
 
         try {
             new DaoGenerator().generateAll(schema, args[0]);

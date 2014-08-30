@@ -25,7 +25,7 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import zmuzik.czechstocks.dao.Stock;
+import zmuzik.czechstocks.dao.CurrentTradingData;
 
 public class UpdateDataTask extends AsyncTask {
 
@@ -67,7 +67,7 @@ public class UpdateDataTask extends AsyncTask {
     public void saveStocksToDb(String serverResponse) {
         try {
             JSONArray stocksJsonArray = new JSONArray(serverResponse);
-            app.getStockDao().deleteAll();
+            app.getDaoSession().getCurrentTradingDataDao().deleteAll();
             for (int i = 0; i < stocksJsonArray.length(); i++) {
                 JSONObject jsonObject = stocksJsonArray.getJSONObject(i);
 
@@ -77,8 +77,8 @@ public class UpdateDataTask extends AsyncTask {
                 double delta = jsonObject.getDouble("delta");
                 Date stamp = new SimpleDateFormat("d.M.yyyy HH:mm").parse(jsonObject.getString("stamp"));
 
-                Stock stock = new Stock(null, isin, name, price, delta, stamp);
-                app.getStockDao().insert(stock);
+                CurrentTradingData stock = new CurrentTradingData(isin, name, price, delta, stamp);
+                app.getDaoSession().getCurrentTradingDataDao().insert(stock);
 
                 //Log.i(TAG, jsonObject.toString());
             }

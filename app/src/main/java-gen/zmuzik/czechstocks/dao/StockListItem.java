@@ -6,28 +6,14 @@ package zmuzik.czechstocks.dao;
  */
 public class StockListItem {
 
-    private Long id;
     /** Not-null value. */
     private String isin;
 
     public StockListItem() {
     }
 
-    public StockListItem(Long id) {
-        this.id = id;
-    }
-
-    public StockListItem(Long id, String isin) {
-        this.id = id;
+    public StockListItem(String isin) {
         this.isin = isin;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     /** Not-null value. */

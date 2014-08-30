@@ -9,10 +9,12 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,9 +32,9 @@ import com.crashlytics.android.Crashlytics;
 import java.util.ArrayList;
 import java.util.List;
 
+import zmuzik.czechstocks.dao.CurrentTradingData;
 import zmuzik.czechstocks.dao.PortfolioItem;
 import zmuzik.czechstocks.dao.PortfolioItemDao;
-import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.StockListItem;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
@@ -47,7 +49,15 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Crashlytics.start(this);
+
+        boolean isDebuggable = (0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
+        if (isDebuggable) {
+            Log.d(TAG, "Debug build - Crashlytics disabled");
+        } else {
+            Log.d(TAG, "Release build - starting Crashlytics");
+            Crashlytics.start(this);
+        }
+
         app = (CzechStocksApp) getApplicationContext();
         app.setMainActiviy(this);
 
@@ -116,8 +126,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     }
 
     void actionEditStockList() {
-        List<Stock> allStocks = app.getStockDao().loadAll();
-        List<StockListItem> allStockListItems = app.getStockListItemDao().loadAll();
+        List<CurrentTradingData> allStocks = app.getDaoSession().getCurrentTradingDataDao().loadAll();
+        List<StockListItem> allStockListItems = app.getDaoSession().getStockListItemDao().loadAll();
         ArrayList<String> allStockListItemsStrings = new ArrayList<String>();
         for (StockListItem item : allStockListItems) {
             allStockListItemsStrings.add(item.getIsin());
@@ -128,7 +138,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         final boolean[] selectedStocks = new boolean[allStocks.size()];
 
         int i = 0;
-        for (Stock stock : allStocks) {
+        for (CurrentTradingData stock : allStocks) {
             stockNames[i] = stock.getName();
             stockIsins[i] = stock.getIsin();
             selectedStocks[i] = allStockListItemsStrings.contains(stock.getIsin());
@@ -149,10 +159,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                app.getStockListItemDao().deleteAll();
+                app.getDaoSession().getStockListItemDao().deleteAll();
                 for (int i = 0; i < selectedStocks.length; i++) {
                     if (selectedStocks[i]) {
-                        app.getStockListItemDao().insert(new StockListItem((long) i, stockIsins[i]));
+                        app.getDaoSession().getStockListItemDao().insert(new StockListItem(stockIsins[i]));
                     }
                 }
                 refreshFragments();
@@ -163,9 +173,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     }
 
     void actionAddPortfolioItem() {
-        final List<Stock> allStocks = app.getStockDao().loadAll();
+        final List<CurrentTradingData> allStocks = app.getDaoSession().getCurrentTradingDataDao().loadAll();
         ArrayList<String> stockNames = new ArrayList<String>();
-        for (Stock item : allStocks) {
+        for (CurrentTradingData item : allStocks) {
             stockNames.add(item.getName());
         }
 
@@ -202,13 +212,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                     Toast.makeText(app, res.getString(R.string.average_price_null), Toast.LENGTH_LONG).show();
                     return;
                 }
-                PortfolioItemDao pid = app.getPortfolioItemDao();
+                PortfolioItemDao pid = app.getDaoSession().getPortfolioItemDao();
                 PortfolioItem pi = new PortfolioItem();
                 int quantity = Integer.valueOf(quantityString);
                 double price = app.getDoubleValue(priceET.getText().toString());
                 if (quantity > 0 && price > 0) {
                     int position = spinner.getSelectedItemPosition();
-                    Stock stock = allStocks.get(position);
+                    CurrentTradingData stock = allStocks.get(position);
                     pi.setIsin(stock.getIsin());
                     pi.setPrice(price);
                     pi.setQuantity(quantity);

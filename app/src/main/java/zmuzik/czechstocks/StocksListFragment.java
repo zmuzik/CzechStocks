@@ -53,7 +53,7 @@ public class StocksListFragment extends ListFragment {
     }
 
     public void refreshData() {
-        String select = "SELECT _id, NAME, DELTA, PRICE FROM STOCK_LIST;";
+        String select = "SELECT rowid as _id, NAME, DELTA, PRICE FROM CURRENT_TRADING_DATA;";
         Cursor cursor = app.getDb().rawQuery(select, null);
         String[] from = {"NAME", "DELTA", "PRICE"};
         int[] to = {R.id.stockNameTV, R.id.stockDeltaTV, R.id.stockPriceTV};
@@ -89,8 +89,8 @@ public class StocksListFragment extends ListFragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 Resources res = getResources();
-                final StockListItem sli = new StockListItem(arg3);
-                final StockListItemDao sliDao = app.getStockListItemDao();
+                final StockListItemDao sliDao = app.getDaoSession().getStockListItemDao();
+                final StockListItem sli = sliDao.loadByRowId(arg3);
                 String stockName = ((TextView) ((LinearLayout) arg1).getChildAt(0)).getText().toString();
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(R.string.remove_title);

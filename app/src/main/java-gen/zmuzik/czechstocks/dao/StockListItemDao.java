@@ -14,7 +14,7 @@ import zmuzik.czechstocks.dao.StockListItem;
 /** 
  * DAO for table STOCK_LIST_ITEM.
 */
-public class StockListItemDao extends AbstractDao<StockListItem, Long> {
+public class StockListItemDao extends AbstractDao<StockListItem, String> {
 
     public static final String TABLENAME = "STOCK_LIST_ITEM";
 
@@ -23,8 +23,7 @@ public class StockListItemDao extends AbstractDao<StockListItem, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Isin = new Property(1, String.class, "isin", false, "ISIN");
+        public final static Property Isin = new Property(0, String.class, "isin", true, "ISIN");
     };
 
 
@@ -40,8 +39,7 @@ public class StockListItemDao extends AbstractDao<StockListItem, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'STOCK_LIST_ITEM' (" + //
-                "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'ISIN' TEXT NOT NULL );"); // 1: isin
+                "'ISIN' TEXT PRIMARY KEY NOT NULL );"); // 0: isin
     }
 
     /** Drops the underlying database table. */
@@ -54,26 +52,20 @@ public class StockListItemDao extends AbstractDao<StockListItem, Long> {
     @Override
     protected void bindValues(SQLiteStatement stmt, StockListItem entity) {
         stmt.clearBindings();
- 
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
-        }
-        stmt.bindString(2, entity.getIsin());
+        stmt.bindString(1, entity.getIsin());
     }
 
     /** @inheritdoc */
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.getString(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public StockListItem readEntity(Cursor cursor, int offset) {
         StockListItem entity = new StockListItem( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getString(offset + 1) // isin
+            cursor.getString(offset + 0) // isin
         );
         return entity;
     }
@@ -81,22 +73,20 @@ public class StockListItemDao extends AbstractDao<StockListItem, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, StockListItem entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setIsin(cursor.getString(offset + 1));
+        entity.setIsin(cursor.getString(offset + 0));
      }
     
     /** @inheritdoc */
     @Override
-    protected Long updateKeyAfterInsert(StockListItem entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected String updateKeyAfterInsert(StockListItem entity, long rowId) {
+        return entity.getIsin();
     }
     
     /** @inheritdoc */
     @Override
-    public Long getKey(StockListItem entity) {
+    public String getKey(StockListItem entity) {
         if(entity != null) {
-            return entity.getId();
+            return entity.getIsin();
         } else {
             return null;
         }
