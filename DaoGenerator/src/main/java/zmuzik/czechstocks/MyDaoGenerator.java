@@ -11,12 +11,12 @@ public class MyDaoGenerator {
     public static void main(String args[]) throws Exception {
         Schema schema = new Schema(1, "zmuzik.czechstocks.dao");
 
-        Entity stock = schema.addEntity("CurrentTradingData");
-        stock.addStringProperty("isin").notNull().primaryKey();
-        stock.addStringProperty("name").notNull();
-        stock.addDoubleProperty("price").notNull();
-        stock.addDoubleProperty("delta").notNull();
-        stock.addDateProperty("stamp").notNull();
+        Entity currentTradingData = schema.addEntity("CurrentTradingData");
+        currentTradingData.addStringProperty("isin").notNull().primaryKey();
+        currentTradingData.addStringProperty("name").notNull();
+        currentTradingData.addDoubleProperty("price").notNull();
+        currentTradingData.addDoubleProperty("delta").notNull();
+        currentTradingData.addDateProperty("stamp").notNull();
 
         Entity portfolioItem = schema.addEntity("PortfolioItem");
         portfolioItem.addStringProperty("isin").notNull().primaryKey();
