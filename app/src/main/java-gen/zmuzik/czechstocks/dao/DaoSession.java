@@ -9,11 +9,11 @@ import de.greenrobot.dao.AbstractDaoSession;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.greenrobot.dao.internal.DaoConfig;
 
-import zmuzik.czechstocks.dao.Stock;
+import zmuzik.czechstocks.dao.CurrentTradingData;
 import zmuzik.czechstocks.dao.PortfolioItem;
 import zmuzik.czechstocks.dao.StockListItem;
 
-import zmuzik.czechstocks.dao.StockDao;
+import zmuzik.czechstocks.dao.CurrentTradingDataDao;
 import zmuzik.czechstocks.dao.PortfolioItemDao;
 import zmuzik.czechstocks.dao.StockListItemDao;
 
@@ -26,11 +26,11 @@ import zmuzik.czechstocks.dao.StockListItemDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private final DaoConfig stockDaoConfig;
+    private final DaoConfig currentTradingDataDaoConfig;
     private final DaoConfig portfolioItemDaoConfig;
     private final DaoConfig stockListItemDaoConfig;
 
-    private final StockDao stockDao;
+    private final CurrentTradingDataDao currentTradingDataDao;
     private final PortfolioItemDao portfolioItemDao;
     private final StockListItemDao stockListItemDao;
 
@@ -38,8 +38,8 @@ public class DaoSession extends AbstractDaoSession {
             daoConfigMap) {
         super(db);
 
-        stockDaoConfig = daoConfigMap.get(StockDao.class).clone();
-        stockDaoConfig.initIdentityScope(type);
+        currentTradingDataDaoConfig = daoConfigMap.get(CurrentTradingDataDao.class).clone();
+        currentTradingDataDaoConfig.initIdentityScope(type);
 
         portfolioItemDaoConfig = daoConfigMap.get(PortfolioItemDao.class).clone();
         portfolioItemDaoConfig.initIdentityScope(type);
@@ -47,23 +47,23 @@ public class DaoSession extends AbstractDaoSession {
         stockListItemDaoConfig = daoConfigMap.get(StockListItemDao.class).clone();
         stockListItemDaoConfig.initIdentityScope(type);
 
-        stockDao = new StockDao(stockDaoConfig, this);
+        currentTradingDataDao = new CurrentTradingDataDao(currentTradingDataDaoConfig, this);
         portfolioItemDao = new PortfolioItemDao(portfolioItemDaoConfig, this);
         stockListItemDao = new StockListItemDao(stockListItemDaoConfig, this);
 
-        registerDao(Stock.class, stockDao);
+        registerDao(CurrentTradingData.class, currentTradingDataDao);
         registerDao(PortfolioItem.class, portfolioItemDao);
         registerDao(StockListItem.class, stockListItemDao);
     }
     
     public void clear() {
-        stockDaoConfig.getIdentityScope().clear();
+        currentTradingDataDaoConfig.getIdentityScope().clear();
         portfolioItemDaoConfig.getIdentityScope().clear();
         stockListItemDaoConfig.getIdentityScope().clear();
     }
 
-    public StockDao getStockDao() {
-        return stockDao;
+    public CurrentTradingDataDao getCurrentTradingDataDao() {
+        return currentTradingDataDao;
     }
 
     public PortfolioItemDao getPortfolioItemDao() {

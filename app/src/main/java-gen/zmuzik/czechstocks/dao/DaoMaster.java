@@ -8,7 +8,7 @@ import android.util.Log;
 import de.greenrobot.dao.AbstractDaoMaster;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 
-import zmuzik.czechstocks.dao.StockDao;
+import zmuzik.czechstocks.dao.CurrentTradingDataDao;
 import zmuzik.czechstocks.dao.PortfolioItemDao;
 import zmuzik.czechstocks.dao.StockListItemDao;
 
@@ -21,14 +21,14 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
-        StockDao.createTable(db, ifNotExists);
+        CurrentTradingDataDao.createTable(db, ifNotExists);
         PortfolioItemDao.createTable(db, ifNotExists);
         StockListItemDao.createTable(db, ifNotExists);
     }
     
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
-        StockDao.dropTable(db, ifExists);
+        CurrentTradingDataDao.dropTable(db, ifExists);
         PortfolioItemDao.dropTable(db, ifExists);
         StockListItemDao.dropTable(db, ifExists);
     }
@@ -62,7 +62,7 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(SQLiteDatabase db) {
         super(db, SCHEMA_VERSION);
-        registerDaoClass(StockDao.class);
+        registerDaoClass(CurrentTradingDataDao.class);
         registerDaoClass(PortfolioItemDao.class);
         registerDaoClass(StockListItemDao.class);
     }

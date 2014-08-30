@@ -14,7 +14,7 @@ import zmuzik.czechstocks.dao.PortfolioItem;
 /** 
  * DAO for table PORTFOLIO_ITEM.
 */
-public class PortfolioItemDao extends AbstractDao<PortfolioItem, Long> {
+public class PortfolioItemDao extends AbstractDao<PortfolioItem, String> {
 
     public static final String TABLENAME = "PORTFOLIO_ITEM";
 
@@ -23,10 +23,9 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Isin = new Property(1, String.class, "isin", false, "ISIN");
-        public final static Property Price = new Property(2, double.class, "price", false, "PRICE");
-        public final static Property Quantity = new Property(3, int.class, "quantity", false, "QUANTITY");
+        public final static Property Isin = new Property(0, String.class, "isin", true, "ISIN");
+        public final static Property Price = new Property(1, double.class, "price", false, "PRICE");
+        public final static Property Quantity = new Property(2, int.class, "quantity", false, "QUANTITY");
     };
 
 
@@ -42,10 +41,9 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'PORTFOLIO_ITEM' (" + //
-                "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'ISIN' TEXT NOT NULL ," + // 1: isin
-                "'PRICE' REAL NOT NULL ," + // 2: price
-                "'QUANTITY' INTEGER NOT NULL );"); // 3: quantity
+                "'ISIN' TEXT PRIMARY KEY NOT NULL ," + // 0: isin
+                "'PRICE' REAL NOT NULL ," + // 1: price
+                "'QUANTITY' INTEGER NOT NULL );"); // 2: quantity
     }
 
     /** Drops the underlying database table. */
@@ -58,30 +56,24 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, Long> {
     @Override
     protected void bindValues(SQLiteStatement stmt, PortfolioItem entity) {
         stmt.clearBindings();
- 
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
-        }
-        stmt.bindString(2, entity.getIsin());
-        stmt.bindDouble(3, entity.getPrice());
-        stmt.bindLong(4, entity.getQuantity());
+        stmt.bindString(1, entity.getIsin());
+        stmt.bindDouble(2, entity.getPrice());
+        stmt.bindLong(3, entity.getQuantity());
     }
 
     /** @inheritdoc */
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.getString(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public PortfolioItem readEntity(Cursor cursor, int offset) {
         PortfolioItem entity = new PortfolioItem( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getString(offset + 1), // isin
-            cursor.getDouble(offset + 2), // price
-            cursor.getInt(offset + 3) // quantity
+            cursor.getString(offset + 0), // isin
+            cursor.getDouble(offset + 1), // price
+            cursor.getInt(offset + 2) // quantity
         );
         return entity;
     }
@@ -89,24 +81,22 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, PortfolioItem entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setIsin(cursor.getString(offset + 1));
-        entity.setPrice(cursor.getDouble(offset + 2));
-        entity.setQuantity(cursor.getInt(offset + 3));
+        entity.setIsin(cursor.getString(offset + 0));
+        entity.setPrice(cursor.getDouble(offset + 1));
+        entity.setQuantity(cursor.getInt(offset + 2));
      }
     
     /** @inheritdoc */
     @Override
-    protected Long updateKeyAfterInsert(PortfolioItem entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected String updateKeyAfterInsert(PortfolioItem entity, long rowId) {
+        return entity.getIsin();
     }
     
     /** @inheritdoc */
     @Override
-    public Long getKey(PortfolioItem entity) {
+    public String getKey(PortfolioItem entity) {
         if(entity != null) {
-            return entity.getId();
+            return entity.getIsin();
         } else {
             return null;
         }
