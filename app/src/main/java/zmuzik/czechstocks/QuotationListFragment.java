@@ -17,10 +17,10 @@ import android.widget.TextView;
 import java.util.List;
 
 import zmuzik.czechstocks.adapters.QuotationListAdapter;
-import zmuzik.czechstocks.dao.QuotationListItem;
-import zmuzik.czechstocks.dao.QuotationListItemDao;
+import zmuzik.czechstocks.dao.QuoteListItem;
+import zmuzik.czechstocks.dao.QuoteListItemDao;
 
-public class StocksListFragment extends ListFragment {
+public class QuotationListFragment extends ListFragment {
 
     final String TAG = this.getClass().getSimpleName();
     CzechStocksApp app;
@@ -49,7 +49,7 @@ public class StocksListFragment extends ListFragment {
     }
 
     public void refreshData() {
-        List items = app.getDaoSession().getQuotationListItemDao().loadAll();
+        List items = app.getDaoSession().getQuoteListItemDao().loadAll();
         mAdapter = new QuotationListAdapter(app, items);
         setListAdapter(mAdapter);
 
@@ -68,8 +68,8 @@ public class StocksListFragment extends ListFragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 Resources res = getResources();
-                final QuotationListItemDao dao = app.getDaoSession().getQuotationListItemDao();
-                final QuotationListItem sli = dao.loadByRowId(arg3);
+                final QuoteListItemDao dao = app.getDaoSession().getQuoteListItemDao();
+                final QuoteListItem sli = dao.loadByRowId(arg3);
                 String stockName = ((TextView) ((LinearLayout) arg1).getChildAt(0)).getText().toString();
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(R.string.remove_title);

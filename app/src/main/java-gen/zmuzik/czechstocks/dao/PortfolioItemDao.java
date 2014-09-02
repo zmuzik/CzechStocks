@@ -127,9 +127,9 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, String> {
             StringBuilder builder = new StringBuilder("SELECT ");
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getCurrentTradingDataDao().getAllColumns());
+            SqlUtils.appendColumns(builder, "T0", daoSession.getCurrentQuoteDao().getAllColumns());
             builder.append(" FROM PORTFOLIO_ITEM T");
-            builder.append(" LEFT JOIN CURRENT_TRADING_DATA T0 ON T.'ISIN'=T0.'ISIN'");
+            builder.append(" LEFT JOIN CURRENT_QUOTE T0 ON T.'ISIN'=T0.'ISIN'");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -140,9 +140,9 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, String> {
         PortfolioItem entity = loadCurrent(cursor, 0, lock);
         int offset = getAllColumns().length;
 
-        CurrentTradingData currentTradingData = loadCurrentOther(daoSession.getCurrentTradingDataDao(), cursor, offset);
-         if(currentTradingData != null) {
-            entity.setCurrentTradingData(currentTradingData);
+        CurrentQuote currentQuote = loadCurrentOther(daoSession.getCurrentQuoteDao(), cursor, offset);
+         if(currentQuote != null) {
+            entity.setCurrentQuote(currentQuote);
         }
 
         return entity;    

@@ -10,13 +10,13 @@ import java.util.List;
 
 import zmuzik.czechstocks.CzechStocksApp;
 import zmuzik.czechstocks.R;
-import zmuzik.czechstocks.dao.QuotationListItem;
+import zmuzik.czechstocks.dao.QuoteListItem;
 
-public class PortfolioAdapter extends ArrayAdapter<QuotationListItem> {
+public class PortfolioAdapter extends ArrayAdapter<QuoteListItem> {
 
     CzechStocksApp app;
 
-    public PortfolioAdapter(Context context, List<QuotationListItem> objects) {
+    public PortfolioAdapter(Context context, List<QuoteListItem> objects) {
         super(context, R.layout.portfolio_item, objects);
         app = (CzechStocksApp) context.getApplicationContext();
     }

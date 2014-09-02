@@ -9,16 +9,25 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import zmuzik.czechstocks.CzechStocksApp;
 import zmuzik.czechstocks.R;
-import zmuzik.czechstocks.dao.CurrentTradingData;
-import zmuzik.czechstocks.dao.QuotationListItem;
+import zmuzik.czechstocks.dao.CurrentQuote;
+import zmuzik.czechstocks.dao.QuoteListItem;
 
-public class QuotationListAdapter extends ArrayAdapter<QuotationListItem> {
+public class QuotationListAdapter extends ArrayAdapter<QuoteListItem> {
+
+    private final String TAG = this.getClass().getSimpleName();
 
     CzechStocksApp app;
 
-    public QuotationListAdapter(Context context, List<QuotationListItem> objects) {
+    @InjectView(R.id.stockNameTV) TextView stockNameTV;
+    @InjectView(R.id.stockDeltaTV) TextView stockDeltaTV;
+    @InjectView(R.id.stockPriceTV) TextView stockPriceTV;
+
+
+    public QuotationListAdapter(Context context, List<QuoteListItem> objects) {
         super(context, R.layout.stocks_list_item, objects);
         app = (CzechStocksApp) context.getApplicationContext();
     }
@@ -27,12 +36,9 @@ public class QuotationListAdapter extends ArrayAdapter<QuotationListItem> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.stocks_list_item, parent, false);
+        ButterKnife.inject(this, convertView);
 
-        TextView stockNameTV = (TextView)convertView.findViewById(R.id.stockNameTV);
-        TextView stockDeltaTV = (TextView)convertView.findViewById(R.id.stockDeltaTV);
-        TextView stockPriceTV = (TextView)convertView.findViewById(R.id.stockPriceTV);
-
-        CurrentTradingData item = getItem(position).getCurrentTradingData();
+        CurrentQuote item = getItem(position).getCurrentQuote();
         stockNameTV.setText(item.getName());
         stockDeltaTV.setText(""+item.getDelta());
         stockPriceTV.setText(""+item.getPrice());

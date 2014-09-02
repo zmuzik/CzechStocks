@@ -7,18 +7,19 @@ import android.support.v13.app.FragmentPagerAdapter;
 
 import zmuzik.czechstocks.CzechStocksApp;
 import zmuzik.czechstocks.PortfolioListFragment;
+import zmuzik.czechstocks.QuotationListFragment;
 import zmuzik.czechstocks.R;
-import zmuzik.czechstocks.StocksListFragment;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private CzechStocksApp app;
 
-    StocksListFragment stocksListFragment;
+    QuotationListFragment stocksListFragment;
     PortfolioListFragment portfolioListFragment;
 
-    public SectionsPagerAdapter(FragmentManager fm) {
+    public SectionsPagerAdapter(CzechStocksApp app, FragmentManager fm) {
         super(fm);
+        this.app = app;
     }
 
     @Override
@@ -26,7 +27,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 if (stocksListFragment == null) {
-                    stocksListFragment = new StocksListFragment();
+                    stocksListFragment = new QuotationListFragment();
                 }
                 return stocksListFragment;
             case 1:

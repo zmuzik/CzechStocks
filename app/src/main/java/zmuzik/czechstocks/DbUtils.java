@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 
-import zmuzik.czechstocks.dao.QuotationListItem;
+import zmuzik.czechstocks.dao.QuoteListItem;
 
 public class DbUtils {
 
@@ -58,8 +58,8 @@ public class DbUtils {
     void fillTableStockListItem() {
         Log.i(TAG, "Filling STOCK_LIST_ITEM table with default values");
         for (String isin : app.getResources().getStringArray(R.array.default_quotes_list)) {
-            QuotationListItem item = new QuotationListItem(isin);
-            app.getDaoSession().getQuotationListItemDao().insert(item);
+            QuoteListItem item = new QuoteListItem(isin);
+            app.getDaoSession().getQuoteListItemDao().insert(item);
         }
     }
 }

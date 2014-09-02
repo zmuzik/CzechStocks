@@ -13,12 +13,12 @@ public class MyDaoGenerator {
         Schema schema = new Schema(1, "zmuzik.czechstocks.dao");
 
         // Current trading data
-        Entity currentTradingData = schema.addEntity("CurrentTradingData");
+        Entity currentTradingData = schema.addEntity("CurrentQuote");
         currentTradingData.addStringProperty("isin").notNull().primaryKey();
         currentTradingData.addStringProperty("name").notNull();
         currentTradingData.addDoubleProperty("price").notNull();
         currentTradingData.addDoubleProperty("delta").notNull();
-        currentTradingData.addDateProperty("stamp").notNull();
+        currentTradingData.addStringProperty("stamp").notNull();
 
         // Portfolio item
         Entity portfolioItem = schema.addEntity("PortfolioItem");
@@ -29,7 +29,7 @@ public class MyDaoGenerator {
         portfolioItem.addToOne(currentTradingData, portfolioIsinProperty);
 
         // Stock list item
-        Entity quotationListItem = schema.addEntity("QuotationListItem");
+        Entity quotationListItem = schema.addEntity("QuoteListItem");
         Property quotationListIsinProperty = quotationListItem.addStringProperty("isin").notNull().primaryKey().getProperty();
 
         quotationListItem.addToOne(currentTradingData, quotationListIsinProperty);

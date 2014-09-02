@@ -20,8 +20,8 @@ public class PortfolioItem {
     /** Used for active entity operations. */
     private transient PortfolioItemDao myDao;
 
-    private CurrentTradingData currentTradingData;
-    private String currentTradingData__resolvedKey;
+    private CurrentQuote currentQuote;
+    private String currentQuote__resolvedKey;
 
 
     public PortfolioItem() {
@@ -70,30 +70,30 @@ public class PortfolioItem {
     }
 
     /** To-one relationship, resolved on first access. */
-    public CurrentTradingData getCurrentTradingData() {
+    public CurrentQuote getCurrentQuote() {
         String __key = this.isin;
-        if (currentTradingData__resolvedKey == null || currentTradingData__resolvedKey != __key) {
+        if (currentQuote__resolvedKey == null || currentQuote__resolvedKey != __key) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            CurrentTradingDataDao targetDao = daoSession.getCurrentTradingDataDao();
-            CurrentTradingData currentTradingDataNew = targetDao.load(__key);
+            CurrentQuoteDao targetDao = daoSession.getCurrentQuoteDao();
+            CurrentQuote currentQuoteNew = targetDao.load(__key);
             synchronized (this) {
-                currentTradingData = currentTradingDataNew;
-            	currentTradingData__resolvedKey = __key;
+                currentQuote = currentQuoteNew;
+            	currentQuote__resolvedKey = __key;
             }
         }
-        return currentTradingData;
+        return currentQuote;
     }
 
-    public void setCurrentTradingData(CurrentTradingData currentTradingData) {
-        if (currentTradingData == null) {
+    public void setCurrentQuote(CurrentQuote currentQuote) {
+        if (currentQuote == null) {
             throw new DaoException("To-one property 'isin' has not-null constraint; cannot set to-one to null");
         }
         synchronized (this) {
-            this.currentTradingData = currentTradingData;
-            isin = currentTradingData.getIsin();
-            currentTradingData__resolvedKey = isin;
+            this.currentQuote = currentQuote;
+            isin = currentQuote.getIsin();
+            currentQuote__resolvedKey = isin;
         }
     }
 

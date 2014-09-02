@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import retrofit.RestAdapter;
 import zmuzik.czechstocks.dao.DaoMaster;
 import zmuzik.czechstocks.dao.DaoSession;
 
@@ -26,6 +27,7 @@ public class CzechStocksApp extends Application {
     private SQLiteDatabase mDb;
     private DaoSession mDaoSession;
     private MainActivity mMainActivity;
+    ApiService mApiService;
 
     private Locale mLocale;
 
@@ -42,6 +44,10 @@ public class CzechStocksApp extends Application {
         }
 
         initDb(DB_NAME);
+
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AppConf.SERVER_API_ROOT).build();
+        mApiService = restAdapter.create(ApiService.class);
+
     }
 
     private void initDb(String dbName) {
@@ -81,7 +87,7 @@ public class CzechStocksApp extends Application {
             if (mDb == null || !mDb.isOpen()) {
                 return null;
             }
-            Cursor cursor = mDb.rawQuery("SELECT STAMP FROM CURRENT_TRADING_DATA;", null);
+            Cursor cursor = mDb.rawQuery("SELECT STAMP FROM CURRENT_QUOTE;", null);
             if (!cursor.moveToFirst()) {
                 return null;
             }
@@ -117,10 +123,6 @@ public class CzechStocksApp extends Application {
         return 0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE);
     }
 
-    SQLiteDatabase getDb() {
-        return mDb;
-    }
-
     DaoSession getDaoSession() {
         return mDaoSession;
     }
@@ -131,5 +133,9 @@ public class CzechStocksApp extends Application {
 
     MainActivity getMainActivity() {
         return mMainActivity;
+    }
+
+    ApiService getApiService() {
+        return mApiService;
     }
 }
