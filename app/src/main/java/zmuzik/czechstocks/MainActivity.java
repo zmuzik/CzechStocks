@@ -4,17 +4,12 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,15 +22,14 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import zmuzik.czechstocks.adapters.SectionsPagerAdapter;
 import zmuzik.czechstocks.dao.CurrentTradingData;
 import zmuzik.czechstocks.dao.PortfolioItem;
 import zmuzik.czechstocks.dao.PortfolioItemDao;
-import zmuzik.czechstocks.dao.StockListItem;
+import zmuzik.czechstocks.dao.QuotationListItem;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
@@ -50,14 +44,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boolean isDebuggable = (0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
-        if (isDebuggable) {
-            Log.d(TAG, "Debug build - Crashlytics disabled");
-        } else {
-            Log.d(TAG, "Release build - starting Crashlytics");
-            Crashlytics.start(this);
-        }
-
         app = (CzechStocksApp) getApplicationContext();
         app.setMainActiviy(this);
 
@@ -65,18 +51,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -84,7 +63,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
             }
         });
 
-        // For each of the sections in the app, add a tab to the action bar.
         for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
             actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
         }
@@ -99,7 +77,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -127,9 +104,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
     void actionEditStockList() {
         List<CurrentTradingData> allStocks = app.getDaoSession().getCurrentTradingDataDao().loadAll();
-        List<StockListItem> allStockListItems = app.getDaoSession().getStockListItemDao().loadAll();
+        List<QuotationListItem> allStockListItems = app.getDaoSession().getQuotationListItemDao().loadAll();
         ArrayList<String> allStockListItemsStrings = new ArrayList<String>();
-        for (StockListItem item : allStockListItems) {
+        for (QuotationListItem item : allStockListItems) {
             allStockListItemsStrings.add(item.getIsin());
         }
 
@@ -159,10 +136,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                app.getDaoSession().getStockListItemDao().deleteAll();
+                app.getDaoSession().getQuotationListItemDao().deleteAll();
                 for (int i = 0; i < selectedStocks.length; i++) {
                     if (selectedStocks[i]) {
-                        app.getDaoSession().getStockListItemDao().insert(new StockListItem(stockIsins[i]));
+                        app.getDaoSession().getQuotationListItemDao().insert(new QuotationListItem(stockIsins[i]));
                     }
                 }
                 refreshFragments();
@@ -265,11 +242,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
     void refreshFragments() {
         if (mSectionsPagerAdapter != null) {
-            if (mSectionsPagerAdapter.stocksListFragment != null) {
-                mSectionsPagerAdapter.stocksListFragment.refreshData();
+            if (mSectionsPagerAdapter.getItem(0) != null) {
+                ((StocksListFragment)mSectionsPagerAdapter.getItem(0)).refreshData();
             }
-            if (mSectionsPagerAdapter.portfolioListFragment != null) {
-                mSectionsPagerAdapter.portfolioListFragment.refreshData();
+            if (mSectionsPagerAdapter.getItem(0) != null) {
+                ((PortfolioListFragment)mSectionsPagerAdapter.getItem(0)).refreshData();
             }
         }
     }
@@ -287,50 +264,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     @Override
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
         ;
-    }
-
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        StocksListFragment stocksListFragment;
-        PortfolioListFragment portfolioListFragment;
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    if (stocksListFragment == null) {
-                        stocksListFragment = new StocksListFragment();
-                    }
-                    return stocksListFragment;
-                case 1:
-                    if (portfolioListFragment == null) {
-                        portfolioListFragment = new PortfolioListFragment();
-                    }
-                    return portfolioListFragment;
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return getString(R.string.tab_title_section1);
-                case 1:
-                    return getString(R.string.tab_title_section2);
-            }
-            return null;
-        }
     }
 
 }

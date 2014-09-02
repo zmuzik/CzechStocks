@@ -1,6 +1,7 @@
 package zmuzik.czechstocks;
 
 import android.app.Application;
+import android.content.pm.ApplicationInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -32,6 +33,14 @@ public class CzechStocksApp extends Application {
     public void onCreate() {
         Log.i(TAG, "===Initializing app===");
         super.onCreate();
+
+        if (isDebuggable()) {
+            Log.d(TAG, "Debug build - Crashlytics disabled");
+        } else {
+            Log.d(TAG, "Release build - starting Crashlytics");
+            Crashlytics.start(this);
+        }
+
         initDb(DB_NAME);
     }
 
@@ -44,13 +53,10 @@ public class CzechStocksApp extends Application {
 
         DbUtils dbUtils = DbUtils.getInstance(this);
 
-        //if (dbUtils.isCurrentDbVersion()) {
+        if (dbUtils.isCurrentDbVersion()) {
             dbUtils.fillTableStockListItem();
-            dbUtils.createStockListView();
-            dbUtils.createPortfolioView();
-            dbUtils.createTotalPortfolioView();
             dbUtils.saveCurrentDbVersion();
-        //}
+        }
     }
 
     public void setLastUpdatedTime() {
@@ -89,7 +95,7 @@ public class CzechStocksApp extends Application {
     }
 
 
-    double getDoubleValue(String s) {
+    public double getDoubleValue(String s) {
         if (s == null || "".equals(s)) {
             return (double) 0;
         }
@@ -105,6 +111,10 @@ public class CzechStocksApp extends Application {
             number = Double.valueOf(s);
         }
         return number.doubleValue();
+    }
+
+    public boolean isDebuggable() {
+        return 0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE);
     }
 
     SQLiteDatabase getDb() {

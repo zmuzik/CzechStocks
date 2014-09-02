@@ -2,10 +2,8 @@ package zmuzik.czechstocks;
 
 import android.app.AlertDialog;
 import android.app.ListFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,15 +12,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
+import java.util.List;
 
-import java.text.DecimalFormat;
-
-import zmuzik.czechstocks.dao.StockListItem;
-import zmuzik.czechstocks.dao.StockListItemDao;
+import zmuzik.czechstocks.adapters.QuotationListAdapter;
+import zmuzik.czechstocks.dao.QuotationListItem;
+import zmuzik.czechstocks.dao.QuotationListItemDao;
 
 public class StocksListFragment extends ListFragment {
 
@@ -30,7 +26,7 @@ public class StocksListFragment extends ListFragment {
     CzechStocksApp app;
     TextView mLastUpdateTime;
     TextView mDataFromTime;
-    StocksCursorAdapter cursorAdapter;
+    QuotationListAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,20 +49,9 @@ public class StocksListFragment extends ListFragment {
     }
 
     public void refreshData() {
-        String select = "SELECT rowid as _id, NAME, DELTA, PRICE FROM CURRENT_TRADING_DATA;";
-        Cursor cursor = app.getDb().rawQuery(select, null);
-        String[] from = {"NAME", "DELTA", "PRICE"};
-        int[] to = {R.id.stockNameTV, R.id.stockDeltaTV, R.id.stockPriceTV};
-
-        if (cursor != null) {
-            Crashlytics.setInt("stockListSize", cursor.getCount());
-            Crashlytics.setBool("stockListCursorNull", false);
-        } else {
-            Crashlytics.setBool("stockListCursorNull", true);
-        }
-
-        cursorAdapter = new StocksCursorAdapter(app, R.layout.stocks_list_item, cursor, from, to);
-        setListAdapter(cursorAdapter);
+        List items = app.getDaoSession().getQuotationListItemDao().loadAll();
+        mAdapter = new QuotationListAdapter(app, items);
+        setListAdapter(mAdapter);
 
         if (mLastUpdateTime != null) {
             mLastUpdateTime.setText(app.getLastUpdatedTime());
@@ -78,19 +63,13 @@ public class StocksListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int pos, long id) {
-        getListView().setItemChecked(pos, true);
-    }
-
-    public void onActivityCreated(Bundle savedState) {
-        super.onActivityCreated(savedState);
-
         getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 Resources res = getResources();
-                final StockListItemDao sliDao = app.getDaoSession().getStockListItemDao();
-                final StockListItem sli = sliDao.loadByRowId(arg3);
+                final QuotationListItemDao dao = app.getDaoSession().getQuotationListItemDao();
+                final QuotationListItem sli = dao.loadByRowId(arg3);
                 String stockName = ((TextView) ((LinearLayout) arg1).getChildAt(0)).getText().toString();
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(R.string.remove_title);
@@ -105,7 +84,7 @@ public class StocksListFragment extends ListFragment {
 
                 builder.setPositiveButton(res.getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        sliDao.delete(sli);
+                        dao.delete(sli);
                         app.getMainActivity().refreshFragments();
                         dialog.dismiss();
                     }
@@ -115,41 +94,5 @@ public class StocksListFragment extends ListFragment {
                 return true;
             }
         });
-    }
-
-    class StocksCursorAdapter extends SimpleCursorAdapter {
-
-        private DecimalFormat decFormater;
-
-        public StocksCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
-            super(context, layout, c, from, to, 0);
-            decFormater = new DecimalFormat();
-            decFormater.setMinimumIntegerDigits(1);
-            decFormater.setMinimumFractionDigits(2);
-            decFormater.setMaximumFractionDigits(2);
-        }
-
-        @Override
-        public void setViewText(TextView v, String text) {
-            super.setViewText(v, convText(v, text));
-        }
-
-        private String convText(TextView v, String text) {
-            double doubleAmount;
-            switch (v.getId()) {
-                case R.id.stockPriceTV:
-                    doubleAmount = app.getDoubleValue(text);
-                    return decFormater.format(doubleAmount);
-                case R.id.stockDeltaTV:
-                    doubleAmount = app.getDoubleValue(text);
-                    if (doubleAmount >= 0) {
-                        v.setTextAppearance(app, R.style.greenNumber);
-                    } else {
-                        v.setTextAppearance(app, R.style.redNumber);
-                    }
-                    return decFormater.format(doubleAmount) + "%";
-            }
-            return text;
-        }
     }
 }

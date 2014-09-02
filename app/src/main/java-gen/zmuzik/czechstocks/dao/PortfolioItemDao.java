@@ -1,11 +1,14 @@
 package zmuzik.czechstocks.dao;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import zmuzik.czechstocks.dao.PortfolioItem;
@@ -28,6 +31,8 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, String> {
         public final static Property Quantity = new Property(2, int.class, "quantity", false, "QUANTITY");
     };
 
+    private DaoSession daoSession;
+
 
     public PortfolioItemDao(DaoConfig config) {
         super(config);
@@ -35,6 +40,7 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, String> {
     
     public PortfolioItemDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -59,6 +65,12 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, String> {
         stmt.bindString(1, entity.getIsin());
         stmt.bindDouble(2, entity.getPrice());
         stmt.bindLong(3, entity.getQuantity());
+    }
+
+    @Override
+    protected void attachEntity(PortfolioItem entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -108,4 +120,97 @@ public class PortfolioItemDao extends AbstractDao<PortfolioItem, String> {
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getCurrentTradingDataDao().getAllColumns());
+            builder.append(" FROM PORTFOLIO_ITEM T");
+            builder.append(" LEFT JOIN CURRENT_TRADING_DATA T0 ON T.'ISIN'=T0.'ISIN'");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected PortfolioItem loadCurrentDeep(Cursor cursor, boolean lock) {
+        PortfolioItem entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        CurrentTradingData currentTradingData = loadCurrentOther(daoSession.getCurrentTradingDataDao(), cursor, offset);
+         if(currentTradingData != null) {
+            entity.setCurrentTradingData(currentTradingData);
+        }
+
+        return entity;    
+    }
+
+    public PortfolioItem loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<PortfolioItem> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<PortfolioItem> list = new ArrayList<PortfolioItem>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<PortfolioItem> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<PortfolioItem> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }
