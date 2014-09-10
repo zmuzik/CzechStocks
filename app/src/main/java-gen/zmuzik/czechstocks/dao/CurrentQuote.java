@@ -8,8 +8,6 @@ public class CurrentQuote {
 
     /** Not-null value. */
     private String isin;
-    /** Not-null value. */
-    private String name;
     private double price;
     private double delta;
     /** Not-null value. */
@@ -22,9 +20,8 @@ public class CurrentQuote {
         this.isin = isin;
     }
 
-    public CurrentQuote(String isin, String name, double price, double delta, String stamp) {
+    public CurrentQuote(String isin, double price, double delta, String stamp) {
         this.isin = isin;
-        this.name = name;
         this.price = price;
         this.delta = delta;
         this.stamp = stamp;
@@ -38,16 +35,6 @@ public class CurrentQuote {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setIsin(String isin) {
         this.isin = isin;
-    }
-
-    /** Not-null value. */
-    public String getName() {
-        return name;
-    }
-
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setName(String name) {
-        this.name = name;
     }
 
     public double getPrice() {

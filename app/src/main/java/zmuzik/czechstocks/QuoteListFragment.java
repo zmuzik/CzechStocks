@@ -17,8 +17,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import zmuzik.czechstocks.adapters.QuotationListAdapter;
-import zmuzik.czechstocks.dao.QuoteListItem;
-import zmuzik.czechstocks.dao.QuoteListItemDao;
+import zmuzik.czechstocks.dao.Stock;
+import zmuzik.czechstocks.dao.StockDao;
 
 public class QuoteListFragment extends ListFragment {
 
@@ -49,7 +49,7 @@ public class QuoteListFragment extends ListFragment {
     }
 
     public void refreshData() {
-        List items = app.getDaoSession().getQuoteListItemDao().loadAll();
+        List items = app.getDaoSession().getStockDao().loadAll();
         mAdapter = new QuotationListAdapter(app, items);
         setListAdapter(mAdapter);
 
@@ -68,8 +68,8 @@ public class QuoteListFragment extends ListFragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 Resources res = getResources();
-                final QuoteListItemDao dao = app.getDaoSession().getQuoteListItemDao();
-                final QuoteListItem sli = dao.loadByRowId(arg3);
+                final StockDao dao = app.getDaoSession().getStockDao();
+                final Stock stock = dao.loadByRowId(arg3);
                 String stockName = ((TextView) ((LinearLayout) arg1).getChildAt(0)).getText().toString();
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(R.string.remove_title);
@@ -84,7 +84,7 @@ public class QuoteListFragment extends ListFragment {
 
                 builder.setPositiveButton(res.getString(R.string.button_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dao.delete(sli);
+                        dao.delete(stock);
                         app.getMainActivity().refreshFragments();
                         dialog.dismiss();
                     }

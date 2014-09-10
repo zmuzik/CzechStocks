@@ -24,10 +24,9 @@ public class CurrentQuoteDao extends AbstractDao<CurrentQuote, String> {
     */
     public static class Properties {
         public final static Property Isin = new Property(0, String.class, "isin", true, "ISIN");
-        public final static Property Name = new Property(1, String.class, "name", false, "NAME");
-        public final static Property Price = new Property(2, double.class, "price", false, "PRICE");
-        public final static Property Delta = new Property(3, double.class, "delta", false, "DELTA");
-        public final static Property Stamp = new Property(4, String.class, "stamp", false, "STAMP");
+        public final static Property Price = new Property(1, double.class, "price", false, "PRICE");
+        public final static Property Delta = new Property(2, double.class, "delta", false, "DELTA");
+        public final static Property Stamp = new Property(3, String.class, "stamp", false, "STAMP");
     };
 
 
@@ -44,10 +43,9 @@ public class CurrentQuoteDao extends AbstractDao<CurrentQuote, String> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'CURRENT_QUOTE' (" + //
                 "'ISIN' TEXT PRIMARY KEY NOT NULL ," + // 0: isin
-                "'NAME' TEXT NOT NULL ," + // 1: name
-                "'PRICE' REAL NOT NULL ," + // 2: price
-                "'DELTA' REAL NOT NULL ," + // 3: delta
-                "'STAMP' TEXT NOT NULL );"); // 4: stamp
+                "'PRICE' REAL NOT NULL ," + // 1: price
+                "'DELTA' REAL NOT NULL ," + // 2: delta
+                "'STAMP' TEXT NOT NULL );"); // 3: stamp
     }
 
     /** Drops the underlying database table. */
@@ -61,10 +59,9 @@ public class CurrentQuoteDao extends AbstractDao<CurrentQuote, String> {
     protected void bindValues(SQLiteStatement stmt, CurrentQuote entity) {
         stmt.clearBindings();
         stmt.bindString(1, entity.getIsin());
-        stmt.bindString(2, entity.getName());
-        stmt.bindDouble(3, entity.getPrice());
-        stmt.bindDouble(4, entity.getDelta());
-        stmt.bindString(5, entity.getStamp());
+        stmt.bindDouble(2, entity.getPrice());
+        stmt.bindDouble(3, entity.getDelta());
+        stmt.bindString(4, entity.getStamp());
     }
 
     /** @inheritdoc */
@@ -78,10 +75,9 @@ public class CurrentQuoteDao extends AbstractDao<CurrentQuote, String> {
     public CurrentQuote readEntity(Cursor cursor, int offset) {
         CurrentQuote entity = new CurrentQuote( //
             cursor.getString(offset + 0), // isin
-            cursor.getString(offset + 1), // name
-            cursor.getDouble(offset + 2), // price
-            cursor.getDouble(offset + 3), // delta
-            cursor.getString(offset + 4) // stamp
+            cursor.getDouble(offset + 1), // price
+            cursor.getDouble(offset + 2), // delta
+            cursor.getString(offset + 3) // stamp
         );
         return entity;
     }
@@ -90,10 +86,9 @@ public class CurrentQuoteDao extends AbstractDao<CurrentQuote, String> {
     @Override
     public void readEntity(Cursor cursor, CurrentQuote entity, int offset) {
         entity.setIsin(cursor.getString(offset + 0));
-        entity.setName(cursor.getString(offset + 1));
-        entity.setPrice(cursor.getDouble(offset + 2));
-        entity.setDelta(cursor.getDouble(offset + 3));
-        entity.setStamp(cursor.getString(offset + 4));
+        entity.setPrice(cursor.getDouble(offset + 1));
+        entity.setDelta(cursor.getDouble(offset + 2));
+        entity.setStamp(cursor.getString(offset + 3));
      }
     
     /** @inheritdoc */

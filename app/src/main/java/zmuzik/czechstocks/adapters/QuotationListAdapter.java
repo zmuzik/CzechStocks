@@ -15,14 +15,15 @@ import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.QuoteListItem;
+import zmuzik.czechstocks.dao.Stock;
 
-public class QuotationListAdapter extends ArrayAdapter<QuoteListItem> {
+public class QuotationListAdapter extends ArrayAdapter<Stock> {
 
     private final String TAG = this.getClass().getSimpleName();
 
     App app;
 
-    public QuotationListAdapter(Context context, List<QuoteListItem> objects) {
+    public QuotationListAdapter(Context context, List<Stock> objects) {
         super(context, R.layout.stocks_list_item, objects);
         app = (App) context.getApplicationContext();
     }

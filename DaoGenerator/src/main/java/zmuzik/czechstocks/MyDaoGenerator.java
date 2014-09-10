@@ -15,7 +15,6 @@ public class MyDaoGenerator {
         // Current trading data
         Entity currentTradingData = schema.addEntity("CurrentQuote");
         currentTradingData.addStringProperty("isin").notNull().primaryKey();
-        currentTradingData.addStringProperty("name").notNull();
         currentTradingData.addDoubleProperty("price").notNull();
         currentTradingData.addDoubleProperty("delta").notNull();
         currentTradingData.addStringProperty("stamp").notNull();
@@ -29,10 +28,12 @@ public class MyDaoGenerator {
         portfolioItem.addToOne(currentTradingData, portfolioIsinProperty);
 
         // Stock list item
-        Entity quotationListItem = schema.addEntity("QuoteListItem");
-        Property quotationListIsinProperty = quotationListItem.addStringProperty("isin").notNull().primaryKey().getProperty();
+        Entity stock = schema.addEntity("Stock");
+        Property quotationListIsinProperty = stock.addStringProperty("isin").notNull().primaryKey().getProperty();
+        stock.addStringProperty("name").notNull();
+        stock.addBooleanProperty("showInQuotesList").notNull();
+        stock.addToOne(currentTradingData, quotationListIsinProperty);
 
-        quotationListItem.addToOne(currentTradingData, quotationListIsinProperty);
 
         try {
             new DaoGenerator().generateAll(schema, args[0]);
