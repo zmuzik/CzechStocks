@@ -11,7 +11,7 @@
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/portfolioStockNameTV"
+            android:id="@+id/stockNameTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="6.0dip"
@@ -20,7 +20,7 @@
             android:textAppearance="?android:textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/portfolioDeltaTV"
+            android:id="@+id/deltaTV"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
@@ -33,7 +33,7 @@
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/portfolioQuantityTV"
+            android:id="@+id/quantityTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -41,14 +41,14 @@
             android:textAppearance="?android:textAppearanceSmall" />
 
         <TextView
-            android:id="@+id/portfolioOriginalPriceTV"
+            android:id="@+id/originalPriceTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
             android:textAppearance="?android:textAppearanceSmall" />
 
         <TextView
-            android:id="@+id/portfolioProfitTV"
+            android:id="@+id/profitTV"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"

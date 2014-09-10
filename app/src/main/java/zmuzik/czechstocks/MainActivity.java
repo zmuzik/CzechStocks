@@ -34,7 +34,7 @@ import zmuzik.czechstocks.dao.QuoteListItem;
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
     private final String TAG = this.getClass().getSimpleName();
-    private CzechStocksApp app;
+    private App app;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -44,7 +44,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        app = (CzechStocksApp) getApplicationContext();
+        app = (App) getApplicationContext();
         app.setMainActiviy(this);
 
         setContentView(R.layout.activity_main);
@@ -243,10 +243,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     void refreshFragments() {
         if (mSectionsPagerAdapter != null) {
             if (mSectionsPagerAdapter.getItem(0) != null) {
-                ((QuotationListFragment) mSectionsPagerAdapter.getItem(0)).refreshData();
+                ((QuoteListFragment) mSectionsPagerAdapter.getItem(0)).refreshData();
             }
-            if (mSectionsPagerAdapter.getItem(0) != null) {
-                ((QuotationListFragment) mSectionsPagerAdapter.getItem(0)).refreshData();
+            if (mSectionsPagerAdapter.getItem(1) != null) {
+                ((PortfolioListFragment) mSectionsPagerAdapter.getItem(1)).refreshData();
             }
         }
     }

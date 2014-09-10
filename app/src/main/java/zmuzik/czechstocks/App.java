@@ -18,7 +18,7 @@ import retrofit.RestAdapter;
 import zmuzik.czechstocks.dao.DaoMaster;
 import zmuzik.czechstocks.dao.DaoSession;
 
-public class CzechStocksApp extends Application {
+public class App extends Application {
 
     private final String TAG = this.getClass().getSimpleName();
     private final String DB_NAME = "czech-stocks-db";
@@ -33,7 +33,7 @@ public class CzechStocksApp extends Application {
 
     @Override
     public void onCreate() {
-        Log.i(TAG, "===Initializing app===");
+        Log.i(TAG, "====================Initializing app====================");
         super.onCreate();
 
         if (isDebuggable()) {
@@ -59,8 +59,8 @@ public class CzechStocksApp extends Application {
 
         DbUtils dbUtils = DbUtils.getInstance(this);
 
-        if (dbUtils.isCurrentDbVersion()) {
-            dbUtils.fillTableStockListItem();
+        if (!dbUtils.isCurrentDbVersion()) {
+            dbUtils.fillTableQuoteListItem();
             dbUtils.saveCurrentDbVersion();
         }
     }

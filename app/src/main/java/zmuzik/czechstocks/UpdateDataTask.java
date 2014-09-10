@@ -12,11 +12,11 @@ import zmuzik.czechstocks.dao.CurrentQuoteDao;
 public class UpdateDataTask extends AsyncTask {
 
     private final String TAG = this.getClass().getSimpleName();
-    CzechStocksApp app;
+    App app;
     private boolean mDownloadError = false;
 
     UpdateDataTask(Context context) {
-        app = (CzechStocksApp) context;
+        app = (App) context;
     }
 
     @Override

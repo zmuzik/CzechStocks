@@ -27,6 +27,8 @@
     <string name="no_data_stocks_list">Attempting to download stock quotes from server. If this lasts too long, check your Intenet connection.</string>
     <string name="last_updated">Last updated:</string>
     <string name="data_from">Data from:</string>
+    <string name="total">TOTAL</string>
+
 
     <plurals name="pieces_bought_at">
         <item quantity="one">pc at</item>

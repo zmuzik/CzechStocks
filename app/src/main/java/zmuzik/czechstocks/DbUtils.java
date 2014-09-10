@@ -14,13 +14,13 @@ public class DbUtils {
     private final String APP_VERSION_CODE_KEY = "appVersionCode";
 
     private static DbUtils instance = null;
-    private CzechStocksApp app;
+    private App app;
 
-    public DbUtils(CzechStocksApp app) {
+    public DbUtils(App app) {
         this.app = app;
     }
 
-    public static synchronized DbUtils getInstance(CzechStocksApp app) {
+    public static synchronized DbUtils getInstance(App app) {
         if (instance == null) {
             instance = new DbUtils(app);
         }
@@ -55,8 +55,8 @@ public class DbUtils {
         }
     }
 
-    void fillTableStockListItem() {
-        Log.i(TAG, "Filling STOCK_LIST_ITEM table with default values");
+    void fillTableQuoteListItem() {
+        Log.i(TAG, "Filling QUOTE_LIST_ITEM table with default values");
         for (String isin : app.getResources().getStringArray(R.array.default_quotes_list)) {
             QuoteListItem item = new QuoteListItem(isin);
             app.getDaoSession().getQuoteListItemDao().insert(item);

@@ -20,10 +20,10 @@ import zmuzik.czechstocks.adapters.QuotationListAdapter;
 import zmuzik.czechstocks.dao.QuoteListItem;
 import zmuzik.czechstocks.dao.QuoteListItemDao;
 
-public class QuotationListFragment extends ListFragment {
+public class QuoteListFragment extends ListFragment {
 
     final String TAG = this.getClass().getSimpleName();
-    CzechStocksApp app;
+    App app;
     TextView mLastUpdateTime;
     TextView mDataFromTime;
     QuotationListAdapter mAdapter;
@@ -31,7 +31,7 @@ public class QuotationListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        app = (CzechStocksApp) this.getActivity().getApplicationContext();
+        app = (App) this.getActivity().getApplicationContext();
     }
 
     @Override

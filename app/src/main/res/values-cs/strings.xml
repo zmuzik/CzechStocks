@@ -27,6 +27,8 @@
     <string name="no_data_stocks_list">Stahuji aktuální data ze serveru. Pokud to trvá příliš dlouho, zkontrolujte vaše internetové připojení.</string>
     <string name="last_updated">Poslední aktualizace:</string>
     <string name="data_from">Data z:</string>
+    <string name="total">CELKEM</string>
+
 
     <plurals name="pieces_bought_at">
         <item quantity="one">kus za</item>

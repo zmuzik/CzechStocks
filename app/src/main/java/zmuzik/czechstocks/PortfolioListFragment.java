@@ -25,7 +25,7 @@ import zmuzik.czechstocks.dao.PortfolioItemDao;
 public class PortfolioListFragment extends ListFragment {
 
     final String TAG = this.getClass().getSimpleName();
-    CzechStocksApp app;
+    App app;
     TextView mLastUpdateTime;
     TextView mDataFromTime;
     PortfolioAdapter mAdapter;
@@ -33,7 +33,7 @@ public class PortfolioListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        app = (CzechStocksApp) this.getActivity().getApplicationContext();
+        app = (App) this.getActivity().getApplicationContext();
         refreshData();
     }
 
