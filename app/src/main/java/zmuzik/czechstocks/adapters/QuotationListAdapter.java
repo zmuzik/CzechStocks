@@ -14,7 +14,6 @@ import butterknife.InjectView;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.dao.CurrentQuote;
-import zmuzik.czechstocks.dao.QuoteListItem;
 import zmuzik.czechstocks.dao.Stock;
 
 public class QuotationListAdapter extends ArrayAdapter<Stock> {
@@ -41,18 +40,27 @@ public class QuotationListAdapter extends ArrayAdapter<Stock> {
             convertView.setTag(holder);
         }
 
-        CurrentQuote item = getItem(position).getCurrentQuote();
-        holder.stockNameTV.setText(item.getName());
-        holder.stockDeltaTV.setText(""+item.getDelta());
-        holder.stockPriceTV.setText(""+item.getPrice());
+        Stock stock = getItem(position);
+        holder.stockNameTV.setText(stock.getName());
+        CurrentQuote currentQuote = stock.getCurrentQuote();
+        if (currentQuote != null) {
+            holder.stockDeltaTV.setText("" + stock.getCurrentQuote().getDelta());
+            holder.stockPriceTV.setText("" + stock.getCurrentQuote().getPrice());
+        } else {
+            holder.stockDeltaTV.setText("");
+            holder.stockPriceTV.setText("");
+        }
 
         return convertView;
     }
 
     static class ViewHolder {
-        @InjectView(R.id.stockNameTV)   TextView stockNameTV;
-        @InjectView(R.id.stockDeltaTV)  TextView stockDeltaTV;
-        @InjectView(R.id.stockPriceTV)  TextView stockPriceTV;
+        @InjectView(R.id.stockNameTV)
+        TextView stockNameTV;
+        @InjectView(R.id.stockDeltaTV)
+        TextView stockDeltaTV;
+        @InjectView(R.id.stockPriceTV)
+        TextView stockPriceTV;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);

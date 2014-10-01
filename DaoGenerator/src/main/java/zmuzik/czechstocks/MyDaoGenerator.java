@@ -13,11 +13,18 @@ public class MyDaoGenerator {
         Schema schema = new Schema(1, "zmuzik.czechstocks.dao");
 
         // Current trading data
-        Entity currentTradingData = schema.addEntity("CurrentQuote");
-        currentTradingData.addStringProperty("isin").notNull().primaryKey();
-        currentTradingData.addDoubleProperty("price").notNull();
-        currentTradingData.addDoubleProperty("delta").notNull();
-        currentTradingData.addStringProperty("stamp").notNull();
+        Entity currentQuote = schema.addEntity("CurrentQuote");
+        currentQuote.addStringProperty("isin").notNull().primaryKey();
+        currentQuote.addDoubleProperty("price").notNull();
+        currentQuote.addDoubleProperty("delta").notNull();
+        currentQuote.addStringProperty("stamp").notNull();
+
+        // Stock list item
+        Entity stock = schema.addEntity("Stock");
+        Property quotationListIsinProperty = stock.addStringProperty("isin").notNull().primaryKey().getProperty();
+        stock.addStringProperty("name").notNull();
+        stock.addBooleanProperty("showInQuotesList").notNull();
+        stock.addToOne(currentQuote, quotationListIsinProperty);
 
         // Portfolio item
         Entity portfolioItem = schema.addEntity("PortfolioItem");
@@ -25,15 +32,7 @@ public class MyDaoGenerator {
         portfolioItem.addDoubleProperty("price").notNull();
         portfolioItem.addIntProperty("quantity").notNull();
 
-        portfolioItem.addToOne(currentTradingData, portfolioIsinProperty);
-
-        // Stock list item
-        Entity stock = schema.addEntity("Stock");
-        Property quotationListIsinProperty = stock.addStringProperty("isin").notNull().primaryKey().getProperty();
-        stock.addStringProperty("name").notNull();
-        stock.addBooleanProperty("showInQuotesList").notNull();
-        stock.addToOne(currentTradingData, quotationListIsinProperty);
-
+        portfolioItem.addToOne(stock, portfolioIsinProperty);
 
         try {
             new DaoGenerator().generateAll(schema, args[0]);

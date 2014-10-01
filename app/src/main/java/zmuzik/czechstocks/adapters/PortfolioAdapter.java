@@ -46,13 +46,13 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
             deltaTV.setText("0 %");
             profitTV.setText("0 " + app.getResources().getString(R.string.currency));
         } else { //regular portfolio item
-            PortfolioItem item = getItem(position);
-            CurrentQuote quote = item.getCurrentQuote();
-            stockNameTV.setText(quote.getName());
-            quantityTV.setText(""+item.getQuantity());
-            originalPriceTV.setText(""+item.getPrice());
-            double delta = (quote.getPrice() / item.getPrice()) / 100;
-            double profit = (quote.getPrice() - item.getPrice()) * item.getQuantity();
+            PortfolioItem portfolioItem = getItem(position);
+            CurrentQuote quote = portfolioItem.getStock().getCurrentQuote();
+            stockNameTV.setText(portfolioItem.getStock().getName());
+            quantityTV.setText(""+portfolioItem.getQuantity());
+            originalPriceTV.setText(""+portfolioItem.getPrice());
+            double delta = (quote.getPrice() / portfolioItem.getPrice()) / 100;
+            double profit = (quote.getPrice() - portfolioItem.getPrice()) * portfolioItem.getQuantity();
 
             NumberFormat nf = NumberFormat.getNumberInstance(app.getResources().getConfiguration().locale);
             nf.setMaximumFractionDigits(2);

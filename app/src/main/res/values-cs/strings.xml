@@ -29,30 +29,10 @@
     <string name="data_from">Data z:</string>
     <string name="total">CELKEM</string>
 
-
     <plurals name="pieces_bought_at">
         <item quantity="one">kus za</item>
         <item quantity="few">kusy po</item>
         <item quantity="other">kusů po</item>
     </plurals>
-
-    <string-array name="default_quotes_list">
-        <item>BMG200452024</item> <!-- CETV -->
-        <item>CZ0005112300</item> <!-- ČEZ -->
-        <item>CZ0005123620</item> <!-- E4U -->
-        <item>AT0000652011</item> <!-- ERSTE GROUP BANK -->
-        <item>NL0009604859</item> <!-- FORTUNA -->
-        <item>CZ0008019106</item> <!-- KOMERČNÍ BANKA -->
-        <item>GB00B42CTW68</item> <!-- NWR -->
-        <item>LU0122624777</item> <!-- ORCO -->
-        <item>LU0275164910</item> <!-- PEGAS NONWOVENS -->
-        <item>CS0008418869</item> <!-- PHILIP MORRIS ČR -->
-        <item>CZ0005124420</item> <!-- PLG -->
-        <item>GB00BF5SDZ96</item> <!-- STOCK -->
-        <item>CZ0009093209</item> <!-- TELEFÓNICA C.R. -->
-        <item>SK1120010287</item> <!-- TMR -->
-        <item>CZ0009091500</item> <!-- UNIPETROL -->
-        <item>AT0000908504</item> <!-- VIG -->
-    </string-array>
 
 </resources>

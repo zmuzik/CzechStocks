@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import de.greenrobot.dao.query.QueryBuilder;
 import zmuzik.czechstocks.adapters.QuotationListAdapter;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.StockDao;
@@ -49,7 +50,10 @@ public class QuoteListFragment extends ListFragment {
     }
 
     public void refreshData() {
-        List items = app.getDaoSession().getStockDao().loadAll();
+        QueryBuilder qb = app.getDaoSession().getStockDao().queryBuilder();
+        qb.where(StockDao.Properties.ShowInQuotesList.eq(true));
+        List items = qb.list();
+
         mAdapter = new QuotationListAdapter(app, items);
         setListAdapter(mAdapter);
 

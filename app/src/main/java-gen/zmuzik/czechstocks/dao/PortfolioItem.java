@@ -20,8 +20,8 @@ public class PortfolioItem {
     /** Used for active entity operations. */
     private transient PortfolioItemDao myDao;
 
-    private CurrentQuote currentQuote;
-    private String currentQuote__resolvedKey;
+    private Stock stock;
+    private String stock__resolvedKey;
 
 
     public PortfolioItem() {
@@ -70,30 +70,30 @@ public class PortfolioItem {
     }
 
     /** To-one relationship, resolved on first access. */
-    public CurrentQuote getCurrentQuote() {
+    public Stock getStock() {
         String __key = this.isin;
-        if (currentQuote__resolvedKey == null || currentQuote__resolvedKey != __key) {
+        if (stock__resolvedKey == null || stock__resolvedKey != __key) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            CurrentQuoteDao targetDao = daoSession.getCurrentQuoteDao();
-            CurrentQuote currentQuoteNew = targetDao.load(__key);
+            StockDao targetDao = daoSession.getStockDao();
+            Stock stockNew = targetDao.load(__key);
             synchronized (this) {
-                currentQuote = currentQuoteNew;
-            	currentQuote__resolvedKey = __key;
+                stock = stockNew;
+            	stock__resolvedKey = __key;
             }
         }
-        return currentQuote;
+        return stock;
     }
 
-    public void setCurrentQuote(CurrentQuote currentQuote) {
-        if (currentQuote == null) {
+    public void setStock(Stock stock) {
+        if (stock == null) {
             throw new DaoException("To-one property 'isin' has not-null constraint; cannot set to-one to null");
         }
         synchronized (this) {
-            this.currentQuote = currentQuote;
-            isin = currentQuote.getIsin();
-            currentQuote__resolvedKey = isin;
+            this.stock = stock;
+            isin = stock.getIsin();
+            stock__resolvedKey = isin;
         }
     }
 

@@ -6,7 +6,14 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
 import zmuzik.czechstocks.dao.Stock;
+import zmuzik.czechstocks.dao.StockDao;
 
 public class DbUtils {
 
@@ -56,10 +63,24 @@ public class DbUtils {
     }
 
     void fillTableQuoteListItem() {
-        Log.i(TAG, "Filling QUOTE_LIST_ITEM table with default values");
-        for (String isin : app.getResources().getStringArray(R.array.default_quotes_list)) {
-            Stock item = new Stock(isin);
-            app.getDaoSession().getStockDao().insert(item);
+        Log.i(TAG, "Filling stock table with default values");
+        StockDao stockDao = app.getDaoSession().getStockDao();
+        try {
+            InputStream in = app.getAssets().open("stocks.csv");
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String line;
+            while ((line = br.readLine()) != null) {
+                StringTokenizer tokenizer = new StringTokenizer(line, ";");
+                String isin = tokenizer.nextToken();
+                tokenizer.nextToken(); // don't need this item (yet)
+                String name = tokenizer.nextToken();
+                boolean isInQuotesList = "Y".equals(tokenizer.nextToken());
+                Stock stock = new Stock(isin, name, isInQuotesList);
+                stockDao.insert(stock);
+            }
+            br.close();
+        } catch (IOException e) {
+            Crashlytics.log(Log.ERROR, TAG, "Unable to initialize default stocks list");
         }
     }
 }

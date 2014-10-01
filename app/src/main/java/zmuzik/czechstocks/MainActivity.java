@@ -26,10 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zmuzik.czechstocks.adapters.SectionsPagerAdapter;
-import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.PortfolioItem;
 import zmuzik.czechstocks.dao.PortfolioItemDao;
-import zmuzik.czechstocks.dao.QuoteListItem;
+import zmuzik.czechstocks.dao.Stock;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
@@ -103,11 +102,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     }
 
     void actionEditStockList() {
-        List<CurrentQuote> allStocks = app.getDaoSession().getCurrentQuoteDao().loadAll();
-        List<QuoteListItem> allStockListItems = app.getDaoSession().getQuoteListItemDao().loadAll();
+        List<Stock> allStocks = app.getDaoSession().getStockDao().loadAll();
         ArrayList<String> allStockListItemsStrings = new ArrayList<String>();
-        for (QuoteListItem item : allStockListItems) {
-            allStockListItemsStrings.add(item.getIsin());
+        for (Stock stock : allStocks) {
+            allStockListItemsStrings.add(stock.getIsin());
         }
 
         String[] stockNames = new String[allStocks.size()];
@@ -115,7 +113,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         final boolean[] selectedStocks = new boolean[allStocks.size()];
 
         int i = 0;
-        for (CurrentQuote stock : allStocks) {
+        for (Stock stock : allStocks) {
             stockNames[i] = stock.getName();
             stockIsins[i] = stock.getIsin();
             selectedStocks[i] = allStockListItemsStrings.contains(stock.getIsin());
@@ -136,12 +134,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                app.getDaoSession().getQuoteListItemDao().deleteAll();
-                for (int i = 0; i < selectedStocks.length; i++) {
-                    if (selectedStocks[i]) {
-                        app.getDaoSession().getQuoteListItemDao().insert(new QuoteListItem(stockIsins[i]));
-                    }
-                }
+                //TODO
                 refreshFragments();
             }
         });
@@ -150,10 +143,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     }
 
     void actionAddPortfolioItem() {
-        final List<CurrentQuote> allStocks = app.getDaoSession().getCurrentQuoteDao().loadAll();
+        final List<Stock> allStocks = app.getDaoSession().getStockDao().loadAll();
         ArrayList<String> stockNames = new ArrayList<String>();
-        for (CurrentQuote item : allStocks) {
-            stockNames.add(item.getName());
+        for (Stock stock : allStocks) {
+            stockNames.add(stock.getName());
         }
 
         LayoutInflater inflater = this.getLayoutInflater();
@@ -195,7 +188,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                 double price = app.getDoubleValue(priceET.getText().toString());
                 if (quantity > 0 && price > 0) {
                     int position = spinner.getSelectedItemPosition();
-                    CurrentQuote stock = allStocks.get(position);
+                    Stock stock = allStocks.get(position);
                     pi.setIsin(stock.getIsin());
                     pi.setPrice(price);
                     pi.setQuantity(quantity);
