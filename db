@@ -1,0 +1,4 @@
+#!/bin/bash
+adb pull /data/data/zmuzik.czechstocks/databases/czech-stocks-db .
+sqlite3 czech-stocks-db
+rm czech-stocks-db
