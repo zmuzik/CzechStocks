@@ -97,49 +97,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
             default:
                 break;
         }
-
         return true;
     }
 
     void actionEditStockList() {
-        List<Stock> allStocks = app.getDaoSession().getStockDao().loadAll();
-        ArrayList<String> allStockListItemsStrings = new ArrayList<String>();
-        for (Stock stock : allStocks) {
-            allStockListItemsStrings.add(stock.getIsin());
-        }
 
-        String[] stockNames = new String[allStocks.size()];
-        final String[] stockIsins = new String[allStocks.size()];
-        final boolean[] selectedStocks = new boolean[allStocks.size()];
-
-        int i = 0;
-        for (Stock stock : allStocks) {
-            stockNames[i] = stock.getName();
-            stockIsins[i] = stock.getIsin();
-            selectedStocks[i] = allStockListItemsStrings.contains(stock.getIsin());
-            i++;
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle(R.string.add_stocks_dialog_title);
-
-        builder.setMultiChoiceItems(stockNames, selectedStocks, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                selectedStocks[which] = isChecked;
-            }
-        });
-
-        builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //TODO
-                refreshFragments();
-            }
-        });
-
-        builder.show();
     }
 
     void actionAddPortfolioItem() {

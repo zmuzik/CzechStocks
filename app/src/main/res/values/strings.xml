@@ -34,4 +34,7 @@
         <item quantity="other">pcs at</item>
     </plurals>
 
+    <string name="title_activity_edit_stock_list">EditStockListActivity</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>
