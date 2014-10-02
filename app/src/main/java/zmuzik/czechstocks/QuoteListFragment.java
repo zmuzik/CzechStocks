@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;
+import de.greenrobot.dao.query.WhereCondition;
 import zmuzik.czechstocks.adapters.QuotationListAdapter;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.StockDao;
@@ -51,7 +52,8 @@ public class QuoteListFragment extends ListFragment {
 
     public void refreshData() {
         QueryBuilder qb = app.getDaoSession().getStockDao().queryBuilder();
-        qb.where(StockDao.Properties.ShowInQuotesList.eq(true));
+        qb.where(new WhereCondition.StringCondition("SHOW_IN_QUOTES_LIST = 1 AND ISIN IN " +
+                "(SELECT ISIN FROM CURRENT_QUOTE)"));
         List items = qb.list();
 
         mAdapter = new QuotationListAdapter(app, items);
