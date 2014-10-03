@@ -44,7 +44,13 @@ public class QuotationListAdapter extends ArrayAdapter<Stock> {
         holder.stockNameTV.setText(stock.getName());
         CurrentQuote currentQuote = stock.getCurrentQuote();
         if (currentQuote != null) {
-            holder.stockDeltaTV.setText("" + stock.getCurrentQuote().getDelta());
+            double delta =  stock.getCurrentQuote().getDelta();
+            holder.stockDeltaTV.setText("" + delta + "%");
+            if (delta < 0) {
+                holder.stockDeltaTV.setTextColor(app.getResources().getColor(R.color.red));
+            } else {
+                holder.stockDeltaTV.setTextColor(app.getResources().getColor(R.color.lime));
+            }
             holder.stockPriceTV.setText("" + stock.getCurrentQuote().getPrice());
         } else {
             holder.stockDeltaTV.setText("");
@@ -55,12 +61,9 @@ public class QuotationListAdapter extends ArrayAdapter<Stock> {
     }
 
     static class ViewHolder {
-        @InjectView(R.id.stockNameTV)
-        TextView stockNameTV;
-        @InjectView(R.id.stockDeltaTV)
-        TextView stockDeltaTV;
-        @InjectView(R.id.stockPriceTV)
-        TextView stockPriceTV;
+        @InjectView(R.id.stockNameTV)   TextView stockNameTV;
+        @InjectView(R.id.stockDeltaTV)  TextView stockDeltaTV;
+        @InjectView(R.id.stockPriceTV)  TextView stockPriceTV;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
