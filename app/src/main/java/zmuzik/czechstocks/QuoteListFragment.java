@@ -1,16 +1,11 @@
 package zmuzik.czechstocks;
 
-import android.app.AlertDialog;
 import android.app.ListFragment;
-import android.content.DialogInterface;
-import android.content.res.Resources;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,8 +14,6 @@ import java.util.List;
 import de.greenrobot.dao.query.QueryBuilder;
 import de.greenrobot.dao.query.WhereCondition;
 import zmuzik.czechstocks.adapters.QuotationListAdapter;
-import zmuzik.czechstocks.dao.Stock;
-import zmuzik.czechstocks.dao.StockDao;
 
 public class QuoteListFragment extends ListFragment {
 
@@ -69,36 +62,8 @@ public class QuoteListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int pos, long id) {
-        getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Resources res = getResources();
-                final StockDao dao = app.getDaoSession().getStockDao();
-                final Stock stock = dao.loadByRowId(arg3);
-                String stockName = ((TextView) ((LinearLayout) arg1).getChildAt(0)).getText().toString();
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(R.string.remove_title);
-                builder.setMessage(String.format(res.getString(R.string.remove_stock_from_quotes_list), stockName));
-                builder.setCancelable(true);
-
-                builder.setNegativeButton(res.getString(R.string.button_cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-
-                builder.setPositiveButton(res.getString(R.string.button_ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dao.delete(stock);
-                        app.getMainActivity().refreshFragments();
-                        dialog.dismiss();
-                    }
-                });
-
-                builder.show();
-                return true;
-            }
-        });
+        Intent intent = new Intent(getActivity(), StockDetailActivity.class);
+        intent.putExtra("isin", mAdapter.getItem(pos).getIsin());
+        startActivity(intent);
     }
 }

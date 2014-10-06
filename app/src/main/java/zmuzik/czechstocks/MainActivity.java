@@ -102,7 +102,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     }
 
     void actionEditStockList() {
-        Intent intent = new Intent(this, EditStockListActivity.class);
+        Intent intent = new Intent(this, AddStockActivity.class);
         startActivity(intent);
     }
 

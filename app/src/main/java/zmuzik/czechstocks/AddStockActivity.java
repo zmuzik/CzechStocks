@@ -21,7 +21,7 @@ import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.StockDao;
 
 
-public class EditStockListActivity extends ListActivity {
+public class AddStockActivity extends ListActivity {
 
     private final String TAG = this.getClass().getSimpleName();
 

@@ -36,5 +36,7 @@
     </plurals>
 
     <string name="title_activity_edit_stock_list">Add quote</string>
+    <string name="title_activity_stock_detail">StockDetailActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
