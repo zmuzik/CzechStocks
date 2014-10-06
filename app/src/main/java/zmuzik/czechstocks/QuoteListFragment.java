@@ -26,7 +26,7 @@ public class QuoteListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        app = (App) this.getActivity().getApplicationContext();
+        app = (App) this.getActivity().getApplication();
     }
 
     @Override

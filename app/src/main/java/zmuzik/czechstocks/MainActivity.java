@@ -44,7 +44,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        app = (App) getApplicationContext();
+        app = (App) getApplication();
         app.setMainActiviy(this);
 
         setContentView(R.layout.activity_main);

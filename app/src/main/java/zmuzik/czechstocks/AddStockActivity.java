@@ -37,7 +37,7 @@ public class AddStockActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_stock_list);
-        app = (App) getApplicationContext();
+        app = (App) getApplication();
         ButterKnife.inject(this);
     }
 
