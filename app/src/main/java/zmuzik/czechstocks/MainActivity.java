@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -101,7 +102,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     }
 
     void actionEditStockList() {
-
+        Intent intent = new Intent(this, EditStockListActivity.class);
+        startActivity(intent);
     }
 
     void actionAddPortfolioItem() {

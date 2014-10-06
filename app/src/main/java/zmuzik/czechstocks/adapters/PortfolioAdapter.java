@@ -50,8 +50,8 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
             PortfolioItem portfolioItem = getItem(position);
             CurrentQuote quote = portfolioItem.getStock().getCurrentQuote();
             holder.stockNameTV.setText(portfolioItem.getStock().getName());
-            holder.quantityTV.setText(""+portfolioItem.getQuantity());
-            holder.originalPriceTV.setText(""+portfolioItem.getPrice());
+            holder.quantityTV.setText("" + portfolioItem.getQuantity());
+            holder.originalPriceTV.setText("" + portfolioItem.getPrice());
             double delta = (quote.getPrice() / portfolioItem.getPrice()) / 100;
             double profit = (quote.getPrice() - portfolioItem.getPrice()) * portfolioItem.getQuantity();
 
@@ -59,7 +59,7 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
             nf.setMaximumFractionDigits(2);
             nf.setMinimumFractionDigits(2);
             holder.deltaTV.setText(nf.format(delta));
-            holder.profitTV.setText(nf.format(profit) +" "+ app.getResources().getString(R.string.currency));
+            holder.profitTV.setText(nf.format(profit) + " " + app.getResources().getString(R.string.currency));
         }
 
         return convertView;
@@ -81,15 +81,20 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
 
     private boolean isTotalItem(int position) {
         int count = getCount();
-        return (count > 1) && (position == count -1);
+        return (count > 1) && (position == count - 1);
     }
 
     static class ViewHolder {
-        @InjectView(R.id.stockNameTV)       TextView stockNameTV;
-        @InjectView(R.id.deltaTV)           TextView deltaTV;
-        @InjectView(R.id.quantityTV)        TextView quantityTV;
-        @InjectView(R.id.originalPriceTV)   TextView originalPriceTV;
-        @InjectView(R.id.profitTV)          TextView profitTV;
+        @InjectView(R.id.stockNameTV)
+        TextView stockNameTV;
+        @InjectView(R.id.deltaTV)
+        TextView deltaTV;
+        @InjectView(R.id.quantityTV)
+        TextView quantityTV;
+        @InjectView(R.id.originalPriceTV)
+        TextView originalPriceTV;
+        @InjectView(R.id.profitTV)
+        TextView profitTV;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);

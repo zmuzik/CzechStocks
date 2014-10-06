@@ -22,17 +22,20 @@
     <string name="average_price_hint">Průměrná cena</string>
     <string name="average_price_null">Průměrná cena nebyla vyplněna</string>
     <string name="currency">Kč</string>
-    <string name="no_data_portfolio">K přidání akcií do portfolia použijte ikonu +</string>
+    <string name="no_data_portfolio">Pro přidání akcií do portfolia použijte ikonu +</string>
     <string name="toas_check_net">Síťová chyba, zkontrolujte připojení k internetu.</string>
     <string name="no_data_stocks_list">Stahuji aktuální data ze serveru. Pokud to trvá příliš dlouho, zkontrolujte vaše internetové připojení.</string>
     <string name="last_updated">Poslední aktualizace:</string>
     <string name="data_from">Data z:</string>
     <string name="total">CELKEM</string>
+    <string name="no_other_stocks">Žádné další akcie nejsou k dispozici.</string>
 
     <plurals name="pieces_bought_at">
         <item quantity="one">kus za</item>
         <item quantity="few">kusy po</item>
         <item quantity="other">kusů po</item>
     </plurals>
+
+    <string name="title_activity_edit_stock_list">Přidání do kurzovního lístku</string>
 
 </resources>

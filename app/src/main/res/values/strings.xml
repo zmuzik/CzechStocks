@@ -28,13 +28,13 @@
     <string name="last_updated">Last updated:</string>
     <string name="data_from">Data from:</string>
     <string name="total">TOTAL</string>
+    <string name="no_other_stocks">There are no other stocks available.</string>
 
     <plurals name="pieces_bought_at">
         <item quantity="one">pc at</item>
         <item quantity="other">pcs at</item>
     </plurals>
 
-    <string name="title_activity_edit_stock_list">EditStockListActivity</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_edit_stock_list">Add quote</string>
 
 </resources>

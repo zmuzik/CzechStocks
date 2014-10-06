@@ -65,10 +65,6 @@ public class App extends Application {
         }
     }
 
-    public void setLastUpdatedTime() {
-        mLastUpdated = new Date();
-    }
-
     protected String getLastUpdatedTime() {
         try {
             if (mLastUpdated == null) {

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ListView
         android:id="@id/android:list"
@@ -17,51 +18,16 @@
         android:gravity="center"
         android:text="@string/no_data_stocks_list" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/lastUpdatedLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#FF24292F"
-        android:orientation="horizontal"
-        android:textAppearance="?android:textAppearanceSmall" >
+        android:text="@string/last_updated" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2sp"
-            android:orientation="vertical" >
+    <TextView
+        android:id="@+id/dataFromLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/data_from" />
 
-            <TextView
-                android:id="@+id/lastUpdatedLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/last_updated" />
-
-            <TextView
-                android:id="@+id/dataFromLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/data_from" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5sp"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/lastUpdatedValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-            <TextView
-                android:id="@+id/dataFromValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="" />
-        </LinearLayout>
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>
