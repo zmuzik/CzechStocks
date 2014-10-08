@@ -21,5 +21,4 @@ public interface ApiService {
 
     @GET("/todaysdata")
     List<TodaysQuote> getTodaysQuotes();
-
 }

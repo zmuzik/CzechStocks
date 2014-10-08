@@ -2,6 +2,6 @@ package zmuzik.czechstocks;
 
 public class AppConf {
 
-    public static final String SERVER_API_ROOT = "http://localhost:5000/";
+    public static final String SERVER_API_ROOT = "http://127.0.0.1:5000";
 
 }
