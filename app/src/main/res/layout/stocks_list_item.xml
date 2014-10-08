@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="2.0dip" >
 
     <TextView
         android:id="@+id/stockNameTV"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="6.0dip"
         android:layout_weight="1"
@@ -17,7 +17,7 @@
 
     <TextView
         android:id="@+id/stockDeltaTV"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1.6"
         android:gravity="right"
@@ -26,7 +26,7 @@
 
     <TextView
         android:id="@+id/stockPriceTV"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1.6"
         android:gravity="right"
