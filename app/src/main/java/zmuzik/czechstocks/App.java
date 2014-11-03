@@ -23,7 +23,6 @@ public class App extends Application {
 
     private final String TAG = this.getClass().getSimpleName();
     private static App app;
-    private final String DB_NAME = "czech-stocks-db";
     private Date mLastUpdated;
 
     private SQLiteDatabase mDb;
@@ -53,7 +52,7 @@ public class App extends Application {
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AppConf.SERVER_API_ROOT).build();
         mApiService = restAdapter.create(ApiService.class);
 
-        initDb(DB_NAME);
+        initDb(AppConf.DB_NAME);
     }
 
     private void initDb(String dbName) {
