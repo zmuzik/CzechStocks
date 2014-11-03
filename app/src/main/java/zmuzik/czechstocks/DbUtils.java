@@ -14,6 +14,8 @@ import zmuzik.czechstocks.dao.Dividend;
 import zmuzik.czechstocks.dao.DividendDao;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.StockDao;
+import zmuzik.czechstocks.dao.StockInfo;
+import zmuzik.czechstocks.dao.StockInfoDao;
 
 public class DbUtils {
 
@@ -101,6 +103,23 @@ public class DbUtils {
 
                 Dividend dividend = new Dividend(counter++, isin, amount, currency, exDate, paymentDate);
                 dividendDao.insert(dividend);
+            }
+        } catch (IOException e) {
+            Crashlytics.log(Log.ERROR, TAG, "Unable to initialize default dividends table");
+        }
+    }
+
+    public void fillStockInfoTable() {
+        try {
+            StockInfoDao stockInfoDao = app.getDaoSession().getStockInfoDao();
+            Scanner scanner = new Scanner(app.getAssets().open("stock_info.csv"));
+            long counter = 0;
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] items = line.split(";");
+
+                StockInfo stockInfo = new StockInfo(counter++, items[0], items[1], items[2]);
+                stockInfoDao.insert(stockInfo);
             }
         } catch (IOException e) {
             Crashlytics.log(Log.ERROR, TAG, "Unable to initialize default dividends table");

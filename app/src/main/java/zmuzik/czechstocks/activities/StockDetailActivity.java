@@ -16,6 +16,7 @@ import zmuzik.czechstocks.Utils;
 import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.StockDao;
+import zmuzik.czechstocks.dao.StockInfo;
 
 
 public class StockDetailActivity extends Activity {
@@ -49,26 +50,33 @@ public class StockDetailActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        loadStockFromDb();
+        updateBasicInfo();
+    }
+
+    private void loadStockFromDb() {
         StockDao stockDao = App.get().getDaoSession().getStockDao();
         mStock = stockDao.load(mIsin);
         if (mStock == null) {
             Crashlytics.log(Log.ERROR, TAG, "Unable to load stock from the db. ISIN = " + mIsin);
             finish();
         }
-        setTitle(mStock.getName());
-
-        updateBasicInfo();
     }
 
     private void updateBasicInfo() {
         CurrentQuote currentQuote = mStock.getCurrentQuote();
         Resources res = App.get().getResources();
+        setTitle(mStock.getName());
         lastPrice.setText(Utils.getFormatedCurrencyAmount(currentQuote.getPrice()));
+
         delta.setText(Utils.getFormatedPercentage(currentQuote.getDelta()));
-        if (currentQuote.getDelta() >= 0) {
-            delta.setTextColor(res.getColor(R.color.green));
-        } else {
-            delta.setTextColor(res.getColor(R.color.red));
+        delta.setTextColor(res.getColor((currentQuote.getDelta() >= 0) ? R.color.lime : R.color.red));
+
+        for (StockInfo stockInfo : mStock.getStockInfoList()) {
+            if ("P/E".equals(stockInfo.getIndicator()) && stockInfo.getValue() != null) {
+                pe.setText(stockInfo.getValue().replace('.', Utils.getDecimalSeparator()));
+                break;
+            }
         }
     }
 }

@@ -1,15 +1,15 @@
 package zmuzik.czechstocks.dao;
 
 import java.util.List;
-import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
-import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
+import de.greenrobot.dao.query.Query;
+import de.greenrobot.dao.query.QueryBuilder;
 
 import zmuzik.czechstocks.dao.TodaysQuote;
 
@@ -33,8 +33,7 @@ public class TodaysQuoteDao extends AbstractDao<TodaysQuote, Long> {
         public final static Property Volume = new Property(4, double.class, "volume", false, "VOLUME");
     };
 
-    private DaoSession daoSession;
-
+    private Query<TodaysQuote> stock_TodaysQuoteListQuery;
 
     public TodaysQuoteDao(DaoConfig config) {
         super(config);
@@ -42,7 +41,6 @@ public class TodaysQuoteDao extends AbstractDao<TodaysQuote, Long> {
     
     public TodaysQuoteDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -75,12 +73,6 @@ public class TodaysQuoteDao extends AbstractDao<TodaysQuote, Long> {
         stmt.bindLong(3, entity.getStamp().getTime());
         stmt.bindDouble(4, entity.getPrice());
         stmt.bindDouble(5, entity.getVolume());
-    }
-
-    @Override
-    protected void attachEntity(TodaysQuote entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -135,97 +127,18 @@ public class TodaysQuoteDao extends AbstractDao<TodaysQuote, Long> {
         return true;
     }
     
-    private String selectDeep;
-
-    protected String getSelectDeep() {
-        if (selectDeep == null) {
-            StringBuilder builder = new StringBuilder("SELECT ");
-            SqlUtils.appendColumns(builder, "T", getAllColumns());
-            builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getStockDao().getAllColumns());
-            builder.append(" FROM TODAYS_QUOTE T");
-            builder.append(" LEFT JOIN STOCK T0 ON T.'ISIN'=T0.'ISIN'");
-            builder.append(' ');
-            selectDeep = builder.toString();
-        }
-        return selectDeep;
-    }
-    
-    protected TodaysQuote loadCurrentDeep(Cursor cursor, boolean lock) {
-        TodaysQuote entity = loadCurrent(cursor, 0, lock);
-        int offset = getAllColumns().length;
-
-        Stock stock = loadCurrentOther(daoSession.getStockDao(), cursor, offset);
-         if(stock != null) {
-            entity.setStock(stock);
-        }
-
-        return entity;    
-    }
-
-    public TodaysQuote loadDeep(Long key) {
-        assertSinglePk();
-        if (key == null) {
-            return null;
-        }
-
-        StringBuilder builder = new StringBuilder(getSelectDeep());
-        builder.append("WHERE ");
-        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
-        String sql = builder.toString();
-        
-        String[] keyArray = new String[] { key.toString() };
-        Cursor cursor = db.rawQuery(sql, keyArray);
-        
-        try {
-            boolean available = cursor.moveToFirst();
-            if (!available) {
-                return null;
-            } else if (!cursor.isLast()) {
-                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
-            }
-            return loadCurrentDeep(cursor, true);
-        } finally {
-            cursor.close();
-        }
-    }
-    
-    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
-    public List<TodaysQuote> loadAllDeepFromCursor(Cursor cursor) {
-        int count = cursor.getCount();
-        List<TodaysQuote> list = new ArrayList<TodaysQuote>(count);
-        
-        if (cursor.moveToFirst()) {
-            if (identityScope != null) {
-                identityScope.lock();
-                identityScope.reserveRoom(count);
-            }
-            try {
-                do {
-                    list.add(loadCurrentDeep(cursor, false));
-                } while (cursor.moveToNext());
-            } finally {
-                if (identityScope != null) {
-                    identityScope.unlock();
-                }
+    /** Internal query to resolve the "todaysQuoteList" to-many relationship of Stock. */
+    public List<TodaysQuote> _queryStock_TodaysQuoteList(String isin) {
+        synchronized (this) {
+            if (stock_TodaysQuoteListQuery == null) {
+                QueryBuilder<TodaysQuote> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.Isin.eq(null));
+                stock_TodaysQuoteListQuery = queryBuilder.build();
             }
         }
-        return list;
+        Query<TodaysQuote> query = stock_TodaysQuoteListQuery.forCurrentThread();
+        query.setParameter(0, isin);
+        return query.list();
     }
-    
-    protected List<TodaysQuote> loadDeepAllAndCloseCursor(Cursor cursor) {
-        try {
-            return loadAllDeepFromCursor(cursor);
-        } finally {
-            cursor.close();
-        }
-    }
-    
 
-    /** A raw-style query where you can pass any WHERE clause and arguments. */
-    public List<TodaysQuote> queryDeep(String where, String... selectionArg) {
-        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
-        return loadDeepAllAndCloseCursor(cursor);
-    }
- 
 }

@@ -1,5 +1,6 @@
 package zmuzik.czechstocks.dao;
 
+import java.util.List;
 import zmuzik.czechstocks.dao.DaoSession;
 import de.greenrobot.dao.DaoException;
 
@@ -24,6 +25,9 @@ public class Stock {
     private CurrentQuote currentQuote;
     private String currentQuote__resolvedKey;
 
+    private List<TodaysQuote> todaysQuoteList;
+    private List<StockInfo> stockInfoList;
+    private List<Dividend> dividendList;
 
     public Stock() {
     }
@@ -98,6 +102,72 @@ public class Stock {
             isin = currentQuote.getIsin();
             currentQuote__resolvedKey = isin;
         }
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public List<TodaysQuote> getTodaysQuoteList() {
+        if (todaysQuoteList == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            TodaysQuoteDao targetDao = daoSession.getTodaysQuoteDao();
+            List<TodaysQuote> todaysQuoteListNew = targetDao._queryStock_TodaysQuoteList(isin);
+            synchronized (this) {
+                if(todaysQuoteList == null) {
+                    todaysQuoteList = todaysQuoteListNew;
+                }
+            }
+        }
+        return todaysQuoteList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetTodaysQuoteList() {
+        todaysQuoteList = null;
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public List<StockInfo> getStockInfoList() {
+        if (stockInfoList == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            StockInfoDao targetDao = daoSession.getStockInfoDao();
+            List<StockInfo> stockInfoListNew = targetDao._queryStock_StockInfoList(isin);
+            synchronized (this) {
+                if(stockInfoList == null) {
+                    stockInfoList = stockInfoListNew;
+                }
+            }
+        }
+        return stockInfoList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetStockInfoList() {
+        stockInfoList = null;
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public List<Dividend> getDividendList() {
+        if (dividendList == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            DividendDao targetDao = daoSession.getDividendDao();
+            List<Dividend> dividendListNew = targetDao._queryStock_DividendList(isin);
+            synchronized (this) {
+                if(dividendList == null) {
+                    dividendList = dividendListNew;
+                }
+            }
+        }
+        return dividendList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetDividendList() {
+        dividendList = null;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */
