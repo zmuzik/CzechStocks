@@ -22,6 +22,7 @@ import zmuzik.czechstocks.dao.DaoSession;
 public class App extends Application {
 
     private final String TAG = this.getClass().getSimpleName();
+    private static App app;
     private final String DB_NAME = "czech-stocks-db";
     private Date mLastUpdated;
 
@@ -32,10 +33,15 @@ public class App extends Application {
 
     private Locale mLocale;
 
+    public static App getInstance() {
+        return app;
+    }
+
     @Override
     public void onCreate() {
         Log.i(TAG, "====================Initializing app====================");
         super.onCreate();
+        app = this;
 
         if (isDebuggable()) {
             Log.d(TAG, "Debug build - Crashlytics disabled");
@@ -44,11 +50,10 @@ public class App extends Application {
             Crashlytics.start(this);
         }
 
-        initDb(DB_NAME);
-
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AppConf.SERVER_API_ROOT).build();
         mApiService = restAdapter.create(ApiService.class);
 
+        initDb(DB_NAME);
     }
 
     private void initDb(String dbName) {

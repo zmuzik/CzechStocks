@@ -34,7 +34,7 @@ import zmuzik.czechstocks.adapters.SectionsPagerAdapter;
 import zmuzik.czechstocks.dao.PortfolioItem;
 import zmuzik.czechstocks.dao.PortfolioItemDao;
 import zmuzik.czechstocks.dao.Stock;
-import zmuzik.czechstocks.tasks.UpdateDataTask;
+import zmuzik.czechstocks.tasks.UpdateCurrentDataTask;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
@@ -183,7 +183,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
     void actionDataRefresh() {
         setMovingRefreshIcon();
-        new UpdateDataTask(app).execute();
+        new UpdateCurrentDataTask(app).execute();
     }
 
     void setMovingRefreshIcon() {

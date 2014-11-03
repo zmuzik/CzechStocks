@@ -11,13 +11,13 @@ import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.CurrentQuoteDao;
 
-public class UpdateDataTask extends AsyncTask {
+public class UpdateCurrentDataTask extends AsyncTask {
 
     private final String TAG = this.getClass().getSimpleName();
     App app;
     private boolean mDownloadError = false;
 
-    public UpdateDataTask(Context context) {
+    public UpdateCurrentDataTask(Context context) {
         app = (App) context;
     }
 
