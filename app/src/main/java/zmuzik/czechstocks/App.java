@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import retrofit.RestAdapter;
+import zmuzik.czechstocks.activities.MainActivity;
 import zmuzik.czechstocks.dao.DaoMaster;
 import zmuzik.czechstocks.dao.DaoSession;
 
@@ -65,7 +66,7 @@ public class App extends Application {
         }
     }
 
-    protected String getLastUpdatedTime() {
+    public String getLastUpdatedTime() {
         try {
             if (mLastUpdated == null) {
                 return null;
@@ -78,7 +79,7 @@ public class App extends Application {
         }
     }
 
-    protected String getDataFromTime() {
+    public String getDataFromTime() {
         try {
             if (mDb == null || !mDb.isOpen()) {
                 return null;
@@ -119,19 +120,19 @@ public class App extends Application {
         return 0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE);
     }
 
-    DaoSession getDaoSession() {
+    public DaoSession getDaoSession() {
         return mDaoSession;
     }
 
-    void setMainActiviy(MainActivity a) {
+    public void setMainActiviy(MainActivity a) {
         mMainActivity = a;
     }
 
-    MainActivity getMainActivity() {
+    public MainActivity getMainActivity() {
         return mMainActivity;
     }
 
-    ApiService getApiService() {
+    public ApiService getApiService() {
         return mApiService;
     }
 }

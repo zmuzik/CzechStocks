@@ -1,4 +1,4 @@
-package zmuzik.czechstocks;
+package zmuzik.czechstocks.activities;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import com.crashlytics.android.Crashlytics;
 
+import zmuzik.czechstocks.App;
+import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.StockDao;
 

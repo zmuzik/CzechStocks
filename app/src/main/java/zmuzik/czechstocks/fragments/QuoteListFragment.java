@@ -1,4 +1,4 @@
-package zmuzik.czechstocks;
+package zmuzik.czechstocks.fragments;
 
 import android.app.ListFragment;
 import android.content.Intent;
@@ -13,6 +13,9 @@ import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;
 import de.greenrobot.dao.query.WhereCondition;
+import zmuzik.czechstocks.App;
+import zmuzik.czechstocks.R;
+import zmuzik.czechstocks.activities.StockDetailActivity;
 import zmuzik.czechstocks.adapters.QuotationListAdapter;
 
 public class QuoteListFragment extends ListFragment {

@@ -1,4 +1,4 @@
-package zmuzik.czechstocks;
+package zmuzik.czechstocks.fragments;
 
 import android.app.AlertDialog;
 import android.app.ListFragment;
@@ -18,6 +18,8 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import zmuzik.czechstocks.App;
+import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.adapters.PortfolioAdapter;
 import zmuzik.czechstocks.dao.PortfolioItem;
 import zmuzik.czechstocks.dao.PortfolioItemDao;

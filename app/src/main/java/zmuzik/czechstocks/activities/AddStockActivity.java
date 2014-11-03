@@ -1,4 +1,4 @@
-package zmuzik.czechstocks;
+package zmuzik.czechstocks.activities;
 
 import android.app.ListActivity;
 import android.content.Context;
@@ -17,6 +17,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import zmuzik.czechstocks.App;
+import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.StockDao;
 

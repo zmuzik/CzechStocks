@@ -6,8 +6,8 @@ import android.support.v13.app.FragmentPagerAdapter;
 
 
 import zmuzik.czechstocks.App;
-import zmuzik.czechstocks.PortfolioListFragment;
-import zmuzik.czechstocks.QuoteListFragment;
+import zmuzik.czechstocks.fragments.PortfolioListFragment;
+import zmuzik.czechstocks.fragments.QuoteListFragment;
 import zmuzik.czechstocks.R;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {

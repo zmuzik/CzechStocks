@@ -1,4 +1,4 @@
-package zmuzik.czechstocks;
+package zmuzik.czechstocks.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -6,6 +6,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import zmuzik.czechstocks.App;
+import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.CurrentQuoteDao;
 
@@ -15,7 +17,7 @@ public class UpdateDataTask extends AsyncTask {
     App app;
     private boolean mDownloadError = false;
 
-    UpdateDataTask(Context context) {
+    public UpdateDataTask(Context context) {
         app = (App) context;
     }
 

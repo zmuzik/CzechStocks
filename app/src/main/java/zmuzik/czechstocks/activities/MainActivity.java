@@ -1,4 +1,4 @@
-package zmuzik.czechstocks;
+package zmuzik.czechstocks.activities;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -26,10 +26,15 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import zmuzik.czechstocks.App;
+import zmuzik.czechstocks.fragments.PortfolioListFragment;
+import zmuzik.czechstocks.fragments.QuoteListFragment;
+import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.adapters.SectionsPagerAdapter;
 import zmuzik.czechstocks.dao.PortfolioItem;
 import zmuzik.czechstocks.dao.PortfolioItemDao;
 import zmuzik.czechstocks.dao.Stock;
+import zmuzik.czechstocks.tasks.UpdateDataTask;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
@@ -190,14 +195,14 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         mRefreshMenuItem.setActionView(iv);
     }
 
-    void setStaticRefreshIcon() {
+    public void setStaticRefreshIcon() {
         if (mRefreshMenuItem != null && mRefreshMenuItem.getActionView() != null) {
             mRefreshMenuItem.getActionView().clearAnimation();
             mRefreshMenuItem.setActionView(null);
         }
     }
 
-    void refreshFragments() {
+    public void refreshFragments() {
         if (mSectionsPagerAdapter != null) {
             if (mSectionsPagerAdapter.getItem(0) != null) {
                 ((QuoteListFragment) mSectionsPagerAdapter.getItem(0)).refreshData();
