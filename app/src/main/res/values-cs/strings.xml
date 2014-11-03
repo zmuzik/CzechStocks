@@ -37,5 +37,8 @@
     </plurals>
 
     <string name="title_activity_edit_stock_list">Přidání do kurzovního lístku</string>
+    <string name="last_price">Poslední cena</string>
+    <string name="delta">Změna</string>
+    <string name="p_e">P/E</string>
 
 </resources>

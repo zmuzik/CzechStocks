@@ -37,6 +37,8 @@
 
     <string name="title_activity_edit_stock_list">Add quote</string>
     <string name="title_activity_stock_detail">StockDetailActivity</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="last_price">Last price</string>
+    <string name="delta">Změna</string>
+    <string name="p_e">P/E</string>
 
 </resources>

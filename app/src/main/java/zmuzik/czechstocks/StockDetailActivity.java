@@ -2,7 +2,6 @@ package zmuzik.czechstocks;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,8 +30,7 @@ public class StockDetailActivity extends Activity {
         app = (App) getApplication();
         StockDao stockDao = app.getDaoSession().getStockDao();
 
-        Intent intent = getIntent();
-        String stockIsin = intent.getStringExtra("isin");
+        String stockIsin = getIntent().getStringExtra("isin");
         if (stockIsin == null) {
             Crashlytics.log(Log.ERROR, TAG, "Invalid ISIN. Unable to open stock detail");
             finish();
@@ -47,7 +45,7 @@ public class StockDetailActivity extends Activity {
         setContentView(R.layout.activity_stock_detail);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new BasicInfoFragment())
                     .commit();
         }
     }
@@ -62,9 +60,6 @@ public class StockDetailActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
@@ -72,9 +67,9 @@ public class StockDetailActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class PlaceholderFragment extends Fragment {
+    public static class BasicInfoFragment extends Fragment {
 
-        public PlaceholderFragment() {
+        public BasicInfoFragment() {
         }
 
         @Override
