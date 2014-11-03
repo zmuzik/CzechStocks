@@ -5,6 +5,8 @@ import android.content.res.Resources;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class Utils {
@@ -34,5 +36,10 @@ public class Utils {
         DecimalFormat format= (DecimalFormat) DecimalFormat.getInstance();
         DecimalFormatSymbols symbols=format.getDecimalFormatSymbols();
         return symbols.getDecimalSeparator();
+    }
+
+    public static String getFormatedDate(Date date) {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return timeFormat.format(date);
     }
 }

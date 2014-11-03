@@ -98,8 +98,8 @@ public class DbUtils {
                 String isin = items[0];
                 double amount = Double.parseDouble(items[1]);
                 String currency = items[2];
-                Date exDate = (items[3] == null || "".equals(items[3]) || "n/a".equals(items[3])) ? null : new Date(Long.parseLong(items[3]));
-                Date paymentDate = (items[4] == null || "".equals(items[4]) || "n/a".equals(items[4])) ? null : new Date(Long.parseLong(items[4]));
+                Date exDate = (items[3] == null || "".equals(items[3]) || "n/a".equals(items[3])) ? null : new Date(Long.parseLong(items[3])*1000);
+                Date paymentDate = (items[4] == null || "".equals(items[4]) || "n/a".equals(items[4])) ? null : new Date(Long.parseLong(items[4])*1000);
 
                 Dividend dividend = new Dividend(counter++, isin, amount, currency, exDate, paymentDate);
                 dividendDao.insert(dividend);

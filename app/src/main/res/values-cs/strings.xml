@@ -40,5 +40,9 @@
     <string name="last_price">Poslední cena</string>
     <string name="delta">Změna</string>
     <string name="p_e">P/E</string>
+    <string name="dividends">Dividendy</string>
+    <string name="ex_date">Ex-dividenda</string>
+    <string name="payment_date">Den výplaty</string>
+    <string name="amount">Částka</string>
 
 </resources>
