@@ -54,8 +54,8 @@ public class DividendDao extends AbstractDao<Dividend, Long> {
                 "'ISIN' TEXT NOT NULL ," + // 1: isin
                 "'AMOUNT' REAL NOT NULL ," + // 2: amount
                 "'CURRENCY' TEXT NOT NULL ," + // 3: currency
-                "'EX_DATE' INTEGER NOT NULL ," + // 4: exDate
-                "'PAYMENT_DATE' INTEGER NOT NULL );"); // 5: paymentDate
+                "'EX_DATE' INTEGER," + // 4: exDate
+                "'PAYMENT_DATE' INTEGER);"); // 5: paymentDate
     }
 
     /** Drops the underlying database table. */
@@ -76,8 +76,16 @@ public class DividendDao extends AbstractDao<Dividend, Long> {
         stmt.bindString(2, entity.getIsin());
         stmt.bindDouble(3, entity.getAmount());
         stmt.bindString(4, entity.getCurrency());
-        stmt.bindLong(5, entity.getExDate().getTime());
-        stmt.bindLong(6, entity.getPaymentDate().getTime());
+ 
+        java.util.Date exDate = entity.getExDate();
+        if (exDate != null) {
+            stmt.bindLong(5, exDate.getTime());
+        }
+ 
+        java.util.Date paymentDate = entity.getPaymentDate();
+        if (paymentDate != null) {
+            stmt.bindLong(6, paymentDate.getTime());
+        }
     }
 
     @Override
@@ -100,8 +108,8 @@ public class DividendDao extends AbstractDao<Dividend, Long> {
             cursor.getString(offset + 1), // isin
             cursor.getDouble(offset + 2), // amount
             cursor.getString(offset + 3), // currency
-            new java.util.Date(cursor.getLong(offset + 4)), // exDate
-            new java.util.Date(cursor.getLong(offset + 5)) // paymentDate
+            cursor.isNull(offset + 4) ? null : new java.util.Date(cursor.getLong(offset + 4)), // exDate
+            cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)) // paymentDate
         );
         return entity;
     }
@@ -113,8 +121,8 @@ public class DividendDao extends AbstractDao<Dividend, Long> {
         entity.setIsin(cursor.getString(offset + 1));
         entity.setAmount(cursor.getDouble(offset + 2));
         entity.setCurrency(cursor.getString(offset + 3));
-        entity.setExDate(new java.util.Date(cursor.getLong(offset + 4)));
-        entity.setPaymentDate(new java.util.Date(cursor.getLong(offset + 5)));
+        entity.setExDate(cursor.isNull(offset + 4) ? null : new java.util.Date(cursor.getLong(offset + 4)));
+        entity.setPaymentDate(cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)));
      }
     
     /** @inheritdoc */

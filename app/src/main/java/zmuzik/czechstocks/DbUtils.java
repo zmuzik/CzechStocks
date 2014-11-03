@@ -6,12 +6,12 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.Date;
+import java.util.Scanner;
 
+import zmuzik.czechstocks.dao.Dividend;
+import zmuzik.czechstocks.dao.DividendDao;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.StockDao;
 
@@ -62,25 +62,63 @@ public class DbUtils {
         }
     }
 
-    void fillTableQuoteListItem() {
+    void fillStockTable() {
         Log.i(TAG, "Filling stock table with default values");
         StockDao stockDao = app.getDaoSession().getStockDao();
         try {
-            InputStream in = app.getAssets().open("stocks.csv");
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String line;
-            while ((line = br.readLine()) != null) {
-                StringTokenizer tokenizer = new StringTokenizer(line, ";");
-                String isin = tokenizer.nextToken();
-                tokenizer.nextToken(); // don't need this item (yet)
-                String name = tokenizer.nextToken();
-                boolean isInQuotesList = "Y".equals(tokenizer.nextToken());
+            Scanner scanner = new Scanner(app.getAssets().open("stocks.csv"));
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] items = line.split(";");
+
+                String isin = items[0];
+                String name = items[2];
+                boolean isInQuotesList = "Y".equals(items[3]);
+
                 Stock stock = new Stock(isin, name, isInQuotesList);
                 stockDao.insert(stock);
             }
-            br.close();
         } catch (IOException e) {
             Crashlytics.log(Log.ERROR, TAG, "Unable to initialize default stocks list");
         }
     }
+
+    public void fillDividendTable() {
+        try {
+            DividendDao dividendDao = app.getDaoSession().getDividendDao();
+            Scanner scanner = new Scanner(app.getAssets().open("dividends.csv"));
+            long counter = 0;
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] items = line.split(";");
+
+                String isin = items[0];
+                double amount = Double.parseDouble(items[1]);
+                String currency = items[2];
+                Date exDate = (items[3] == null || "".equals(items[3]) || "n/a".equals(items[3])) ? null : new Date(Long.parseLong(items[3]));
+                Date paymentDate = (items[4] == null || "".equals(items[4]) || "n/a".equals(items[4])) ? null : new Date(Long.parseLong(items[4]));
+
+                Dividend dividend = new Dividend(counter++, isin, amount, currency, exDate, paymentDate);
+                dividendDao.insert(dividend);
+            }
+        } catch (IOException e) {
+            Crashlytics.log(Log.ERROR, TAG, "Unable to initialize default dividends table");
+        }
+    }
+
+//    private void bulkInsertOneHundredRecords() {
+//        String sql = "INSERT INTO "+ SAMPLE_TABLE_NAME +" VALUES (?,?,?);";
+//        SQLiteStatement statement = sampleDB.compileStatement(sql);
+//        sampleDB.beginTransaction();
+//        for (int i = 0; i<100; i++) {
+//            statement.clearBindings();
+//            statement.bindLong(1, i);
+//            statement.bindLong(2, i);
+//            statement.bindLong(3, i*i);
+//            statement.execute();
+//        }
+//        sampleDB.setTransactionSuccessful();
+//        sampleDB.endTransaction();
+//    }
 }

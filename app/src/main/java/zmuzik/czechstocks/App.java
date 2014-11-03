@@ -66,7 +66,8 @@ public class App extends Application {
         DbUtils dbUtils = DbUtils.getInstance(this);
 
         if (!dbUtils.isCurrentDbVersion()) {
-            dbUtils.fillTableQuoteListItem();
+            dbUtils.fillStockTable();
+            dbUtils.fillDividendTable();
             dbUtils.saveCurrentDbVersion();
         }
     }

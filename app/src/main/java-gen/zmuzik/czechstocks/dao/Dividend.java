@@ -15,9 +15,7 @@ public class Dividend {
     private double amount;
     /** Not-null value. */
     private String currency;
-    /** Not-null value. */
     private java.util.Date exDate;
-    /** Not-null value. */
     private java.util.Date paymentDate;
 
     /** Used to resolve relations */
@@ -88,22 +86,18 @@ public class Dividend {
         this.currency = currency;
     }
 
-    /** Not-null value. */
     public java.util.Date getExDate() {
         return exDate;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setExDate(java.util.Date exDate) {
         this.exDate = exDate;
     }
 
-    /** Not-null value. */
     public java.util.Date getPaymentDate() {
         return paymentDate;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setPaymentDate(java.util.Date paymentDate) {
         this.paymentDate = paymentDate;
     }

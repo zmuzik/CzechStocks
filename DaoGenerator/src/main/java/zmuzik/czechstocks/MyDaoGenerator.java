@@ -39,8 +39,8 @@ public class MyDaoGenerator {
         Property dividendIsinProperty = dividend.addStringProperty("isin").notNull().getProperty();
         dividend.addDoubleProperty("amount").notNull();
         dividend.addStringProperty("currency").notNull();
-        dividend.addDateProperty("exDate").notNull();
-        dividend.addDateProperty("paymentDate").notNull();
+        dividend.addDateProperty("exDate");
+        dividend.addDateProperty("paymentDate");
         dividend.addToOne(stock, dividendIsinProperty);
 
         // Stock Info
