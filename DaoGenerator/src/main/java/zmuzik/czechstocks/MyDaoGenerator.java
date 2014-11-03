@@ -19,20 +19,6 @@ public class MyDaoGenerator {
         currentQuote.addDoubleProperty("delta").notNull();
         currentQuote.addStringProperty("stamp").notNull();
 
-        // Stock
-        Entity stock = schema.addEntity("Stock");
-        Property quotationListIsinProperty = stock.addStringProperty("isin").notNull().primaryKey().getProperty();
-        stock.addStringProperty("name").notNull();
-        stock.addBooleanProperty("showInQuotesList").notNull();
-        stock.addToOne(currentQuote, quotationListIsinProperty);
-
-        // Portfolio item
-        Entity portfolioItem = schema.addEntity("PortfolioItem");
-        Property portfolioIsinProperty = portfolioItem.addStringProperty("isin").notNull().primaryKey().getProperty();
-        portfolioItem.addDoubleProperty("price").notNull();
-        portfolioItem.addIntProperty("quantity").notNull();
-        portfolioItem.addToOne(stock, portfolioIsinProperty);
-
         // Dividend
         Entity dividend = schema.addEntity("Dividend");
         dividend.addIdProperty();
@@ -41,7 +27,6 @@ public class MyDaoGenerator {
         dividend.addStringProperty("currency").notNull();
         dividend.addDateProperty("exDate");
         dividend.addDateProperty("paymentDate");
-        dividend.addToOne(stock, dividendIsinProperty);
 
         // Stock Info
         Entity stockInfo = schema.addEntity("StockInfo");
@@ -49,7 +34,6 @@ public class MyDaoGenerator {
         Property stockInfoIsinProperty = stockInfo.addStringProperty("isin").notNull().getProperty();
         stockInfo.addStringProperty("indicator").notNull();
         stockInfo.addStringProperty("value").notNull();
-        stockInfo.addToOne(stock, stockInfoIsinProperty);
 
         // Todays quote
         Entity todaysQuote = schema.addEntity("TodaysQuote");
@@ -58,7 +42,24 @@ public class MyDaoGenerator {
         todaysQuote.addDateProperty("stamp").notNull();
         todaysQuote.addDoubleProperty("price").notNull();
         todaysQuote.addDoubleProperty("volume").notNull();
-        todaysQuote.addToOne(stock, todaysQuoteIsinProperty);
+
+        // Stock
+        Entity stock = schema.addEntity("Stock");
+        Property stockIsinProperty = stock.addStringProperty("isin").notNull().primaryKey().getProperty();
+        stock.addStringProperty("name").notNull();
+        stock.addBooleanProperty("showInQuotesList").notNull();
+        stock.addToOne(currentQuote, stockIsinProperty);
+        stock.addToMany(todaysQuote, todaysQuoteIsinProperty);
+        stock.addToMany(stockInfo, stockInfoIsinProperty);
+        stock.addToMany(dividend, dividendIsinProperty);
+
+        // Portfolio item
+        Entity portfolioItem = schema.addEntity("PortfolioItem");
+        Property portfolioIsinProperty = portfolioItem.addStringProperty("isin").notNull().primaryKey().getProperty();
+        portfolioItem.addDoubleProperty("price").notNull();
+        portfolioItem.addIntProperty("quantity").notNull();
+        portfolioItem.addToOne(stock, portfolioIsinProperty);
+
 
         try {
             new DaoGenerator().generateAll(schema, args[0]);
