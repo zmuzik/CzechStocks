@@ -33,7 +33,7 @@ public class App extends Application {
 
     private Locale mLocale;
 
-    public static App getInstance() {
+    public static App get() {
         return app;
     }
 

@@ -1,6 +1,5 @@
 package zmuzik.czechstocks.tasks;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -14,29 +13,24 @@ import zmuzik.czechstocks.dao.CurrentQuoteDao;
 public class UpdateCurrentDataTask extends AsyncTask {
 
     private final String TAG = this.getClass().getSimpleName();
-    App app;
     private boolean mDownloadError = false;
-
-    public UpdateCurrentDataTask(Context context) {
-        app = (App) context;
-    }
 
     @Override
     protected Object doInBackground(Object... params) {
-        List<CurrentQuote> currentQuotes = app.getApiService().getCurrentQuotes();
-        CurrentQuoteDao dao = app.getDaoSession().getCurrentQuoteDao();
+        List<CurrentQuote> currentQuotes = App.get().getApiService().getCurrentQuotes();
+        CurrentQuoteDao dao = App.get().getDaoSession().getCurrentQuoteDao();
         dao.insertOrReplaceInTx(currentQuotes);
         return null;
     }
 
     @Override
     protected void onPostExecute(Object result) {
-        if (app != null && app.getMainActivity() != null) {
-            app.getMainActivity().setStaticRefreshIcon();
+        if (App.get().getMainActivity() != null) {
+            App.get().getMainActivity().setStaticRefreshIcon();
             if (mDownloadError) {
-                Toast.makeText(app, R.string.toas_check_net, Toast.LENGTH_LONG).show();
+                Toast.makeText(App.get(), R.string.toas_check_net, Toast.LENGTH_LONG).show();
             } else {
-                app.getMainActivity().refreshFragments();
+                App.get().getMainActivity().refreshFragments();
             }
         }
     }
