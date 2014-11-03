@@ -183,7 +183,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
     void actionDataRefresh() {
         setMovingRefreshIcon();
-        new UpdateCurrentDataTask(app).execute();
+        new UpdateCurrentDataTask().execute();
     }
 
     void setMovingRefreshIcon() {

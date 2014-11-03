@@ -1,19 +1,19 @@
 package zmuzik.czechstocks.activities;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
+import zmuzik.czechstocks.Utils;
+import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.StockDao;
 
@@ -22,62 +22,53 @@ public class StockDetailActivity extends Activity {
 
     private final String TAG = this.getClass().getSimpleName();
 
-    App app;
-
     Stock mStock;
+    String mIsin;
+
+    @InjectView(R.id.lastPrice)
+    TextView lastPrice;
+    @InjectView(R.id.delta)
+    TextView delta;
+    @InjectView(R.id.pe)
+    TextView pe;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        app = (App) getApplication();
-        StockDao stockDao = app.getDaoSession().getStockDao();
 
-        String stockIsin = getIntent().getStringExtra("isin");
-        if (stockIsin == null) {
+        mIsin = getIntent().getStringExtra("isin");
+        if (mIsin == null) {
             Crashlytics.log(Log.ERROR, TAG, "Invalid ISIN. Unable to open stock detail");
             finish();
         }
-        mStock = stockDao.load(stockIsin);
+        setContentView(R.layout.activity_stock_detail);
+        ButterKnife.inject(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        StockDao stockDao = App.get().getDaoSession().getStockDao();
+        mStock = stockDao.load(mIsin);
         if (mStock == null) {
-            Crashlytics.log(Log.ERROR, TAG, "Unable to load stock from the db. ISIN = " + stockIsin);
+            Crashlytics.log(Log.ERROR, TAG, "Unable to load stock from the db. ISIN = " + mIsin);
             finish();
         }
         setTitle(mStock.getName());
 
-        setContentView(R.layout.activity_stock_detail);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new BasicInfoFragment())
-                    .commit();
-        }
+        updateBasicInfo();
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.stock_detail, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public static class BasicInfoFragment extends Fragment {
-
-        public BasicInfoFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_stock_basic_info, container, false);
-            return rootView;
+    private void updateBasicInfo() {
+        CurrentQuote currentQuote = mStock.getCurrentQuote();
+        Resources res = App.get().getResources();
+        lastPrice.setText(Utils.getFormatedCurrencyAmount(currentQuote.getPrice()));
+        delta.setText(Utils.getFormatedPercentage(currentQuote.getDelta()));
+        if (currentQuote.getDelta() >= 0) {
+            delta.setTextColor(res.getColor(R.color.green));
+        } else {
+            delta.setTextColor(res.getColor(R.color.red));
         }
     }
 }
