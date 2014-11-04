@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
 
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
+import zmuzik.czechstocks.Utils;
 import zmuzik.czechstocks.adapters.PortfolioAdapter;
 import zmuzik.czechstocks.dao.PortfolioItem;
 import zmuzik.czechstocks.dao.PortfolioItemDao;
@@ -57,13 +58,6 @@ public class PortfolioListFragment extends ListFragment {
         List items = app.getDaoSession().getPortfolioItemDao().loadAll();
         mAdapter = new PortfolioAdapter(app, items);
         setListAdapter(mAdapter);
-
-        if (mLastUpdateTime != null) {
-            mLastUpdateTime.setText(app.getLastUpdatedTime());
-        }
-        if (mDataFromTime != null) {
-            mDataFromTime.setText(app.getDataFromTime());
-        }
     }
 
     @Override
@@ -96,7 +90,7 @@ public class PortfolioListFragment extends ListFragment {
                 String origPriceString = ((TextView) itemRow2.getChildAt(1)).getText().toString();
                 st = new StringTokenizer(origPriceString, " ");
 
-                double origPrice = app.getDoubleValue(st.nextToken());
+                double origPrice = Utils.getDoubleValue(st.nextToken());
 
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
                 LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -136,7 +130,7 @@ public class PortfolioListFragment extends ListFragment {
                 dialogBuilder.setPositiveButton(res.getString(R.string.button_save),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                double price = app.getDoubleValue(priceET.getText().toString());
+                                double price = Utils.getDoubleValue(priceET.getText().toString());
                                 int quantity = Integer.valueOf(quantityET.getText().toString());
                                 if (price > 0 && quantity > 0) {
                                     PortfolioItemDao pid = app.getDaoSession().getPortfolioItemDao();

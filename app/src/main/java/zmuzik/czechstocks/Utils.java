@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -41,5 +42,19 @@ public class Utils {
     public static String getFormatedDate(Date date) {
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
         return timeFormat.format(date);
+    }
+
+    public static double getDoubleValue(String s) {
+        if (s == null || "".equals(s)) {
+            return (double) 0;
+        }
+        NumberFormat format = NumberFormat.getInstance(App.get().getResources().getConfiguration().locale);
+        Number number;
+        try {
+            number = format.parse(s);
+        } catch (ParseException e) {
+            number = Double.valueOf(s);
+        }
+        return number.doubleValue();
     }
 }

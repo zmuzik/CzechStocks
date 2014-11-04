@@ -54,13 +54,6 @@ public class QuoteListFragment extends ListFragment {
 
         mAdapter = new QuotationListAdapter(app, items);
         setListAdapter(mAdapter);
-
-        if (mLastUpdateTime != null) {
-            mLastUpdateTime.setText(app.getLastUpdatedTime());
-        }
-        if (mDataFromTime != null) {
-            mDataFromTime.setText(app.getDataFromTime());
-        }
     }
 
     @Override

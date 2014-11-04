@@ -27,13 +27,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zmuzik.czechstocks.App;
-import zmuzik.czechstocks.fragments.PortfolioListFragment;
-import zmuzik.czechstocks.fragments.QuoteListFragment;
 import zmuzik.czechstocks.R;
+import zmuzik.czechstocks.Utils;
 import zmuzik.czechstocks.adapters.SectionsPagerAdapter;
 import zmuzik.czechstocks.dao.PortfolioItem;
 import zmuzik.czechstocks.dao.PortfolioItemDao;
 import zmuzik.czechstocks.dao.Stock;
+import zmuzik.czechstocks.fragments.PortfolioListFragment;
+import zmuzik.czechstocks.fragments.QuoteListFragment;
 import zmuzik.czechstocks.tasks.UpdateCurrentDataTask;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
@@ -154,7 +155,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                 PortfolioItemDao pid = app.getDaoSession().getPortfolioItemDao();
                 PortfolioItem pi = new PortfolioItem();
                 int quantity = Integer.valueOf(quantityString);
-                double price = app.getDoubleValue(priceET.getText().toString());
+                double price = Utils.getDoubleValue(priceET.getText().toString());
                 if (quantity > 0 && price > 0) {
                     int position = spinner.getSelectedItemPosition();
                     Stock stock = allStocks.get(position);
