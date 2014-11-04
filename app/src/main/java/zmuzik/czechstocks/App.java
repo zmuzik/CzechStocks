@@ -7,9 +7,6 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 
-import java.util.Date;
-import java.util.Locale;
-
 import retrofit.RestAdapter;
 import zmuzik.czechstocks.activities.MainActivity;
 import zmuzik.czechstocks.dao.DaoMaster;
@@ -19,14 +16,11 @@ public class App extends Application {
 
     private final String TAG = this.getClass().getSimpleName();
     private static App app;
-    private Date mLastUpdated;
 
     private SQLiteDatabase mDb;
     private DaoSession mDaoSession;
     private MainActivity mMainActivity;
     ApiService mApiService;
-
-    private Locale mLocale;
 
     public static App get() {
         return app;
@@ -35,24 +29,29 @@ public class App extends Application {
     @Override
     public void onCreate() {
         Log.i(TAG, "====================Initializing app====================");
-        super.onCreate();
         app = this;
+        super.onCreate();
+        initCrashlytics();
+        initApi();
+        initDb();
+    }
 
+    private void initCrashlytics() {
         if (isDebuggable()) {
             Log.d(TAG, "Debug build - Crashlytics disabled");
         } else {
             Log.d(TAG, "Release build - starting Crashlytics");
             Crashlytics.start(this);
         }
-
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AppConf.SERVER_API_ROOT).build();
-        mApiService = restAdapter.create(ApiService.class);
-
-        initDb(AppConf.DB_NAME);
     }
 
-    private void initDb(String dbName) {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, dbName, null);
+    private void initApi() {
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AppConf.SERVER_API_ROOT).build();
+        mApiService = restAdapter.create(ApiService.class);
+    }
+
+    private void initDb() {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, AppConf.DB_NAME, null);
 
         mDb = helper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(mDb);
