@@ -12,6 +12,7 @@ import zmuzik.czechstocks.dao.CurrentQuoteDao;
 import zmuzik.czechstocks.dao.DividendDao;
 import zmuzik.czechstocks.dao.StockInfoDao;
 import zmuzik.czechstocks.dao.TodaysQuoteDao;
+import zmuzik.czechstocks.dao.HistoricalQuoteDao;
 import zmuzik.czechstocks.dao.StockDao;
 import zmuzik.czechstocks.dao.PortfolioItemDao;
 
@@ -28,6 +29,7 @@ public class DaoMaster extends AbstractDaoMaster {
         DividendDao.createTable(db, ifNotExists);
         StockInfoDao.createTable(db, ifNotExists);
         TodaysQuoteDao.createTable(db, ifNotExists);
+        HistoricalQuoteDao.createTable(db, ifNotExists);
         StockDao.createTable(db, ifNotExists);
         PortfolioItemDao.createTable(db, ifNotExists);
     }
@@ -38,6 +40,7 @@ public class DaoMaster extends AbstractDaoMaster {
         DividendDao.dropTable(db, ifExists);
         StockInfoDao.dropTable(db, ifExists);
         TodaysQuoteDao.dropTable(db, ifExists);
+        HistoricalQuoteDao.dropTable(db, ifExists);
         StockDao.dropTable(db, ifExists);
         PortfolioItemDao.dropTable(db, ifExists);
     }
@@ -75,6 +78,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(DividendDao.class);
         registerDaoClass(StockInfoDao.class);
         registerDaoClass(TodaysQuoteDao.class);
+        registerDaoClass(HistoricalQuoteDao.class);
         registerDaoClass(StockDao.class);
         registerDaoClass(PortfolioItemDao.class);
     }

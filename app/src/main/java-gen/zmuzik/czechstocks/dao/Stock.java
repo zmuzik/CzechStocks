@@ -26,6 +26,7 @@ public class Stock {
     private String currentQuote__resolvedKey;
 
     private List<TodaysQuote> todaysQuoteList;
+    private List<HistoricalQuote> historicalQuoteList;
     private List<StockInfo> stockInfoList;
     private List<Dividend> dividendList;
 
@@ -124,6 +125,28 @@ public class Stock {
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     public synchronized void resetTodaysQuoteList() {
         todaysQuoteList = null;
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public List<HistoricalQuote> getHistoricalQuoteList() {
+        if (historicalQuoteList == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            HistoricalQuoteDao targetDao = daoSession.getHistoricalQuoteDao();
+            List<HistoricalQuote> historicalQuoteListNew = targetDao._queryStock_HistoricalQuoteList(isin);
+            synchronized (this) {
+                if(historicalQuoteList == null) {
+                    historicalQuoteList = historicalQuoteListNew;
+                }
+            }
+        }
+        return historicalQuoteList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetHistoricalQuoteList() {
+        historicalQuoteList = null;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

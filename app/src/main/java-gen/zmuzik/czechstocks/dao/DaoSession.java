@@ -13,6 +13,7 @@ import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.Dividend;
 import zmuzik.czechstocks.dao.StockInfo;
 import zmuzik.czechstocks.dao.TodaysQuote;
+import zmuzik.czechstocks.dao.HistoricalQuote;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.PortfolioItem;
 
@@ -20,6 +21,7 @@ import zmuzik.czechstocks.dao.CurrentQuoteDao;
 import zmuzik.czechstocks.dao.DividendDao;
 import zmuzik.czechstocks.dao.StockInfoDao;
 import zmuzik.czechstocks.dao.TodaysQuoteDao;
+import zmuzik.czechstocks.dao.HistoricalQuoteDao;
 import zmuzik.czechstocks.dao.StockDao;
 import zmuzik.czechstocks.dao.PortfolioItemDao;
 
@@ -36,6 +38,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig dividendDaoConfig;
     private final DaoConfig stockInfoDaoConfig;
     private final DaoConfig todaysQuoteDaoConfig;
+    private final DaoConfig historicalQuoteDaoConfig;
     private final DaoConfig stockDaoConfig;
     private final DaoConfig portfolioItemDaoConfig;
 
@@ -43,6 +46,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DividendDao dividendDao;
     private final StockInfoDao stockInfoDao;
     private final TodaysQuoteDao todaysQuoteDao;
+    private final HistoricalQuoteDao historicalQuoteDao;
     private final StockDao stockDao;
     private final PortfolioItemDao portfolioItemDao;
 
@@ -62,6 +66,9 @@ public class DaoSession extends AbstractDaoSession {
         todaysQuoteDaoConfig = daoConfigMap.get(TodaysQuoteDao.class).clone();
         todaysQuoteDaoConfig.initIdentityScope(type);
 
+        historicalQuoteDaoConfig = daoConfigMap.get(HistoricalQuoteDao.class).clone();
+        historicalQuoteDaoConfig.initIdentityScope(type);
+
         stockDaoConfig = daoConfigMap.get(StockDao.class).clone();
         stockDaoConfig.initIdentityScope(type);
 
@@ -72,6 +79,7 @@ public class DaoSession extends AbstractDaoSession {
         dividendDao = new DividendDao(dividendDaoConfig, this);
         stockInfoDao = new StockInfoDao(stockInfoDaoConfig, this);
         todaysQuoteDao = new TodaysQuoteDao(todaysQuoteDaoConfig, this);
+        historicalQuoteDao = new HistoricalQuoteDao(historicalQuoteDaoConfig, this);
         stockDao = new StockDao(stockDaoConfig, this);
         portfolioItemDao = new PortfolioItemDao(portfolioItemDaoConfig, this);
 
@@ -79,6 +87,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(Dividend.class, dividendDao);
         registerDao(StockInfo.class, stockInfoDao);
         registerDao(TodaysQuote.class, todaysQuoteDao);
+        registerDao(HistoricalQuote.class, historicalQuoteDao);
         registerDao(Stock.class, stockDao);
         registerDao(PortfolioItem.class, portfolioItemDao);
     }
@@ -88,6 +97,7 @@ public class DaoSession extends AbstractDaoSession {
         dividendDaoConfig.getIdentityScope().clear();
         stockInfoDaoConfig.getIdentityScope().clear();
         todaysQuoteDaoConfig.getIdentityScope().clear();
+        historicalQuoteDaoConfig.getIdentityScope().clear();
         stockDaoConfig.getIdentityScope().clear();
         portfolioItemDaoConfig.getIdentityScope().clear();
     }
@@ -106,6 +116,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public TodaysQuoteDao getTodaysQuoteDao() {
         return todaysQuoteDao;
+    }
+
+    public HistoricalQuoteDao getHistoricalQuoteDao() {
+        return historicalQuoteDao;
     }
 
     public StockDao getStockDao() {

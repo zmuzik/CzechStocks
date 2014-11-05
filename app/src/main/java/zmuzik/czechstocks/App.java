@@ -64,6 +64,7 @@ public class App extends Application {
             dbUtils.fillDividendTable();
             dbUtils.fillStockInfoTable();
             dbUtils.fillTodaysQuoteTable();
+            dbUtils.fillHistoricalQuoteTable();
             dbUtils.saveCurrentDbVersion();
         }
     }
