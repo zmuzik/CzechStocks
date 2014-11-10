@@ -28,7 +28,6 @@ import zmuzik.czechstocks.dao.PortfolioItemDao;
 public class PortfolioListFragment extends ListFragment {
 
     final String TAG = this.getClass().getSimpleName();
-    App app;
     TextView mLastUpdateTime;
     TextView mDataFromTime;
     PortfolioAdapter mAdapter;
@@ -36,7 +35,6 @@ public class PortfolioListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        app = (App) this.getActivity().getApplication();
         refreshData();
     }
 
@@ -55,8 +53,8 @@ public class PortfolioListFragment extends ListFragment {
     }
 
     public void refreshData() {
-        List items = app.getDaoSession().getPortfolioItemDao().loadAll();
-        mAdapter = new PortfolioAdapter(app, items);
+        List items = App.get().getDaoSession().getPortfolioItemDao().loadAll();
+        mAdapter = new PortfolioAdapter(App.get(), items);
         setListAdapter(mAdapter);
     }
 
@@ -69,7 +67,7 @@ public class PortfolioListFragment extends ListFragment {
                 Resources res = getResources();
                 final long rowid = arg3;
 
-                PortfolioItemDao pid = app.getDaoSession().getPortfolioItemDao();
+                PortfolioItemDao pid = App.get().getDaoSession().getPortfolioItemDao();
                 List<PortfolioItem> portfolioItems = pid.loadAll();
                 PortfolioItem clickedItem = portfolioItems.get(arg2);
                 final String isin = clickedItem.getIsin();
@@ -120,7 +118,7 @@ public class PortfolioListFragment extends ListFragment {
                 dialogBuilder.setNeutralButton(res.getString(R.string.button_remove),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                PortfolioItemDao pid = app.getDaoSession().getPortfolioItemDao();
+                                PortfolioItemDao pid = App.get().getDaoSession().getPortfolioItemDao();
                                 pid.deleteByKey(isin);
                                 refreshData();
                                 dialog.dismiss();
@@ -133,7 +131,7 @@ public class PortfolioListFragment extends ListFragment {
                                 double price = Utils.getDoubleValue(priceET.getText().toString());
                                 int quantity = Integer.valueOf(quantityET.getText().toString());
                                 if (price > 0 && quantity > 0) {
-                                    PortfolioItemDao pid = app.getDaoSession().getPortfolioItemDao();
+                                    PortfolioItemDao pid = App.get().getDaoSession().getPortfolioItemDao();
                                     PortfolioItem pi = pid.loadByRowId(rowid);
                                     pi.setPrice(price);
                                     pi.setQuantity(quantity);
