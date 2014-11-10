@@ -162,7 +162,7 @@ public class StockDetailActivity extends Activity {
         lineFill.setShader(new LinearGradient(0, 0, 0, 250, Color.rgb(0, 0, 150), Color.rgb(0, 0, 100), Shader.TileMode.MIRROR));
         priceFormat.setFillPaint(lineFill);
 
-        stockGraph.setDomainValueFormat(new GraphDateFormat("HH:mm"));
+        stockGraph.setDomainValueFormat(new GraphDateFormat(GraphDateFormat.MONTH_YEAR_FORMAT));
         stockGraph.addSeries(priceSeries, priceFormat);
         stockGraph.getLegendWidget().setVisible(false);
         stockGraph.setBorderStyle(Plot.BorderStyle.NONE, null, null);

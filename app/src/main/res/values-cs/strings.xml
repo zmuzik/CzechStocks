@@ -45,4 +45,7 @@
     <string name="payment_date">Den výplaty</string>
     <string name="amount">Částka</string>
 
+    <string name="please_wait">Čekejte prosím</string>
+    <string name="initializing_db">Inicializuji databázi</string>
+
 </resources>

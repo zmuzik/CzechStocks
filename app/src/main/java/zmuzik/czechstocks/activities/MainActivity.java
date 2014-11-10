@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zmuzik.czechstocks.App;
+import zmuzik.czechstocks.DbUtils;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.Utils;
 import zmuzik.czechstocks.adapters.SectionsPagerAdapter;
@@ -35,12 +36,12 @@ import zmuzik.czechstocks.dao.PortfolioItemDao;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.fragments.PortfolioListFragment;
 import zmuzik.czechstocks.fragments.QuoteListFragment;
+import zmuzik.czechstocks.tasks.FillDbTablesTask;
 import zmuzik.czechstocks.tasks.UpdateCurrentDataTask;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
     private final String TAG = this.getClass().getSimpleName();
-    private App app;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -49,19 +50,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        app = (App) getApplication();
-        app.setMainActiviy(this);
-
+        App.get().setMainActiviy(this);
         setContentView(R.layout.activity_main);
         final ActionBar actionBar = getActionBar();
-
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        mSectionsPagerAdapter = new SectionsPagerAdapter(app, getFragmentManager());
-
+        mSectionsPagerAdapter = new SectionsPagerAdapter(App.get(), getFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -71,6 +66,12 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
         for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
             actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
+        }
+
+        // fill tables with default data if there's new db version
+        if (!DbUtils.getInstance().isCurrentDbVersion()) {
+            FillDbTablesTask fillDbTablesTask = new FillDbTablesTask(this);
+            fillDbTablesTask.execute();
         }
     }
 
@@ -113,7 +114,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     }
 
     void actionAddPortfolioItem() {
-        final List<Stock> allStocks = app.getDaoSession().getStockDao().loadAll();
+        final List<Stock> allStocks = App.get().getDaoSession().getStockDao().loadAll();
         ArrayList<String> stockNames = new ArrayList<String>();
         for (Stock stock : allStocks) {
             stockNames.add(stock.getName());
@@ -123,7 +124,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         LinearLayout parentLayout = (LinearLayout) inflater.inflate(R.layout.add_portfolio_item_dialog, null);
 
         final Spinner spinner = (Spinner) parentLayout.getChildAt(0);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(app, android.R.layout.simple_spinner_dropdown_item,
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(App.get(), android.R.layout.simple_spinner_dropdown_item,
                 stockNames);
         spinner.setAdapter(adapter);
 
@@ -145,14 +146,14 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                 String priceString = priceET.getText().toString();
                 Resources res = getResources();
                 if (quantityString == null || "".equals(quantityString)) {
-                    Toast.makeText(app, res.getString(R.string.number_of_stocks_null), Toast.LENGTH_LONG).show();
+                    Toast.makeText(App.get(), res.getString(R.string.number_of_stocks_null), Toast.LENGTH_LONG).show();
                     return;
                 }
                 if (priceString == null || "".equals(priceString)) {
-                    Toast.makeText(app, res.getString(R.string.average_price_null), Toast.LENGTH_LONG).show();
+                    Toast.makeText(App.get(), res.getString(R.string.average_price_null), Toast.LENGTH_LONG).show();
                     return;
                 }
-                PortfolioItemDao pid = app.getDaoSession().getPortfolioItemDao();
+                PortfolioItemDao pid = App.get().getDaoSession().getPortfolioItemDao();
                 PortfolioItem pi = new PortfolioItem();
                 int quantity = Integer.valueOf(quantityString);
                 double price = Utils.getDoubleValue(priceET.getText().toString());

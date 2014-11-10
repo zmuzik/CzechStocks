@@ -1,10 +1,12 @@
 package zmuzik.czechstocks.tasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.List;
 
+import retrofit.RetrofitError;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.dao.CurrentQuote;
@@ -17,9 +19,14 @@ public class UpdateCurrentDataTask extends AsyncTask {
 
     @Override
     protected Object doInBackground(Object... params) {
-        List<CurrentQuote> currentQuotes = App.get().getApiService().getCurrentQuotes();
-        CurrentQuoteDao dao = App.get().getDaoSession().getCurrentQuoteDao();
-        dao.insertOrReplaceInTx(currentQuotes);
+        try {
+            List<CurrentQuote> currentQuotes = App.get().getApiService().getCurrentQuotes();
+            CurrentQuoteDao dao = App.get().getDaoSession().getCurrentQuoteDao();
+            dao.insertOrReplaceInTx(currentQuotes);
+        } catch (RetrofitError e) {
+            Log.e(TAG, e.toString());
+            mDownloadError = true;
+        }
         return null;
     }
 

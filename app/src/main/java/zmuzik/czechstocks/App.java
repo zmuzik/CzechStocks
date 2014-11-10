@@ -52,21 +52,9 @@ public class App extends Application {
 
     private void initDb() {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, AppConf.DB_NAME, null);
-
         mDb = helper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(mDb);
         mDaoSession = daoMaster.newSession();
-
-        DbUtils dbUtils = DbUtils.getInstance(this);
-
-        if (!dbUtils.isCurrentDbVersion()) {
-            dbUtils.fillStockTable();
-            dbUtils.fillDividendTable();
-            dbUtils.fillStockInfoTable();
-            dbUtils.fillTodaysQuoteTable();
-            dbUtils.fillHistoricalQuoteTable();
-            dbUtils.saveCurrentDbVersion();
-        }
     }
 
     public boolean isDebuggable() {

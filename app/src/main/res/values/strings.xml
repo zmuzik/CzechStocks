@@ -45,4 +45,7 @@
     <string name="payment_date">Payment date</string>
     <string name="amount">Amount</string>
 
+    <string name="please_wait">Please wait</string>
+    <string name="initializing_db">Inicializing database</string>
+
 </resources>
