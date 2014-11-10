@@ -1,19 +1,20 @@
 package zmuzik.czechstocks.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.text.NumberFormat;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
+import zmuzik.czechstocks.Utils;
 import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.PortfolioItem;
 
@@ -21,11 +22,8 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
 
     private final String TAG = this.getClass().getSimpleName();
 
-    App app;
-
     public PortfolioAdapter(Context context, List<PortfolioItem> objects) {
         super(context, R.layout.portfolio_item, objects);
-        app = (App) context.getApplicationContext();
     }
 
     @Override
@@ -41,28 +39,70 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
             convertView.setTag(holder);
         }
 
-
-        if (isTotalItem(position)) { //"total" (summary) item
-            holder.stockNameTV.setText(app.getResources().getString(R.string.total));
-            holder.deltaTV.setText("0 %");
-            holder.profitTV.setText("0 " + app.getResources().getString(R.string.currency));
-        } else { //regular portfolio item
-            PortfolioItem portfolioItem = getItem(position);
-            CurrentQuote quote = portfolioItem.getStock().getCurrentQuote();
-            holder.stockNameTV.setText(portfolioItem.getStock().getName());
-            holder.quantityTV.setText("" + portfolioItem.getQuantity());
-            holder.originalPriceTV.setText("" + portfolioItem.getPrice());
-            double delta = (quote.getPrice() / portfolioItem.getPrice()) / 100;
-            double profit = (quote.getPrice() - portfolioItem.getPrice()) * portfolioItem.getQuantity();
-
-            NumberFormat nf = NumberFormat.getNumberInstance(app.getResources().getConfiguration().locale);
-            nf.setMaximumFractionDigits(2);
-            nf.setMinimumFractionDigits(2);
-            holder.deltaTV.setText(nf.format(delta));
-            holder.profitTV.setText(nf.format(profit) + " " + app.getResources().getString(R.string.currency));
+        if (isTotalItem(position)) {
+            renderTotalItem(holder);
+        } else {
+            renderNormalItem(holder, position);
         }
-
         return convertView;
+    }
+
+    private void renderNormalItem(ViewHolder holder, int position) {
+        PortfolioItem portfolioItem = getItem(position);
+        holder.stockNameTV.setText(portfolioItem.getStock().getName());
+        holder.quantityTV.setText(getAmountString(portfolioItem.getQuantity()));
+        holder.originalPriceTV.setText(" " + Utils.getFormatedCurrencyAmount(portfolioItem.getPrice()));
+        holder.deltaTV.setText(Utils.getFormatedPercentage(getDelta(portfolioItem)));
+        holder.profitTV.setText(Utils.getFormatedCurrencyAmount(getProfit(portfolioItem)));
+        // set color
+        if (getProfit(portfolioItem) >= 0) {
+            holder.deltaTV.setTextColor(App.get().getResources().getColor(R.color.lime));
+            holder.profitTV.setTextColor(App.get().getResources().getColor(R.color.lime));
+        } else {
+            holder.deltaTV.setTextColor(App.get().getResources().getColor(R.color.red));
+            holder.profitTV.setTextColor(App.get().getResources().getColor(R.color.red));
+        }
+    }
+
+    private void renderTotalItem(ViewHolder holder) {
+        double totalInvested = 0;
+        double totalProfit = 0;
+        for (int i = 0; i < super.getCount(); i++) {
+            PortfolioItem portfolioItem = getItem(i);
+            CurrentQuote currentQuote = portfolioItem.getStock().getCurrentQuote();
+            totalInvested += portfolioItem.getPrice() * portfolioItem.getQuantity();
+            totalProfit += (currentQuote.getPrice() - portfolioItem.getPrice()) * portfolioItem.getQuantity();
+        }
+        double perCentProfit = (totalProfit / totalInvested) * 100;
+        holder.stockNameTV.setText(App.get().getResources().getString(R.string.total));
+        holder.deltaTV.setText(Utils.getFormatedPercentage(perCentProfit));
+        holder.profitTV.setText(Utils.getFormatedCurrencyAmount(totalProfit));
+        String investedStr = App.get().getResources().getString(R.string.invested);
+        holder.quantityTV.setText(investedStr + " " + Utils.getFormatedCurrencyAmount(totalInvested));
+        holder.originalPriceTV.setText("");
+        // set color
+        if (totalProfit >= 0) {
+            holder.deltaTV.setTextColor(App.get().getResources().getColor(R.color.lime));
+            holder.profitTV.setTextColor(App.get().getResources().getColor(R.color.lime));
+        } else {
+            holder.deltaTV.setTextColor(App.get().getResources().getColor(R.color.red));
+            holder.profitTV.setTextColor(App.get().getResources().getColor(R.color.red));
+        }
+    }
+
+    private double getDelta(PortfolioItem portfolioItem) {
+        CurrentQuote quote = portfolioItem.getStock().getCurrentQuote();
+        return ((quote.getPrice() / portfolioItem.getPrice()) - 1) * 100;
+    }
+
+    private double getProfit(PortfolioItem portfolioItem) {
+        CurrentQuote quote = portfolioItem.getStock().getCurrentQuote();
+        return (quote.getPrice() - portfolioItem.getPrice()) * portfolioItem.getQuantity();
+    }
+
+    private String getAmountString(int amount) {
+        Resources res = App.get().getResources();
+        return res.getQuantityString(R.plurals.pieces_bought_at, amount, amount);
     }
 
     private int getCountNoSummary() {

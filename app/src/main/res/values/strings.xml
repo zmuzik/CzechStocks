@@ -31,8 +31,8 @@
     <string name="no_other_stocks">There are no other stocks available.</string>
 
     <plurals name="pieces_bought_at">
-        <item quantity="one">pc at</item>
-        <item quantity="other">pcs at</item>
+        <item quantity="one">%d pc at</item>
+        <item quantity="other">%d pcs at</item>
     </plurals>
 
     <string name="title_activity_edit_stock_list">Add quote</string>
@@ -47,5 +47,5 @@
 
     <string name="please_wait">Please wait</string>
     <string name="initializing_db">Inicializing database</string>
-
+    <string name="invested">Invested</string>
 </resources>

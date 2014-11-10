@@ -31,9 +31,9 @@
     <string name="no_other_stocks">Žádné další akcie nejsou k dispozici.</string>
 
     <plurals name="pieces_bought_at">
-        <item quantity="one">kus za</item>
-        <item quantity="few">kusy po</item>
-        <item quantity="other">kusů po</item>
+        <item quantity="one">%d kus za</item>
+        <item quantity="few">%d kusy po</item>
+        <item quantity="other">%d kusů po</item>
     </plurals>
 
     <string name="title_activity_edit_stock_list">Přidání do kurzovního lístku</string>
@@ -47,5 +47,5 @@
 
     <string name="please_wait">Čekejte prosím</string>
     <string name="initializing_db">Inicializuji databázi</string>
-
+    <string name="invested">Investováno</string>
 </resources>
