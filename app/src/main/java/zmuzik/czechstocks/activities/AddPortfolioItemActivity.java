@@ -1,6 +1,6 @@
 package zmuzik.czechstocks.activities;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -16,12 +16,9 @@ import zmuzik.czechstocks.adapters.AddStockAdapter;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.StockDao;
 
-
-public class AddStockActivity extends ListActivity {
+public class AddPortfolioItemActivity extends Activity {
 
     private final String TAG = this.getClass().getSimpleName();
-
-    App app;
 
     @InjectView(R.id.okButton)
     Button okButton;
@@ -33,7 +30,6 @@ public class AddStockActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_stock_list);
-        app = (App) getApplication();
         ButterKnife.inject(this);
     }
 
@@ -41,7 +37,7 @@ public class AddStockActivity extends ListActivity {
     protected void onResume() {
         super.onResume();
         // initialize the list adapter
-        StockDao stockDao = app.getDaoSession().getStockDao();
+        StockDao stockDao = App.get().getDaoSession().getStockDao();
         List<Stock> allStocks = stockDao.loadAll();
         stocks = new ArrayList<Stock>();
         for (Stock stock : allStocks) {
@@ -55,7 +51,7 @@ public class AddStockActivity extends ListActivity {
 
     @OnClick(R.id.okButton)
     public void onOkButtonClicked() {
-        StockDao stockDao = app.getDaoSession().getStockDao();
+        StockDao stockDao = App.get().getDaoSession().getStockDao();
         //save the changed items
         for (int i = 0; i < addStockAdapter.getCount(); i++) {
             Stock stock = addStockAdapter.getItem(i);

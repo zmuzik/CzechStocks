@@ -44,7 +44,7 @@ public class QuoteListFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.stocks_list_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_stocks_list, container, false);
         ButterKnife.inject(getActivity());
         return view;
     }

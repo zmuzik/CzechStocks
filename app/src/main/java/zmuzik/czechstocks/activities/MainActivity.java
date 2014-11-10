@@ -121,7 +121,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         }
 
         LayoutInflater inflater = this.getLayoutInflater();
-        LinearLayout parentLayout = (LinearLayout) inflater.inflate(R.layout.add_portfolio_item_dialog, null);
+        LinearLayout parentLayout = (LinearLayout) inflater.inflate(R.layout.dialog_add_portfolio_item, null);
 
         final Spinner spinner = (Spinner) parentLayout.getChildAt(0);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(App.get(), android.R.layout.simple_spinner_dropdown_item,
@@ -190,7 +190,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
     void setMovingRefreshIcon() {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ImageView iv = (ImageView) inflater.inflate(R.layout.refresh_action_view, null);
+        ImageView iv = (ImageView) inflater.inflate(R.layout.icon_action_refresh, null);
         Animation rotation = AnimationUtils.loadAnimation(this, R.anim.clockwise_refresh);
         rotation.setRepeatCount(Animation.INFINITE);
         iv.startAnimation(rotation);

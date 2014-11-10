@@ -20,7 +20,7 @@ public class DividendListAdapter extends ArrayAdapter<Dividend> {
     private final String TAG = this.getClass().getSimpleName();
 
     public DividendListAdapter(Context context, List<Dividend> objects) {
-        super(context, R.layout.dividend_list_item, objects);
+        super(context, R.layout.list_item_dividend, objects);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class DividendListAdapter extends ArrayAdapter<Dividend> {
             holder = (ViewHolder) convertView.getTag();
         } else {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.dividend_list_item, parent, false);
+            convertView = inflater.inflate(R.layout.list_item_dividend, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }

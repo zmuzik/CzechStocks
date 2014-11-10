@@ -22,7 +22,7 @@ public class QuotationListAdapter extends ArrayAdapter<Stock> {
     private final String TAG = this.getClass().getSimpleName();
 
     public QuotationListAdapter(Context context, List<Stock> objects) {
-        super(context, R.layout.stocks_list_item, objects);
+        super(context, R.layout.list_item_stocks, objects);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class QuotationListAdapter extends ArrayAdapter<Stock> {
             holder = (ViewHolder) convertView.getTag();
         } else {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.stocks_list_item, parent, false);
+            convertView = inflater.inflate(R.layout.list_item_stocks, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }

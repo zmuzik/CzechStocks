@@ -23,7 +23,7 @@ public class AddStockAdapter extends ArrayAdapter<Stock> {
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.edit_stock_list_item, parent, false);
+            convertView = inflater.inflate(R.layout.list_item_edit_stock, parent, false);
         }
 
         CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);

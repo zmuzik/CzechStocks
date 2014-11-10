@@ -23,7 +23,7 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
     private final String TAG = this.getClass().getSimpleName();
 
     public PortfolioAdapter(Context context, List<PortfolioItem> objects) {
-        super(context, R.layout.portfolio_item, objects);
+        super(context, R.layout.list_item_portfolio, objects);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
             holder = (ViewHolder) convertView.getTag();
         } else {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.portfolio_item, parent, false);
+            convertView = inflater.inflate(R.layout.list_item_portfolio, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }
