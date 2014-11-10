@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import de.greenrobot.dao.query.QueryBuilder;
 import de.greenrobot.dao.query.WhereCondition;
 import zmuzik.czechstocks.App;
@@ -21,8 +23,12 @@ import zmuzik.czechstocks.adapters.QuotationListAdapter;
 public class QuoteListFragment extends ListFragment {
 
     final String TAG = this.getClass().getSimpleName();
-    TextView mLastUpdateTime;
-    TextView mDataFromTime;
+
+    @InjectView(R.id.lastUpdatedValue)
+    TextView lastUpdatedValue;
+    @InjectView(R.id.dataFromValue)
+    TextView dataFromValue;
+
     QuotationListAdapter mAdapter;
 
     @Override
@@ -39,8 +45,7 @@ public class QuoteListFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.stocks_list_fragment, container, false);
-        mLastUpdateTime = (TextView) view.findViewById(R.id.lastUpdatedValue);
-        mDataFromTime = (TextView) view.findViewById(R.id.dataFromValue);
+        ButterKnife.inject(getActivity());
         return view;
     }
 

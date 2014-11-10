@@ -18,6 +18,8 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.Utils;
@@ -28,8 +30,12 @@ import zmuzik.czechstocks.dao.PortfolioItemDao;
 public class PortfolioListFragment extends ListFragment {
 
     final String TAG = this.getClass().getSimpleName();
-    TextView mLastUpdateTime;
-    TextView mDataFromTime;
+
+    @InjectView(R.id.lastUpdatedValue)
+    TextView lastUpdatedValue;
+    @InjectView(R.id.dataFromValue)
+    TextView dataFromValue;
+
     PortfolioAdapter mAdapter;
 
     @Override
@@ -47,8 +53,7 @@ public class PortfolioListFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.portfolio_fragment, container, false);
-        mLastUpdateTime = (TextView) view.findViewById(R.id.lastUpdatedValue);
-        mDataFromTime = (TextView) view.findViewById(R.id.dataFromValue);
+        ButterKnife.inject(getActivity());
         return view;
     }
 
