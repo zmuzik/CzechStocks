@@ -46,7 +46,6 @@ public class AddPortfolioItemActivity extends Activity {
             }
         }
         addStockAdapter = new AddStockAdapter(this, R.layout.list_item_edit_stock, stocks);
-        setListAdapter(addStockAdapter);
     }
 
     @OnClick(R.id.okButton)

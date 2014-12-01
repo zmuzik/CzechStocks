@@ -12,7 +12,8 @@ import zmuzik.czechstocks.dao.TodaysQuote;
 
 public interface ApiService {
     //@GET("/currentQuote")
-    @GET("/current")
+    //@GET("/current")
+    @GET("/stocks.json")
     List<CurrentQuote> getCurrentQuotes();
 
     @GET("/dividend")

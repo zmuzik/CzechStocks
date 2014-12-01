@@ -32,7 +32,7 @@ public class App extends Application {
         app = this;
         super.onCreate();
         initCrashlytics();
-        initApi();
+        initRestApi();
         initDb();
     }
 
@@ -45,7 +45,7 @@ public class App extends Application {
         }
     }
 
-    private void initApi() {
+    private void initRestApi() {
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AppConf.SERVER_API_ROOT).build();
         mApiService = restAdapter.create(ApiService.class);
     }
