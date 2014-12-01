@@ -15,21 +15,21 @@ import zmuzik.czechstocks.dao.DaoSession;
 public class App extends Application {
 
     private final String TAG = this.getClass().getSimpleName();
-    private static App app;
+    private static App mApp;
+    private static DaoSession mDaoSession;
+    private static Api mApi;
 
     private SQLiteDatabase mDb;
-    private DaoSession mDaoSession;
     private MainActivity mMainActivity;
-    ApiService mApiService;
 
     public static App get() {
-        return app;
+        return mApp;
     }
 
     @Override
     public void onCreate() {
         Log.i(TAG, "====================Initializing app====================");
-        app = this;
+        mApp = this;
         super.onCreate();
         initCrashlytics();
         initRestApi();
@@ -47,7 +47,7 @@ public class App extends Application {
 
     private void initRestApi() {
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AppConf.SERVER_API_ROOT).build();
-        mApiService = restAdapter.create(ApiService.class);
+        mApi = restAdapter.create(Api.class);
     }
 
     private void initDb() {
@@ -61,7 +61,7 @@ public class App extends Application {
         return 0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE);
     }
 
-    public DaoSession getDaoSession() {
+    public static DaoSession getDaoSsn() {
         return mDaoSession;
     }
 
@@ -73,7 +73,7 @@ public class App extends Application {
         return mMainActivity;
     }
 
-    public ApiService getApiService() {
-        return mApiService;
+    public static Api getApi() {
+        return mApi;
     }
 }

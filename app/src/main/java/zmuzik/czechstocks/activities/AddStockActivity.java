@@ -41,7 +41,7 @@ public class AddStockActivity extends ListActivity {
     protected void onResume() {
         super.onResume();
         // initialize the list adapter
-        StockDao stockDao = app.getDaoSession().getStockDao();
+        StockDao stockDao = app.getDaoSsn().getStockDao();
         List<Stock> allStocks = stockDao.loadAll();
         stocks = new ArrayList<Stock>();
         for (Stock stock : allStocks) {
@@ -55,7 +55,7 @@ public class AddStockActivity extends ListActivity {
 
     @OnClick(R.id.okButton)
     public void onOkButtonClicked() {
-        StockDao stockDao = app.getDaoSession().getStockDao();
+        StockDao stockDao = app.getDaoSsn().getStockDao();
         //save the changed items
         for (int i = 0; i < addStockAdapter.getCount(); i++) {
             Stock stock = addStockAdapter.getItem(i);

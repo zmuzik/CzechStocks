@@ -49,7 +49,7 @@ public class PortfolioListFragment extends ListFragment {
     }
 
     public void refreshData() {
-        portfolioItems = App.get().getDaoSession().getPortfolioItemDao().loadAll();
+        portfolioItems = App.getDaoSsn().getPortfolioItemDao().loadAll();
         mAdapter = new PortfolioAdapter(App.get(), portfolioItems);
         setListAdapter(mAdapter);
     }

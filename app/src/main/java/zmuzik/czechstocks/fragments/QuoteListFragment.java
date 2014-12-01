@@ -50,7 +50,7 @@ public class QuoteListFragment extends ListFragment {
     }
 
     public void refreshData() {
-        QueryBuilder qb = App.get().getDaoSession().getStockDao().queryBuilder();
+        QueryBuilder qb = App.getDaoSsn().getStockDao().queryBuilder();
         qb.where(new WhereCondition.StringCondition("SHOW_IN_QUOTES_LIST = 1 AND ISIN IN " +
                 "(SELECT ISIN FROM CURRENT_QUOTE) ORDER BY NAME COLLATE LOCALIZED ASC"));
         List items = qb.list();

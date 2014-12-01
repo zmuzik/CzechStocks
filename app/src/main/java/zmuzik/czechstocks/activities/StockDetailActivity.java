@@ -35,7 +35,7 @@ public class StockDetailActivity extends Activity {
     }
 
     private void loadStockFromDb() {
-        StockDao stockDao = App.get().getDaoSession().getStockDao();
+        StockDao stockDao = App.getDaoSsn().getStockDao();
         mStock = stockDao.load(mIsin);
         if (mStock == null) {
             Crashlytics.log(Log.ERROR, TAG, "Unable to load stock from the db. ISIN = " + mIsin);

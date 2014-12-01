@@ -10,7 +10,7 @@ import zmuzik.czechstocks.dao.HistoricalQuote;
 import zmuzik.czechstocks.dao.StockInfo;
 import zmuzik.czechstocks.dao.TodaysQuote;
 
-public interface ApiService {
+public interface Api {
     //@GET("/currentQuote")
     //@GET("/current")
     @GET("/stocks.json")

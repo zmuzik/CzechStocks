@@ -53,7 +53,7 @@ public class StockDividendsFragment extends Fragment {
     }
 
     private void updateDividendsList() {
-        QueryBuilder qb = App.get().getDaoSession().getDividendDao().queryBuilder();
+        QueryBuilder qb = App.getDaoSsn().getDividendDao().queryBuilder();
         qb.where(new WhereCondition.StringCondition("ISIN = '" + mStock.getIsin()
                 + "' ORDER BY PAYMENT_DATE COLLATE LOCALIZED DESC"));
         List<Dividend> dividends = qb.list();

@@ -37,7 +37,7 @@ public class AddPortfolioItemActivity extends Activity {
     protected void onResume() {
         super.onResume();
         // initialize the list adapter
-        StockDao stockDao = App.get().getDaoSession().getStockDao();
+        StockDao stockDao = App.getDaoSsn().getStockDao();
         List<Stock> allStocks = stockDao.loadAll();
         stocks = new ArrayList<Stock>();
         for (Stock stock : allStocks) {
@@ -50,7 +50,7 @@ public class AddPortfolioItemActivity extends Activity {
 
     @OnClick(R.id.okButton)
     public void onOkButtonClicked() {
-        StockDao stockDao = App.get().getDaoSession().getStockDao();
+        StockDao stockDao = App.getDaoSsn().getStockDao();
         //save the changed items
         for (int i = 0; i < addStockAdapter.getCount(); i++) {
             Stock stock = addStockAdapter.getItem(i);

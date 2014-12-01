@@ -20,8 +20,8 @@ public class UpdateCurrentDataTask extends AsyncTask {
     @Override
     protected Object doInBackground(Object... params) {
         try {
-            List<CurrentQuote> currentQuotes = App.get().getApiService().getCurrentQuotes();
-            CurrentQuoteDao dao = App.get().getDaoSession().getCurrentQuoteDao();
+            List<CurrentQuote> currentQuotes = App.getApi().getCurrentQuotes();
+            CurrentQuoteDao dao = App.getDaoSsn().getCurrentQuoteDao();
             dao.insertOrReplaceInTx(currentQuotes);
         } catch (RetrofitError e) {
             Log.e(TAG, e.toString());

@@ -114,7 +114,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     }
 
     void actionAddPortfolioItem() {
-        final List<Stock> allStocks = App.get().getDaoSession().getStockDao().loadAll();
+        final List<Stock> allStocks = App.getDaoSsn().getStockDao().loadAll();
         ArrayList<String> stockNames = new ArrayList<String>();
         for (Stock stock : allStocks) {
             stockNames.add(stock.getName());
@@ -153,7 +153,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                     Toast.makeText(App.get(), res.getString(R.string.average_price_null), Toast.LENGTH_LONG).show();
                     return;
                 }
-                PortfolioItemDao pid = App.get().getDaoSession().getPortfolioItemDao();
+                PortfolioItemDao pid = App.getDaoSsn().getPortfolioItemDao();
                 PortfolioItem pi = new PortfolioItem();
                 int quantity = Integer.valueOf(quantityString);
                 double price = Utils.getDoubleValue(priceET.getText().toString());

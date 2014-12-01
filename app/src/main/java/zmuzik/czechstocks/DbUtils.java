@@ -62,10 +62,10 @@ public class DbUtils {
 
     public void fillStockTable() {
         Log.d(TAG, "Deleting contents of table STOCK");
-        StockDao stockDao = App.get().getDaoSession().getStockDao();
+        StockDao stockDao = App.getDaoSsn().getStockDao();
         stockDao.deleteAll();
         Log.d(TAG, "Filling table STOCK with default data");
-        SQLiteDatabase db = App.get().getDaoSession().getDatabase();
+        SQLiteDatabase db = App.getDaoSsn().getDatabase();
         SQLiteStatement statement = db.compileStatement("INSERT INTO STOCK VALUES (?,?,?);");
         try {
             db.beginTransaction();
@@ -89,10 +89,10 @@ public class DbUtils {
 
     public void fillDividendTable() {
         Log.d(TAG, "Deleting contents of table DIVIDEND");
-        DividendDao dividendDao = App.get().getDaoSession().getDividendDao();
+        DividendDao dividendDao = App.getDaoSsn().getDividendDao();
         dividendDao.deleteAll();
         Log.d(TAG, "Filling table DIVIDEND with default data");
-        SQLiteDatabase db = App.get().getDaoSession().getDatabase();
+        SQLiteDatabase db = App.getDaoSsn().getDatabase();
         SQLiteStatement statement = db.compileStatement("INSERT INTO DIVIDEND VALUES (?,?,?,?,?,?);");
         try {
             db.beginTransaction();
@@ -122,10 +122,10 @@ public class DbUtils {
 
     public void fillTodaysQuoteTable() {
         Log.d(TAG, "Deleting contents of table TODAYS_QUOTE");
-        TodaysQuoteDao todaysQuoteDao = App.get().getDaoSession().getTodaysQuoteDao();
+        TodaysQuoteDao todaysQuoteDao = App.getDaoSsn().getTodaysQuoteDao();
         todaysQuoteDao.deleteAll();
         Log.d(TAG, "Filling table TODAYS_QUOTE with default data");
-        SQLiteDatabase db = App.get().getDaoSession().getDatabase();
+        SQLiteDatabase db = App.getDaoSsn().getDatabase();
         SQLiteStatement statement = db.compileStatement("INSERT INTO TODAYS_QUOTE VALUES (?,?,?,?,?);");
         try {
             db.beginTransaction();
@@ -155,10 +155,10 @@ public class DbUtils {
 
     public void fillStockInfoTable() {
         Log.d(TAG, "Deleting contents of table STOCK_INFO");
-        StockInfoDao stockInfoDao = App.get().getDaoSession().getStockInfoDao();
+        StockInfoDao stockInfoDao = App.getDaoSsn().getStockInfoDao();
         stockInfoDao.deleteAll();
         Log.d(TAG, "Filling table STOCK_INFO with default data");
-        SQLiteDatabase db = App.get().getDaoSession().getDatabase();
+        SQLiteDatabase db = App.getDaoSsn().getDatabase();
         SQLiteStatement statement = db.compileStatement("INSERT INTO STOCK_INFO VALUES (?,?,?,?);");
         try {
             db.beginTransaction();
@@ -184,10 +184,10 @@ public class DbUtils {
 
     public void fillHistoricalQuoteTable(FillDbTablesTask fillDbTablesTask) {
         Log.d(TAG, "Deleting contents of table STOCK_INFO");
-        HistoricalQuoteDao historicalQuoteDao = App.get().getDaoSession().getHistoricalQuoteDao();
+        HistoricalQuoteDao historicalQuoteDao = App.getDaoSsn().getHistoricalQuoteDao();
         historicalQuoteDao.deleteAll();
         Log.d(TAG, "Filling table STOCK_INFO with default data");
-        SQLiteDatabase db = App.get().getDaoSession().getDatabase();
+        SQLiteDatabase db = App.getDaoSsn().getDatabase();
         SQLiteStatement statement = db.compileStatement("INSERT INTO HISTORICAL_QUOTE VALUES (?,?,?,?,?);");
         try {
             db.beginTransaction();
