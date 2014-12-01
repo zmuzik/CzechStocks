@@ -29,6 +29,7 @@ import java.util.List;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.DbUtils;
 import zmuzik.czechstocks.R;
+import zmuzik.czechstocks.UpdateListener;
 import zmuzik.czechstocks.Utils;
 import zmuzik.czechstocks.adapters.SectionsPagerAdapter;
 import zmuzik.czechstocks.dao.PortfolioItem;
@@ -39,7 +40,7 @@ import zmuzik.czechstocks.fragments.QuoteListFragment;
 import zmuzik.czechstocks.tasks.FillDbTablesTask;
 import zmuzik.czechstocks.tasks.UpdateCurrentDataTask;
 
-public class MainActivity extends Activity implements ActionBar.TabListener {
+public class MainActivity extends Activity implements ActionBar.TabListener, UpdateListener {
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -50,7 +51,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.get().setMainActiviy(this);
         setContentView(R.layout.activity_main);
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -185,7 +185,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
     void actionDataRefresh() {
         setMovingRefreshIcon();
-        new UpdateCurrentDataTask().execute();
+        new UpdateCurrentDataTask(this).execute();
     }
 
     void setMovingRefreshIcon() {
@@ -230,4 +230,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         ;
     }
 
+    @Override public void loadData() {
+        refreshFragments();
+        setStaticRefreshIcon();
+    }
 }

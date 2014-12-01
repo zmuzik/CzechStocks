@@ -22,74 +22,74 @@ public class SharedPrefsHelper {
         PACKAGE_NAME = App.get().getPackageName();
     }
 
-    public static synchronized SharedPrefsHelper getInstance() {
+    public static synchronized SharedPrefsHelper get() {
         if (instance == null) {
             instance = new SharedPrefsHelper();
         }
         return instance;
     }
 
-    private SharedPreferences getSharedPrefs() {
+    private SharedPreferences getPrefs() {
         return App.get().getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
     }
 
     public void setCurrentQuoteTime(long timestamp) {
-        SharedPreferences prefs = getSharedPrefs();
+        SharedPreferences prefs = getPrefs();
         prefs.edit().putLong(CURRENT_QUOTE_TIME, timestamp).apply();
     }
 
     public long getCurrentQuoteTime() {
-        SharedPreferences prefs = getSharedPrefs();
+        SharedPreferences prefs = getPrefs();
         return prefs.getLong(CURRENT_QUOTE_TIME, 0);
     }
 
     public void setCurrentQuoteLastUpdateTime(long timestamp) {
-        SharedPreferences prefs = getSharedPrefs();
+        SharedPreferences prefs = getPrefs();
         prefs.edit().putLong(CURRENT_QUOTE_LUT, timestamp).apply();
     }
 
     public long getCurrentQuoteLastUpdateTime() {
-        SharedPreferences prefs = getSharedPrefs();
+        SharedPreferences prefs = getPrefs();
         return prefs.getLong(CURRENT_QUOTE_LUT, 0);
     }
 
     public void setTodaysQuoteLastUpdateTime(long timestamp) {
-        SharedPreferences prefs = getSharedPrefs();
+        SharedPreferences prefs = getPrefs();
         prefs.edit().putLong(TODAYS_QUOTE_LUT, timestamp).apply();
     }
 
     public long getTodaysQuoteLastUpdateTime() {
-        SharedPreferences prefs = getSharedPrefs();
+        SharedPreferences prefs = getPrefs();
         return prefs.getLong(TODAYS_QUOTE_LUT, 0);
     }
 
     public void setHistoricalQuoteLastUpdateTime(long timestamp) {
-        SharedPreferences prefs = getSharedPrefs();
+        SharedPreferences prefs = getPrefs();
         prefs.edit().putLong(HISTORICAL_QUOTE_LUT, timestamp).apply();
     }
 
     public long getHistoricalQuoteLastUpdateTime() {
-        SharedPreferences prefs = getSharedPrefs();
+        SharedPreferences prefs = getPrefs();
         return prefs.getLong(HISTORICAL_QUOTE_LUT, 0);
     }
 
     public void setDividendLastUpdateTime(long timestamp) {
-        SharedPreferences prefs = getSharedPrefs();
+        SharedPreferences prefs = getPrefs();
         prefs.edit().putLong(DIVIDEND_LUT, timestamp).apply();
     }
 
     public long getDividendLastUpdateTime() {
-        SharedPreferences prefs = getSharedPrefs();
+        SharedPreferences prefs = getPrefs();
         return prefs.getLong(DIVIDEND_LUT, 0);
     }
 
     public void setStockInfoLastUpdateTime(long timestamp) {
-        SharedPreferences prefs = getSharedPrefs();
+        SharedPreferences prefs = getPrefs();
         prefs.edit().putLong(STOCK_INFO_LUT, timestamp).apply();
     }
 
     public long getStockInfoLastUpdateTime() {
-        SharedPreferences prefs = getSharedPrefs();
+        SharedPreferences prefs = getPrefs();
         return prefs.getLong(STOCK_INFO_LUT, 0);
     }
 }

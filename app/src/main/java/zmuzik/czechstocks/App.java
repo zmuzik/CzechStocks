@@ -8,7 +8,6 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 
 import retrofit.RestAdapter;
-import zmuzik.czechstocks.activities.MainActivity;
 import zmuzik.czechstocks.dao.DaoMaster;
 import zmuzik.czechstocks.dao.DaoSession;
 
@@ -17,13 +16,20 @@ public class App extends Application {
     private final String TAG = this.getClass().getSimpleName();
     private static App mApp;
     private static DaoSession mDaoSession;
-    private static Api mApi;
+    private static ServerApi mServerApi;
 
     private SQLiteDatabase mDb;
-    private MainActivity mMainActivity;
 
     public static App get() {
         return mApp;
+    }
+
+    public static DaoSession getDaoSsn() {
+        return mDaoSession;
+    }
+
+    public static ServerApi getServerApi() {
+        return mServerApi;
     }
 
     @Override
@@ -32,7 +38,7 @@ public class App extends Application {
         mApp = this;
         super.onCreate();
         initCrashlytics();
-        initRestApi();
+        initServerApi();
         initDb();
     }
 
@@ -45,9 +51,9 @@ public class App extends Application {
         }
     }
 
-    private void initRestApi() {
+    private void initServerApi() {
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AppConf.SERVER_API_ROOT).build();
-        mApi = restAdapter.create(Api.class);
+        mServerApi = restAdapter.create(ServerApi.class);
     }
 
     private void initDb() {
@@ -59,21 +65,5 @@ public class App extends Application {
 
     public boolean isDebuggable() {
         return 0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE);
-    }
-
-    public static DaoSession getDaoSsn() {
-        return mDaoSession;
-    }
-
-    public void setMainActiviy(MainActivity a) {
-        mMainActivity = a;
-    }
-
-    public MainActivity getMainActivity() {
-        return mMainActivity;
-    }
-
-    public static Api getApi() {
-        return mApi;
     }
 }
