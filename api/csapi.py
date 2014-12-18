@@ -47,8 +47,8 @@ def close_db(error):
         g.sqlite_db.close()
 
 
-@app.route('/currentQuote')
-def get_current_quote():
+@app.route('/currentQuotes')
+def get_current_quotes():
     db = get_db()
     cur = db.execute('select isin, price, delta, stamp from current_quote')
     rows = cur.fetchall()
@@ -69,7 +69,7 @@ def get_current_quote():
     return response
 
 
-@app.route('/dividend')
+@app.route('/dividends')
 def get_dividends():
     db = get_db()
     cur = db.execute('select isin, amount, currency, ex_date, payment_date from dividend')
@@ -92,7 +92,7 @@ def get_dividends():
     return response
 
 
-@app.route('/stockinfo')
+@app.route('/stockInfo')
 def get_stock_info():
     db = get_db()
     cur = db.execute('select isin, indicator, value from stock_info')
@@ -113,10 +113,10 @@ def get_stock_info():
     return response
 
 
-@app.route('/todaysQuote')
-def get_todays_data():
+@app.route('/todaysQuotes')
+def get_todays_quotes():
     db = get_db()
-    cur = db.execute('select isin, stamp, price, volume from todays_data')
+    cur = db.execute('select isin, stamp, price, volume from todays_quote')
     rows = cur.fetchall()
 
     result_list = []
@@ -136,10 +136,56 @@ def get_todays_data():
     return response
 
 
-@app.route('/historicalQuote')
-def get_todays_data():
+@app.route('/todaysQuotes/<timestamp>')
+def get_todays_quotes_newer_than(timestamp):
     db = get_db()
-    cur = db.execute('select isin, stamp, price, volume from historical_data')
+    cur = db.execute('select isin, stamp, price, volume from todays_quote where stamp >= ' + timestamp)
+    rows = cur.fetchall()
+
+    result_list = []
+    for row in rows:
+        d = collections.OrderedDict()
+        d['isin'] = row[0]
+        d['stamp'] = row[1]
+        d['price'] = row[2]
+        d['volume'] = row[3]
+
+        result_list.append(d)
+
+    #result_string = json.dumps(result_list, ensure_ascii=False).encode(encoding='utf-8')
+    result_string = json.dumps(result_list)
+
+    response = Response(result_string, status=200, mimetype='application/json')
+    return response
+
+
+@app.route('/historicalQuotes')
+def get_historical_quotes():
+    db = get_db()
+    cur = db.execute('select isin, stamp, price, volume from historical_quote')
+    rows = cur.fetchall()
+
+    result_list = []
+    for row in rows:
+        d = collections.OrderedDict()
+        d['isin'] = row[0]
+        d['stamp'] = row[1]
+        d['price'] = row[2]
+        d['volume'] = row[3]
+
+        result_list.append(d)
+
+    #result_string = json.dumps(result_list, ensure_ascii=False).encode(encoding='utf-8')
+    result_string = json.dumps(result_list)
+
+    response = Response(result_string, status=200, mimetype='application/json')
+    return response
+
+
+@app.route('/historicalQuotes/<timestamp>')
+def get_historical_quotes_newer_than(timestamp):
+    db = get_db()
+    cur = db.execute('select isin, stamp, price, volume from historical_quote where stamp >= ' + timestamp)
     rows = cur.fetchall()
 
     result_list = []

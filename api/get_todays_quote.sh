@@ -20,7 +20,7 @@ logFile=$appRootDir"/log/get_todays_data.log"
 dbFile=$appRootDir"/data.db"
 
 echo "begin transaction;" > $sqlFile
-echo "DELETE FROM todays_data;" >> $sqlFile
+echo "DELETE FROM todays_quote;" >> $sqlFile
 
 #for every stock
 for confRow in `grep "^[^#;]" $isinsConfFile`
@@ -47,7 +47,7 @@ do
     stamp=`TZ="Europe/Prague" date -d "$year-$month-$day $hour:$minute:$second" +%s`
     price=`echo $record | cut -d" " -f15`
     volume=`echo $record | cut -d" " -f17`
-    echo "insert into todays_data (isin, stamp, price, volume) values ('$isin','$stamp', '$price', '$volume');" >> $sqlFile
+    echo "insert into todays_quote (isin, stamp, price, volume) values ('$isin','$stamp', '$price', '$volume');" >> $sqlFile
   done < $tableFile
   rm $rawFile $tableFile
 done

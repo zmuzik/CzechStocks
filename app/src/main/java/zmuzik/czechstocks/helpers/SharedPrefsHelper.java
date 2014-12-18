@@ -10,8 +10,6 @@ public class SharedPrefsHelper {
     //LUT = last update time
     private static final String CURRENT_QUOTE_TIME = "CURRENT_QUOTE_TIME";
     private static final String CURRENT_QUOTE_LUT = "CURRENT_QUOTE_LUT";
-    private static final String TODAYS_QUOTE_LUT = "TODAYS_QUOTE_LUT";
-    private static final String HISTORICAL_QUOTE_LUT = "HISTORICAL_QUOTE_LUT";
     private static final String DIVIDEND_LUT = "DIVIDEND_LUT";
     private static final String STOCK_INFO_LUT = "STOCK_INFO_LUT";
 
@@ -51,26 +49,6 @@ public class SharedPrefsHelper {
     public long getCurrentQuoteLastUpdateTime() {
         SharedPreferences prefs = getPrefs();
         return prefs.getLong(CURRENT_QUOTE_LUT, 0);
-    }
-
-    public void setTodaysQuoteLastUpdateTime(long timestamp) {
-        SharedPreferences prefs = getPrefs();
-        prefs.edit().putLong(TODAYS_QUOTE_LUT, timestamp).apply();
-    }
-
-    public long getTodaysQuoteLastUpdateTime() {
-        SharedPreferences prefs = getPrefs();
-        return prefs.getLong(TODAYS_QUOTE_LUT, 0);
-    }
-
-    public void setHistoricalQuoteLastUpdateTime(long timestamp) {
-        SharedPreferences prefs = getPrefs();
-        prefs.edit().putLong(HISTORICAL_QUOTE_LUT, timestamp).apply();
-    }
-
-    public long getHistoricalQuoteLastUpdateTime() {
-        SharedPreferences prefs = getPrefs();
-        return prefs.getLong(HISTORICAL_QUOTE_LUT, 0);
     }
 
     public void setDividendLastUpdateTime(long timestamp) {

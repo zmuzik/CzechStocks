@@ -20,7 +20,7 @@ logFile=$appRootDir"/log/get_historical_data.log"
 dbFile=$appRootDir"/data.db"
 
 echo "begin transaction;" > $sqlFile
-echo "DELETE FROM historical_data;" >> $sqlFile
+echo "DELETE FROM historical_quote;" >> $sqlFile
 
 #for every stock
 for confRow in `grep "^[^#;]" $isinsConfFile`
@@ -45,7 +45,7 @@ do
     stamp=`TZ="Europe/Prague" date -d "$year-$month-$day" +%s`
     price=`echo $record | cut -d" " -f12`
     volume=`echo $record | cut -d" " -f14`
-    echo "insert into historical_data (isin, stamp, price, volume) values ('$isin','$stamp', '$price', '$volume');" >> $sqlFile
+    echo "insert into historical_quote (isin, stamp, price, volume) values ('$isin','$stamp', '$price', '$volume');" >> $sqlFile
   done < $tableFile
   rm $rawFile $tableFile
 done

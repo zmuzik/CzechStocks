@@ -18,7 +18,7 @@ public interface ServerApi {
     @GET("/dividend")
     List<Dividend> getDividends();
 
-    @GET("/stockinfo")
+    @GET("/stockInfo")
     List<StockInfo> getStockInfo();
 
     @GET("/todaysQuote")
