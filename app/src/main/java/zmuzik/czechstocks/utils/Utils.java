@@ -1,4 +1,4 @@
-package zmuzik.czechstocks;
+package zmuzik.czechstocks.utils;
 
 import android.content.res.Resources;
 
@@ -9,6 +9,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import zmuzik.czechstocks.App;
+import zmuzik.czechstocks.R;
 
 public class Utils {
 

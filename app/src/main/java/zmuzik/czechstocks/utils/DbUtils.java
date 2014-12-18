@@ -1,4 +1,4 @@
-package zmuzik.czechstocks;
+package zmuzik.czechstocks.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,6 +11,7 @@ import com.crashlytics.android.Crashlytics;
 import java.io.IOException;
 import java.util.Scanner;
 
+import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.dao.DividendDao;
 import zmuzik.czechstocks.dao.HistoricalQuoteDao;
 import zmuzik.czechstocks.dao.StockDao;

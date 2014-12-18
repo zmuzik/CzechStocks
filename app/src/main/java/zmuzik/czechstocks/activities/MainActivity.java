@@ -27,10 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zmuzik.czechstocks.App;
-import zmuzik.czechstocks.DbUtils;
+import zmuzik.czechstocks.utils.DbUtils;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.UpdateListener;
-import zmuzik.czechstocks.Utils;
+import zmuzik.czechstocks.utils.Utils;
 import zmuzik.czechstocks.adapters.SectionsPagerAdapter;
 import zmuzik.czechstocks.dao.PortfolioItem;
 import zmuzik.czechstocks.dao.PortfolioItemDao;

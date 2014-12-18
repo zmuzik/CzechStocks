@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
-import zmuzik.czechstocks.Utils;
+import zmuzik.czechstocks.utils.Utils;
 import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.PortfolioItem;
 

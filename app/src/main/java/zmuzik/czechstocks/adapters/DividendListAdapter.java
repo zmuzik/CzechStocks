@@ -12,7 +12,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import zmuzik.czechstocks.R;
-import zmuzik.czechstocks.Utils;
+import zmuzik.czechstocks.utils.Utils;
 import zmuzik.czechstocks.dao.Dividend;
 
 public class DividendListAdapter extends ArrayAdapter<Dividend> {
