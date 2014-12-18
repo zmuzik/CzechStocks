@@ -11,9 +11,8 @@ import zmuzik.czechstocks.dao.StockInfo;
 import zmuzik.czechstocks.dao.TodaysQuote;
 
 public interface ServerApi {
-    //@GET("/currentQuote")
-    //@GET("/current")
-    @GET("/stocks.json")
+
+    @GET("/currentQuote")
     List<CurrentQuote> getCurrentQuotes();
 
     @GET("/dividend")

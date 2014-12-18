@@ -7,7 +7,6 @@ import sqlite3
 from flask import Flask, Response, jsonify, g, request, session, g, redirect, url_for, abort, render_template, flash
 
 
-# create our little application :)
 app = Flask(__name__)
 
 # Load default config and override config from an environment variable
@@ -48,10 +47,10 @@ def close_db(error):
         g.sqlite_db.close()
 
 
-@app.route('/csapi/current')
-def get_current_data():
+@app.route('/currentQuote')
+def get_current_quote():
     db = get_db()
-    cur = db.execute('select isin, price, delta, stamp from current_data')
+    cur = db.execute('select isin, price, delta, stamp from current_quote')
     rows = cur.fetchall()
 
     result_list = []
@@ -73,7 +72,7 @@ def get_current_data():
 @app.route('/dividend')
 def get_dividends():
     db = get_db()
-    cur = db.execute('select isin, amount, currency, exdate, paymentdate from dividend')
+    cur = db.execute('select isin, amount, currency, ex_date, payment_date from dividend')
     rows = cur.fetchall()
 
     result_list = []
@@ -114,7 +113,7 @@ def get_stock_info():
     return response
 
 
-@app.route('/todaysdata')
+@app.route('/todaysQuote')
 def get_todays_data():
     db = get_db()
     cur = db.execute('select isin, stamp, price, volume from todays_data')
@@ -136,6 +135,28 @@ def get_todays_data():
     response = Response(result_string, status=200, mimetype='application/json')
     return response
 
+
+@app.route('/historicalQuote')
+def get_todays_data():
+    db = get_db()
+    cur = db.execute('select isin, stamp, price, volume from historical_data')
+    rows = cur.fetchall()
+
+    result_list = []
+    for row in rows:
+        d = collections.OrderedDict()
+        d['isin'] = row[0]
+        d['stamp'] = row[1]
+        d['price'] = row[2]
+        d['volume'] = row[3]
+
+        result_list.append(d)
+
+    #result_string = json.dumps(result_list, ensure_ascii=False).encode(encoding='utf-8')
+    result_string = json.dumps(result_list)
+
+    response = Response(result_string, status=200, mimetype='application/json')
+    return response
 
 if __name__ == "__main__":
     app.run()
