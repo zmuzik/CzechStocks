@@ -28,12 +28,12 @@ public class MyDaoGenerator {
         dividend.addDateProperty("exDate");
         dividend.addDateProperty("paymentDate");
 
-        // Stock Info
-        Entity stockInfo = schema.addEntity("StockInfo");
-        stockInfo.addIdProperty();
-        Property stockInfoIsinProperty = stockInfo.addStringProperty("isin").notNull().getProperty();
-        stockInfo.addStringProperty("indicator").notNull();
-        stockInfo.addStringProperty("value").notNull();
+        // Stock Detail
+        Entity stockDetail = schema.addEntity("StockDetail");
+        stockDetail.addIdProperty();
+        Property stockDetailIsinProperty = stockDetail.addStringProperty("isin").notNull().getProperty();
+        stockDetail.addStringProperty("indicator").notNull();
+        stockDetail.addStringProperty("value").notNull();
 
         // Todays quote
         Entity todaysQuote = schema.addEntity("TodaysQuote");
@@ -59,7 +59,7 @@ public class MyDaoGenerator {
         stock.addToOne(currentQuote, stockIsinProperty);
         stock.addToMany(todaysQuote, todaysQuoteIsinProperty);
         stock.addToMany(historicalQuote, historicalQuoteIsinProperty);
-        stock.addToMany(stockInfo, stockInfoIsinProperty);
+        stock.addToMany(stockDetail, stockDetailIsinProperty);
         stock.addToMany(dividend, dividendIsinProperty);
 
         // Portfolio item
@@ -68,7 +68,6 @@ public class MyDaoGenerator {
         portfolioItem.addDoubleProperty("price").notNull();
         portfolioItem.addIntProperty("quantity").notNull();
         portfolioItem.addToOne(stock, portfolioIsinProperty);
-
 
         try {
             new DaoGenerator().generateAll(schema, args[0]);

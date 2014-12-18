@@ -92,10 +92,10 @@ def get_dividends():
     return response
 
 
-@app.route('/stockInfo')
-def get_stock_info():
+@app.route('/stockDetails')
+def get_stock_details():
     db = get_db()
-    cur = db.execute('select isin, indicator, value from stock_info')
+    cur = db.execute('select isin, indicator, value from stock_detail')
     rows = cur.fetchall()
 
     result_list = []
@@ -139,7 +139,7 @@ def get_todays_quotes():
 @app.route('/todaysQuotes/<timestamp>')
 def get_todays_quotes_newer_than(timestamp):
     db = get_db()
-    cur = db.execute('select isin, stamp, price, volume from todays_quote where stamp >= ' + timestamp)
+    cur = db.execute('select isin, stamp, price, volume from todays_quote where stamp > ' + timestamp)
     rows = cur.fetchall()
 
     result_list = []
@@ -185,7 +185,7 @@ def get_historical_quotes():
 @app.route('/historicalQuotes/<timestamp>')
 def get_historical_quotes_newer_than(timestamp):
     db = get_db()
-    cur = db.execute('select isin, stamp, price, volume from historical_quote where stamp >= ' + timestamp)
+    cur = db.execute('select isin, stamp, price, volume from historical_quote where stamp > ' + timestamp)
     rows = cur.fetchall()
 
     result_list = []

@@ -22,7 +22,7 @@ dbFile=$appRootDir"/data.db"
 
 
 echo "begin transaction;" > $sqlFile
-echo "DELETE FROM stock_info;" >> $sqlFile
+echo "DELETE FROM stock_detail;" >> $sqlFile
 
 #for every stock
 for isin in `grep "^[^#;]" $isinsConfFile | cut -d";" -f1`
@@ -34,7 +34,7 @@ do
   do
     indicator=`echo $row | cut -d";" -f1`
     value=`echo $row | cut -d";" -f2 | tr "," "." | tr -d '\r' | sed 's/\xc2\xa0//g'`
-    echo "insert into stock_info (isin, indicator, value) values ('$isin','$indicator', '$value');" >> $sqlFile
+    echo "insert into stock_detail (isin, indicator, value) values ('$isin','$indicator', '$value');" >> $sqlFile
   done < $tableFile
   rm $rawFile $tableFile
 done

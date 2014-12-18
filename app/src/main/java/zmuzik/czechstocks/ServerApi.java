@@ -7,23 +7,23 @@ import retrofit.http.GET;
 import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.Dividend;
 import zmuzik.czechstocks.dao.HistoricalQuote;
-import zmuzik.czechstocks.dao.StockInfo;
+import zmuzik.czechstocks.dao.StockDetail;
 import zmuzik.czechstocks.dao.TodaysQuote;
 
 public interface ServerApi {
 
-    @GET("/currentQuote")
+    @GET("/currentQuotes")
     List<CurrentQuote> getCurrentQuotes();
 
-    @GET("/dividend")
+    @GET("/dividends")
     List<Dividend> getDividends();
 
-    @GET("/stockInfo")
-    List<StockInfo> getStockInfo();
+    @GET("/stockDetails")
+    List<StockDetail> getStockDetails();
 
-    @GET("/todaysQuote")
+    @GET("/todaysQuotes")
     List<TodaysQuote> getTodaysQuotes();
 
-    @GET("/historicalQuote")
+    @GET("/historicalQuotes")
     List<HistoricalQuote> getHistoricalQuotes();
 }

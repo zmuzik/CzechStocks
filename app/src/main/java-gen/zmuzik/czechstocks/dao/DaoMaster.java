@@ -10,7 +10,7 @@ import de.greenrobot.dao.identityscope.IdentityScopeType;
 
 import zmuzik.czechstocks.dao.CurrentQuoteDao;
 import zmuzik.czechstocks.dao.DividendDao;
-import zmuzik.czechstocks.dao.StockInfoDao;
+import zmuzik.czechstocks.dao.StockDetailDao;
 import zmuzik.czechstocks.dao.TodaysQuoteDao;
 import zmuzik.czechstocks.dao.HistoricalQuoteDao;
 import zmuzik.czechstocks.dao.StockDao;
@@ -27,7 +27,7 @@ public class DaoMaster extends AbstractDaoMaster {
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
         CurrentQuoteDao.createTable(db, ifNotExists);
         DividendDao.createTable(db, ifNotExists);
-        StockInfoDao.createTable(db, ifNotExists);
+        StockDetailDao.createTable(db, ifNotExists);
         TodaysQuoteDao.createTable(db, ifNotExists);
         HistoricalQuoteDao.createTable(db, ifNotExists);
         StockDao.createTable(db, ifNotExists);
@@ -38,7 +38,7 @@ public class DaoMaster extends AbstractDaoMaster {
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
         CurrentQuoteDao.dropTable(db, ifExists);
         DividendDao.dropTable(db, ifExists);
-        StockInfoDao.dropTable(db, ifExists);
+        StockDetailDao.dropTable(db, ifExists);
         TodaysQuoteDao.dropTable(db, ifExists);
         HistoricalQuoteDao.dropTable(db, ifExists);
         StockDao.dropTable(db, ifExists);
@@ -76,7 +76,7 @@ public class DaoMaster extends AbstractDaoMaster {
         super(db, SCHEMA_VERSION);
         registerDaoClass(CurrentQuoteDao.class);
         registerDaoClass(DividendDao.class);
-        registerDaoClass(StockInfoDao.class);
+        registerDaoClass(StockDetailDao.class);
         registerDaoClass(TodaysQuoteDao.class);
         registerDaoClass(HistoricalQuoteDao.class);
         registerDaoClass(StockDao.class);

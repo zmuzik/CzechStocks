@@ -27,7 +27,7 @@ public class Stock {
 
     private List<TodaysQuote> todaysQuoteList;
     private List<HistoricalQuote> historicalQuoteList;
-    private List<StockInfo> stockInfoList;
+    private List<StockDetail> stockDetailList;
     private List<Dividend> dividendList;
 
     public Stock() {
@@ -150,25 +150,25 @@ public class Stock {
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
-    public List<StockInfo> getStockInfoList() {
-        if (stockInfoList == null) {
+    public List<StockDetail> getStockDetailList() {
+        if (stockDetailList == null) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            StockInfoDao targetDao = daoSession.getStockInfoDao();
-            List<StockInfo> stockInfoListNew = targetDao._queryStock_StockInfoList(isin);
+            StockDetailDao targetDao = daoSession.getStockDetailDao();
+            List<StockDetail> stockDetailListNew = targetDao._queryStock_StockDetailList(isin);
             synchronized (this) {
-                if(stockInfoList == null) {
-                    stockInfoList = stockInfoListNew;
+                if(stockDetailList == null) {
+                    stockDetailList = stockDetailListNew;
                 }
             }
         }
-        return stockInfoList;
+        return stockDetailList;
     }
 
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    public synchronized void resetStockInfoList() {
-        stockInfoList = null;
+    public synchronized void resetStockDetailList() {
+        stockDetailList = null;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
