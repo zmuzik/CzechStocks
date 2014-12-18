@@ -13,11 +13,11 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
-import zmuzik.czechstocks.utils.Utils;
 import zmuzik.czechstocks.activities.StockDetailActivity;
 import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.Stock;
-import zmuzik.czechstocks.dao.StockInfo;
+import zmuzik.czechstocks.dao.StockDetail;
+import zmuzik.czechstocks.utils.Utils;
 
 public class StockInfoFragment extends Fragment {
 
@@ -62,9 +62,9 @@ public class StockInfoFragment extends Fragment {
         delta.setText(Utils.getFormatedPercentage(currentQuote.getDelta()));
         delta.setTextColor(res.getColor((currentQuote.getDelta() >= 0) ? R.color.lime : R.color.red));
 
-        for (StockInfo stockInfo : mStock.getStockInfoList()) {
-            if ("P/E".equals(stockInfo.getIndicator()) && stockInfo.getValue() != null) {
-                pe.setText(stockInfo.getValue().replace('.', Utils.getDecimalSeparator()));
+        for (StockDetail stockDetail : mStock.getStockDetailList()) {
+            if ("P/E".equals(stockDetail.getIndicator()) && stockDetail.getValue() != null) {
+                pe.setText(stockDetail.getValue().replace('.', Utils.getDecimalSeparator()));
                 break;
             }
         }

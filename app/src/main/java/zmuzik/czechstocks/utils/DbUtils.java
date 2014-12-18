@@ -15,7 +15,7 @@ import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.dao.DividendDao;
 import zmuzik.czechstocks.dao.HistoricalQuoteDao;
 import zmuzik.czechstocks.dao.StockDao;
-import zmuzik.czechstocks.dao.StockInfoDao;
+import zmuzik.czechstocks.dao.StockDetailDao;
 import zmuzik.czechstocks.dao.TodaysQuoteDao;
 import zmuzik.czechstocks.tasks.FillDbTablesTask;
 
@@ -156,8 +156,8 @@ public class DbUtils {
 
     public void fillStockInfoTable() {
         Log.d(TAG, "Deleting contents of table STOCK_INFO");
-        StockInfoDao stockInfoDao = App.getDaoSsn().getStockInfoDao();
-        stockInfoDao.deleteAll();
+        StockDetailDao stockDetailDao = App.getDaoSsn().getStockDetailDao();
+        stockDetailDao.deleteAll();
         Log.d(TAG, "Filling table STOCK_INFO with default data");
         SQLiteDatabase db = App.getDaoSsn().getDatabase();
         SQLiteStatement statement = db.compileStatement("INSERT INTO STOCK_INFO VALUES (?,?,?,?);");
