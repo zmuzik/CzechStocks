@@ -1,7 +1,8 @@
 data.db
 .idea
 venv
-tmp
+tmp/*
+log/*
 
 csapi_uwsgi.sock
 csapi.pyc
