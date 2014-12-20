@@ -17,7 +17,7 @@ public class MyDaoGenerator {
         currentQuote.addStringProperty("isin").notNull().primaryKey();
         currentQuote.addDoubleProperty("price").notNull();
         currentQuote.addDoubleProperty("delta").notNull();
-        currentQuote.addStringProperty("stamp").notNull();
+        currentQuote.addStringProperty("timeStr").notNull();
 
         // Dividend
         Entity dividend = schema.addEntity("Dividend");
