@@ -47,7 +47,7 @@ def close_db(error):
         g.sqlite_db.close()
 
 
-@app.route('/currentQuotes')
+@app.route('/csapi/currentQuotes')
 def get_current_quotes():
     db = get_db()
     cur = db.execute('select isin, price, delta, stamp from current_quote')
@@ -69,7 +69,7 @@ def get_current_quotes():
     return response
 
 
-@app.route('/dividends')
+@app.route('/csapi/dividends')
 def get_dividends():
     db = get_db()
     cur = db.execute('select isin, amount, currency, ex_date, payment_date from dividend')
@@ -92,7 +92,7 @@ def get_dividends():
     return response
 
 
-@app.route('/stockDetails')
+@app.route('/csapi/stockDetails')
 def get_stock_details():
     db = get_db()
     cur = db.execute('select isin, indicator, value from stock_detail')
@@ -113,7 +113,7 @@ def get_stock_details():
     return response
 
 
-@app.route('/todaysQuotes')
+@app.route('/csapi/todaysQuotes')
 def get_todays_quotes():
     db = get_db()
     cur = db.execute('select isin, stamp, price, volume from todays_quote')
@@ -136,7 +136,7 @@ def get_todays_quotes():
     return response
 
 
-@app.route('/todaysQuotes/<timestamp>')
+@app.route('/csapi/todaysQuotes/<timestamp>')
 def get_todays_quotes_newer_than(timestamp):
     db = get_db()
     cur = db.execute('select isin, stamp, price, volume from todays_quote where stamp > ' + timestamp)
@@ -159,7 +159,7 @@ def get_todays_quotes_newer_than(timestamp):
     return response
 
 
-@app.route('/historicalQuotes')
+@app.route('/csapi/historicalQuotes')
 def get_historical_quotes():
     db = get_db()
     cur = db.execute('select isin, stamp, price, volume from historical_quote')
@@ -182,7 +182,7 @@ def get_historical_quotes():
     return response
 
 
-@app.route('/historicalQuotes/<timestamp>')
+@app.route('/csapi/historicalQuotes/<timestamp>')
 def get_historical_quotes_newer_than(timestamp):
     db = get_db()
     cur = db.execute('select isin, stamp, price, volume from historical_quote where stamp > ' + timestamp)
@@ -205,4 +205,4 @@ def get_historical_quotes_newer_than(timestamp):
     return response
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=8080)
