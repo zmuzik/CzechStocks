@@ -154,13 +154,13 @@ public class DbUtils {
         }
     }
 
-    public void fillStockInfoTable() {
-        Log.d(TAG, "Deleting contents of table STOCK_INFO");
+    public void fillStockDetailTable() {
+        Log.d(TAG, "Deleting contents of table STOCK_DETAIL");
         StockDetailDao stockDetailDao = App.getDaoSsn().getStockDetailDao();
         stockDetailDao.deleteAll();
-        Log.d(TAG, "Filling table STOCK_INFO with default data");
+        Log.d(TAG, "Filling table STOCK_DETAIL with default data");
         SQLiteDatabase db = App.getDaoSsn().getDatabase();
-        SQLiteStatement statement = db.compileStatement("INSERT INTO STOCK_INFO VALUES (?,?,?,?);");
+        SQLiteStatement statement = db.compileStatement("INSERT INTO STOCK_DETAIL VALUES (?,?,?,?);");
         try {
             db.beginTransaction();
             Scanner scanner = new Scanner(App.get().getAssets().open("stock_info.csv"));
@@ -176,7 +176,7 @@ public class DbUtils {
                 statement.execute();
             }
         } catch (IOException e) {
-            Crashlytics.log(Log.ERROR, TAG, "Unable to initialize default data for STOCK_INFO table");
+            Crashlytics.log(Log.ERROR, TAG, "Unable to initialize default data for STOCK_DETAIL table");
         } finally {
             db.setTransactionSuccessful();
             db.endTransaction();

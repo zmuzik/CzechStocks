@@ -30,8 +30,8 @@ public class DividendDao extends AbstractDao<Dividend, Long> {
         public final static Property Isin = new Property(1, String.class, "isin", false, "ISIN");
         public final static Property Amount = new Property(2, double.class, "amount", false, "AMOUNT");
         public final static Property Currency = new Property(3, String.class, "currency", false, "CURRENCY");
-        public final static Property ExDate = new Property(4, java.util.Date.class, "exDate", false, "EX_DATE");
-        public final static Property PaymentDate = new Property(5, java.util.Date.class, "paymentDate", false, "PAYMENT_DATE");
+        public final static Property ExDate = new Property(4, Long.class, "exDate", false, "EX_DATE");
+        public final static Property PaymentDate = new Property(5, Long.class, "paymentDate", false, "PAYMENT_DATE");
     };
 
     private Query<Dividend> stock_DividendListQuery;
@@ -75,14 +75,14 @@ public class DividendDao extends AbstractDao<Dividend, Long> {
         stmt.bindDouble(3, entity.getAmount());
         stmt.bindString(4, entity.getCurrency());
  
-        java.util.Date exDate = entity.getExDate();
+        Long exDate = entity.getExDate();
         if (exDate != null) {
-            stmt.bindLong(5, exDate.getTime());
+            stmt.bindLong(5, exDate);
         }
  
-        java.util.Date paymentDate = entity.getPaymentDate();
+        Long paymentDate = entity.getPaymentDate();
         if (paymentDate != null) {
-            stmt.bindLong(6, paymentDate.getTime());
+            stmt.bindLong(6, paymentDate);
         }
     }
 
@@ -100,8 +100,8 @@ public class DividendDao extends AbstractDao<Dividend, Long> {
             cursor.getString(offset + 1), // isin
             cursor.getDouble(offset + 2), // amount
             cursor.getString(offset + 3), // currency
-            cursor.isNull(offset + 4) ? null : new java.util.Date(cursor.getLong(offset + 4)), // exDate
-            cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)) // paymentDate
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4), // exDate
+            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // paymentDate
         );
         return entity;
     }
@@ -113,8 +113,8 @@ public class DividendDao extends AbstractDao<Dividend, Long> {
         entity.setIsin(cursor.getString(offset + 1));
         entity.setAmount(cursor.getDouble(offset + 2));
         entity.setCurrency(cursor.getString(offset + 3));
-        entity.setExDate(cursor.isNull(offset + 4) ? null : new java.util.Date(cursor.getLong(offset + 4)));
-        entity.setPaymentDate(cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)));
+        entity.setExDate(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
+        entity.setPaymentDate(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
      }
     
     /** @inheritdoc */

@@ -47,6 +47,11 @@ public class Utils {
         return timeFormat.format(date);
     }
 
+    public static String getFormatedDate(long timestamp) {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return timeFormat.format(new Date(timestamp));
+    }
+
     public static double getDoubleValue(String s) {
         if (s == null || "".equals(s)) {
             return (double) 0;

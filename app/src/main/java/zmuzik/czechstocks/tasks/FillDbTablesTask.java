@@ -2,28 +2,33 @@ package zmuzik.czechstocks.tasks;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 
-import zmuzik.czechstocks.utils.DbUtils;
+import java.lang.ref.WeakReference;
+
 import zmuzik.czechstocks.R;
+import zmuzik.czechstocks.utils.DbUtils;
 
 public class FillDbTablesTask extends AsyncTask<Void, Integer, Void>{
 
     private final String TAG = this.getClass().getSimpleName();
 
-    Context ctx;
+    WeakReference<Context> ctx;
     ProgressDialog progressDialog;
 
     public FillDbTablesTask(Context ctx) {
-        this.ctx = ctx;
+        this.ctx = new WeakReference<Context>(ctx);
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog = new ProgressDialog(ctx);
-        progressDialog.setTitle(ctx.getResources().getString(R.string.please_wait));
-        progressDialog.setMessage(ctx.getResources().getString(R.string.initializing_db));
+        if (ctx.get() == null) return;
+        Resources res = ctx.get().getResources();
+        progressDialog = new ProgressDialog(ctx.get());
+        progressDialog.setTitle(res.getString(R.string.please_wait));
+        progressDialog.setMessage(res.getString(R.string.initializing_db));
         progressDialog.setIndeterminate(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.show();
@@ -42,13 +47,13 @@ public class FillDbTablesTask extends AsyncTask<Void, Integer, Void>{
         DbUtils dbUtils = DbUtils.getInstance();
         if (!dbUtils.isCurrentDbVersion()) {
             dbUtils.fillStockTable();
-            onProgressUpdate(new Integer(2));
+            onProgressUpdate(2);
             dbUtils.fillDividendTable();
-            onProgressUpdate(new Integer(4));
-            dbUtils.fillStockInfoTable();
-            onProgressUpdate(new Integer(6));
+            onProgressUpdate(4);
+            dbUtils.fillStockDetailTable();
+            onProgressUpdate(6);
             dbUtils.fillTodaysQuoteTable();
-            onProgressUpdate(new Integer(8));
+            onProgressUpdate(8);
             dbUtils.fillHistoricalQuoteTable(this);
             dbUtils.saveCurrentDbVersion();
         }
@@ -56,7 +61,7 @@ public class FillDbTablesTask extends AsyncTask<Void, Integer, Void>{
     }
 
     public void setProgress(int progress) {
-        publishProgress(new Integer(progress));
+        publishProgress(progress);
     }
 
     @Override

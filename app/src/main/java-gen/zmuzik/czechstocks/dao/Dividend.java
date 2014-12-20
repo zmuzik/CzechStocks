@@ -12,8 +12,8 @@ public class Dividend {
     private double amount;
     /** Not-null value. */
     private String currency;
-    private java.util.Date exDate;
-    private java.util.Date paymentDate;
+    private Long exDate;
+    private Long paymentDate;
 
     public Dividend() {
     }
@@ -22,7 +22,7 @@ public class Dividend {
         this.id = id;
     }
 
-    public Dividend(Long id, String isin, double amount, String currency, java.util.Date exDate, java.util.Date paymentDate) {
+    public Dividend(Long id, String isin, double amount, String currency, Long exDate, Long paymentDate) {
         this.id = id;
         this.isin = isin;
         this.amount = amount;
@@ -67,19 +67,19 @@ public class Dividend {
         this.currency = currency;
     }
 
-    public java.util.Date getExDate() {
+    public Long getExDate() {
         return exDate;
     }
 
-    public void setExDate(java.util.Date exDate) {
+    public void setExDate(Long exDate) {
         this.exDate = exDate;
     }
 
-    public java.util.Date getPaymentDate() {
+    public Long getPaymentDate() {
         return paymentDate;
     }
 
-    public void setPaymentDate(java.util.Date paymentDate) {
+    public void setPaymentDate(Long paymentDate) {
         this.paymentDate = paymentDate;
     }
 

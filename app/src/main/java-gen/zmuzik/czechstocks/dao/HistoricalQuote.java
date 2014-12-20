@@ -9,8 +9,7 @@ public class HistoricalQuote {
     private Long id;
     /** Not-null value. */
     private String isin;
-    /** Not-null value. */
-    private java.util.Date stamp;
+    private long stamp;
     private double price;
     private double volume;
 
@@ -21,7 +20,7 @@ public class HistoricalQuote {
         this.id = id;
     }
 
-    public HistoricalQuote(Long id, String isin, java.util.Date stamp, double price, double volume) {
+    public HistoricalQuote(Long id, String isin, long stamp, double price, double volume) {
         this.id = id;
         this.isin = isin;
         this.stamp = stamp;
@@ -47,13 +46,11 @@ public class HistoricalQuote {
         this.isin = isin;
     }
 
-    /** Not-null value. */
-    public java.util.Date getStamp() {
+    public long getStamp() {
         return stamp;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setStamp(java.util.Date stamp) {
+    public void setStamp(long stamp) {
         this.stamp = stamp;
     }
 

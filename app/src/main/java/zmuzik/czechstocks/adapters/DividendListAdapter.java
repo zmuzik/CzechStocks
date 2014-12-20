@@ -38,7 +38,7 @@ public class DividendListAdapter extends ArrayAdapter<Dividend> {
 
         Dividend dividend = getItem(position);
         if (dividend.getExDate() != null) {
-            if (dividend.getExDate().getTime() == 0) {
+            if (dividend.getExDate() == 0) {
                 holder.exDateTV.setText("");
             } else {
                 holder.exDateTV.setText(Utils.getFormatedDate(dividend.getExDate()));

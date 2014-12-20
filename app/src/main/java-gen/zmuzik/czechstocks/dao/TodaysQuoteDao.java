@@ -28,7 +28,7 @@ public class TodaysQuoteDao extends AbstractDao<TodaysQuote, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Isin = new Property(1, String.class, "isin", false, "ISIN");
-        public final static Property Stamp = new Property(2, java.util.Date.class, "stamp", false, "STAMP");
+        public final static Property Stamp = new Property(2, long.class, "stamp", false, "STAMP");
         public final static Property Price = new Property(3, double.class, "price", false, "PRICE");
         public final static Property Volume = new Property(4, double.class, "volume", false, "VOLUME");
     };
@@ -70,7 +70,7 @@ public class TodaysQuoteDao extends AbstractDao<TodaysQuote, Long> {
             stmt.bindLong(1, id);
         }
         stmt.bindString(2, entity.getIsin());
-        stmt.bindLong(3, entity.getStamp().getTime());
+        stmt.bindLong(3, entity.getStamp());
         stmt.bindDouble(4, entity.getPrice());
         stmt.bindDouble(5, entity.getVolume());
     }
@@ -87,7 +87,7 @@ public class TodaysQuoteDao extends AbstractDao<TodaysQuote, Long> {
         TodaysQuote entity = new TodaysQuote( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // isin
-            new java.util.Date(cursor.getLong(offset + 2)), // stamp
+            cursor.getLong(offset + 2), // stamp
             cursor.getDouble(offset + 3), // price
             cursor.getDouble(offset + 4) // volume
         );
@@ -99,7 +99,7 @@ public class TodaysQuoteDao extends AbstractDao<TodaysQuote, Long> {
     public void readEntity(Cursor cursor, TodaysQuote entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setIsin(cursor.getString(offset + 1));
-        entity.setStamp(new java.util.Date(cursor.getLong(offset + 2)));
+        entity.setStamp(cursor.getLong(offset + 2));
         entity.setPrice(cursor.getDouble(offset + 3));
         entity.setVolume(cursor.getDouble(offset + 4));
      }

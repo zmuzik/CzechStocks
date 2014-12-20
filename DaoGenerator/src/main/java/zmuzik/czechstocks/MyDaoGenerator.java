@@ -18,6 +18,7 @@ public class MyDaoGenerator {
         currentQuote.addDoubleProperty("price").notNull();
         currentQuote.addDoubleProperty("delta").notNull();
         currentQuote.addStringProperty("timeStr").notNull();
+        currentQuote.addLongProperty("stamp").notNull();
 
         // Dividend
         Entity dividend = schema.addEntity("Dividend");
@@ -25,8 +26,8 @@ public class MyDaoGenerator {
         Property dividendIsinProperty = dividend.addStringProperty("isin").notNull().getProperty();
         dividend.addDoubleProperty("amount").notNull();
         dividend.addStringProperty("currency").notNull();
-        dividend.addDateProperty("exDate");
-        dividend.addDateProperty("paymentDate");
+        dividend.addLongProperty("exDate");
+        dividend.addLongProperty("paymentDate");
 
         // Stock Detail
         Entity stockDetail = schema.addEntity("StockDetail");
@@ -39,7 +40,7 @@ public class MyDaoGenerator {
         Entity todaysQuote = schema.addEntity("TodaysQuote");
         todaysQuote.addIdProperty();
         Property todaysQuoteIsinProperty = todaysQuote.addStringProperty("isin").notNull().getProperty();
-        todaysQuote.addDateProperty("stamp").notNull();
+        todaysQuote.addLongProperty("stamp").notNull();
         todaysQuote.addDoubleProperty("price").notNull();
         todaysQuote.addDoubleProperty("volume").notNull();
 
@@ -47,7 +48,7 @@ public class MyDaoGenerator {
         Entity historicalQuote = schema.addEntity("HistoricalQuote");
         historicalQuote.addIdProperty();
         Property historicalQuoteIsinProperty = historicalQuote.addStringProperty("isin").notNull().getProperty();
-        historicalQuote.addDateProperty("stamp").notNull();
+        historicalQuote.addLongProperty("stamp").notNull();
         historicalQuote.addDoubleProperty("price").notNull();
         historicalQuote.addDoubleProperty("volume").notNull();
 

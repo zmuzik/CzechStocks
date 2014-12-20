@@ -67,7 +67,7 @@ public class StockGraphFragment extends Fragment {
         ArrayList<Number> dates = new ArrayList<Number>();
         for (HistoricalQuote historicalQuote : quoteList) {
             prices.add(historicalQuote.getPrice());
-            dates.add(historicalQuote.getStamp().getTime());
+            dates.add(historicalQuote.getStamp());
         }
         SimpleXYSeries priceSeries = new SimpleXYSeries(dates, prices, null);
 
