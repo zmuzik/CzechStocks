@@ -60,6 +60,7 @@ def get_current_quotes():
         d['price'] = row[1]
         d['delta'] = row[2]
         d['timeStr'] = row[3]
+        d['stamp'] = row[4]
         result_list.append(d)
 
     #result_string = json.dumps(result_list, ensure_ascii=False).encode(encoding='utf-8')

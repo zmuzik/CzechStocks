@@ -24,7 +24,12 @@ curl -o $rawFile $url
 #curl $url > $rawFile
 
 #extract the timestamp of the data included
-dataTimestamp=`grep "Online data:" $rawFile | sed 's|<[^>]*>||g' | awk '{ print $3 $4 $5 " " $7; }' | sed 's/\x0d//g'`
+timeStr=`grep "Online data:" $rawFile | sed 's|<[^>]*>||g' | awk '{ print $3 $4 $5 " " $7; }' | sed 's/\x0d//g'`
+year=`echo $timeStr | tr " " "." | cut -d'.' -f 3`
+month=`echo $timeStr | cut -d'.' -f 2`
+day=`echo $timeStr | cut -d'.' -f 1`
+time=`echo $timeStr | cut -d' ' -f 2`
+stamp=`TZ="Europe/Prague" date -d "$year-$month-$day $time" +%s`
 
 # take rows with securities listings, strip them from html and leading whitespaces
 grep "<td class=\"nowrap\">" $rawFile | sed 's|<[^>]*>|;|g' | sed 's/^\s*//' > $tableFile
@@ -52,8 +57,8 @@ do
   stockPrice=`echo $dataRow | cut -d";" -f9  | tr "," "." | sed 's/\xc2\xa0//g'`
   stockDelta=`echo $dataRow | cut -d";" -f11 | tr "," "." | sed 's/\xc2\xa0//g'`
   
-  echo "insert into current_quote (isin, price, delta, stamp) \
-  values ('$isin', '$stockPrice', '$stockDelta', '$dataTimestamp');" >> $sqlFile
+  echo "insert into current_quote (isin, price, delta, timeStr, stamp) \
+  values ('$isin', '$stockPrice', '$stockDelta', '$timeStr', '$stamp');" >> $sqlFile
 done
 
 echo "commit;" >> $sqlFile
