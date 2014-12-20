@@ -50,7 +50,7 @@ def close_db(error):
 @app.route('/csapi/currentQuotes')
 def get_current_quotes():
     db = get_db()
-    cur = db.execute('select isin, price, delta, stamp from current_quote')
+    cur = db.execute('select isin, price, delta, timeStr, stamp from current_quote')
     rows = cur.fetchall()
 
     result_list = []
