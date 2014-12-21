@@ -51,9 +51,9 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
         PortfolioItem portfolioItem = getItem(position);
         holder.stockNameTV.setText(portfolioItem.getStock().getName());
         holder.quantityTV.setText(getAmountString(portfolioItem.getQuantity()));
-        holder.originalPriceTV.setText(" " + Utils.getFormatedCurrencyAmount(portfolioItem.getPrice()));
-        holder.deltaTV.setText(Utils.getFormatedPercentage(getDelta(portfolioItem)));
-        holder.profitTV.setText(Utils.getFormatedCurrencyAmount(getProfit(portfolioItem)));
+        holder.originalPriceTV.setText(" " + Utils.getFormattedCurrencyAmount(portfolioItem.getPrice()));
+        holder.deltaTV.setText(Utils.getFormattedPercentage(getDelta(portfolioItem)));
+        holder.profitTV.setText(Utils.getFormattedCurrencyAmount(getProfit(portfolioItem)));
         // set color
         if (getProfit(portfolioItem) >= 0) {
             holder.deltaTV.setTextColor(App.get().getResources().getColor(R.color.lime));
@@ -75,10 +75,10 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
         }
         double perCentProfit = (totalProfit / totalInvested) * 100;
         holder.stockNameTV.setText(App.get().getResources().getString(R.string.total));
-        holder.deltaTV.setText(Utils.getFormatedPercentage(perCentProfit));
-        holder.profitTV.setText(Utils.getFormatedCurrencyAmount(totalProfit));
+        holder.deltaTV.setText(Utils.getFormattedPercentage(perCentProfit));
+        holder.profitTV.setText(Utils.getFormattedCurrencyAmount(totalProfit));
         String investedStr = App.get().getResources().getString(R.string.invested);
-        holder.quantityTV.setText(investedStr + " " + Utils.getFormatedCurrencyAmount(totalInvested));
+        holder.quantityTV.setText(investedStr + " " + Utils.getFormattedCurrencyAmount(totalInvested));
         holder.originalPriceTV.setText("");
         // set color
         if (totalProfit >= 0) {

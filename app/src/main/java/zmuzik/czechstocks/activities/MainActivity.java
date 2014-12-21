@@ -3,12 +3,9 @@ package zmuzik.czechstocks.activities;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -16,29 +13,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import zmuzik.czechstocks.App;
-import zmuzik.czechstocks.utils.DbUtils;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.UpdateListener;
-import zmuzik.czechstocks.utils.Utils;
 import zmuzik.czechstocks.adapters.SectionsPagerAdapter;
-import zmuzik.czechstocks.dao.PortfolioItem;
-import zmuzik.czechstocks.dao.PortfolioItemDao;
-import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.fragments.PortfolioListFragment;
 import zmuzik.czechstocks.fragments.QuoteListFragment;
+import zmuzik.czechstocks.helpers.PrefsHelper;
 import zmuzik.czechstocks.tasks.FillDbTablesTask;
 import zmuzik.czechstocks.tasks.UpdateCurrentDataTask;
+import zmuzik.czechstocks.utils.DbUtils;
+import zmuzik.czechstocks.utils.Utils;
 
 public class MainActivity extends Activity implements ActionBar.TabListener, UpdateListener {
 
@@ -78,7 +65,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         mRefreshMenuItem = menu.findItem(R.id.action_refresh);
-        actionDataRefresh();
+        long lastUpdTime = PrefsHelper.get().getCurrentQuotesLut();
+        if (lastUpdTime + Utils.ONE_MINUTE < Utils.getNow()) {
+            actionDataRefresh();
+        }
         return true;
     }
 
@@ -93,7 +83,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
         switch (item.getItemId()) {
             case R.id.action_edit:
                 if (mViewPager.getCurrentItem() == 0) {
-                    actionEditStockList();
+                    actionAddStock();
                 } else {
                     actionAddPortfolioItem();
                 }
@@ -108,79 +98,14 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
         return true;
     }
 
-    void actionEditStockList() {
+    void actionAddStock() {
         Intent intent = new Intent(this, AddStockActivity.class);
         startActivity(intent);
     }
 
     void actionAddPortfolioItem() {
-        final List<Stock> allStocks = App.getDaoSsn().getStockDao().loadAll();
-        ArrayList<String> stockNames = new ArrayList<String>();
-        for (Stock stock : allStocks) {
-            stockNames.add(stock.getName());
-        }
-
-        LayoutInflater inflater = this.getLayoutInflater();
-        LinearLayout parentLayout = (LinearLayout) inflater.inflate(R.layout.dialog_add_portfolio_item, null);
-
-        final Spinner spinner = (Spinner) parentLayout.getChildAt(0);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(App.get(), android.R.layout.simple_spinner_dropdown_item,
-                stockNames);
-        spinner.setAdapter(adapter);
-
-        final EditText quantityET = (EditText) parentLayout.getChildAt(1);
-        final EditText priceET = (EditText) parentLayout.getChildAt(2);
-
-        // init builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.add_portfolio_item_dialog_title);
-        builder.setCancelable(true);
-
-        // set and inflate layout
-        builder.setView(parentLayout);
-
-        builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String quantityString = quantityET.getText().toString();
-                String priceString = priceET.getText().toString();
-                Resources res = getResources();
-                if (quantityString == null || "".equals(quantityString)) {
-                    Toast.makeText(App.get(), res.getString(R.string.number_of_stocks_null), Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if (priceString == null || "".equals(priceString)) {
-                    Toast.makeText(App.get(), res.getString(R.string.average_price_null), Toast.LENGTH_LONG).show();
-                    return;
-                }
-                PortfolioItemDao pid = App.getDaoSsn().getPortfolioItemDao();
-                PortfolioItem pi = new PortfolioItem();
-                int quantity = Integer.valueOf(quantityString);
-                double price = Utils.getDoubleValue(priceET.getText().toString());
-                if (quantity > 0 && price > 0) {
-                    int position = spinner.getSelectedItemPosition();
-                    Stock stock = allStocks.get(position);
-                    pi.setIsin(stock.getIsin());
-                    pi.setPrice(price);
-                    pi.setQuantity(quantity);
-                    pid.insert(pi);
-                    refreshFragments();
-                }
-                dialog.dismiss();
-
-            }
-        });
-
-        builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
+        Intent intent = new Intent(this, AddPortfolioItemActivity.class);
+        startActivity(intent);
     }
 
     void actionDataRefresh() {
@@ -222,12 +147,12 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
 
     @Override
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-        ;
+
     }
 
     @Override
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
-        ;
+
     }
 
     @Override public void loadData() {

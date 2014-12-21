@@ -17,7 +17,6 @@ public class MyDaoGenerator {
         currentQuote.addStringProperty("isin").notNull().primaryKey();
         currentQuote.addDoubleProperty("price").notNull();
         currentQuote.addDoubleProperty("delta").notNull();
-        currentQuote.addStringProperty("timeStr").notNull();
         currentQuote.addLongProperty("stamp").notNull();
 
         // Dividend

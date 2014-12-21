@@ -57,9 +57,9 @@ public class StockInfoFragment extends Fragment {
     private void updateBasicInfo() {
         CurrentQuote currentQuote = mStock.getCurrentQuote();
         Resources res = App.get().getResources();
-        lastPrice.setText(Utils.getFormatedCurrencyAmount(currentQuote.getPrice()));
+        lastPrice.setText(Utils.getFormattedCurrencyAmount(currentQuote.getPrice()));
 
-        delta.setText(Utils.getFormatedPercentage(currentQuote.getDelta()));
+        delta.setText(Utils.getFormattedPercentage(currentQuote.getDelta()));
         delta.setTextColor(res.getColor((currentQuote.getDelta() >= 0) ? R.color.lime : R.color.red));
 
         for (StockDetail stockDetail : mStock.getStockDetailList()) {

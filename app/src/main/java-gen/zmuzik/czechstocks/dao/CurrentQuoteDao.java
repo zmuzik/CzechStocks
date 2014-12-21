@@ -26,8 +26,7 @@ public class CurrentQuoteDao extends AbstractDao<CurrentQuote, String> {
         public final static Property Isin = new Property(0, String.class, "isin", true, "ISIN");
         public final static Property Price = new Property(1, double.class, "price", false, "PRICE");
         public final static Property Delta = new Property(2, double.class, "delta", false, "DELTA");
-        public final static Property TimeStr = new Property(3, String.class, "timeStr", false, "TIME_STR");
-        public final static Property Stamp = new Property(4, long.class, "stamp", false, "STAMP");
+        public final static Property Stamp = new Property(3, long.class, "stamp", false, "STAMP");
     };
 
 
@@ -46,8 +45,7 @@ public class CurrentQuoteDao extends AbstractDao<CurrentQuote, String> {
                 "'ISIN' TEXT PRIMARY KEY NOT NULL ," + // 0: isin
                 "'PRICE' REAL NOT NULL ," + // 1: price
                 "'DELTA' REAL NOT NULL ," + // 2: delta
-                "'TIME_STR' TEXT NOT NULL ," + // 3: timeStr
-                "'STAMP' INTEGER NOT NULL );"); // 4: stamp
+                "'STAMP' INTEGER NOT NULL );"); // 3: stamp
     }
 
     /** Drops the underlying database table. */
@@ -63,8 +61,7 @@ public class CurrentQuoteDao extends AbstractDao<CurrentQuote, String> {
         stmt.bindString(1, entity.getIsin());
         stmt.bindDouble(2, entity.getPrice());
         stmt.bindDouble(3, entity.getDelta());
-        stmt.bindString(4, entity.getTimeStr());
-        stmt.bindLong(5, entity.getStamp());
+        stmt.bindLong(4, entity.getStamp());
     }
 
     /** @inheritdoc */
@@ -80,8 +77,7 @@ public class CurrentQuoteDao extends AbstractDao<CurrentQuote, String> {
             cursor.getString(offset + 0), // isin
             cursor.getDouble(offset + 1), // price
             cursor.getDouble(offset + 2), // delta
-            cursor.getString(offset + 3), // timeStr
-            cursor.getLong(offset + 4) // stamp
+            cursor.getLong(offset + 3) // stamp
         );
         return entity;
     }
@@ -92,8 +88,7 @@ public class CurrentQuoteDao extends AbstractDao<CurrentQuote, String> {
         entity.setIsin(cursor.getString(offset + 0));
         entity.setPrice(cursor.getDouble(offset + 1));
         entity.setDelta(cursor.getDouble(offset + 2));
-        entity.setTimeStr(cursor.getString(offset + 3));
-        entity.setStamp(cursor.getLong(offset + 4));
+        entity.setStamp(cursor.getLong(offset + 3));
      }
     
     /** @inheritdoc */
