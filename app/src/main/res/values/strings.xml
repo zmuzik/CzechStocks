@@ -59,4 +59,11 @@
     <string name="no">No</string>
     <string name="button_delete">Delete</string>
 
+    <string name="one_day">1D</string>
+    <string name="one_month">1M</string>
+    <string name="six_months">6M</string>
+    <string name="one_year">1Y</string>
+    <string name="five_years">5Y</string>
+    <string name="all">All</string>
+
 </resources>

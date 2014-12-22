@@ -21,12 +21,9 @@ import zmuzik.czechstocks.utils.Utils;
 
 public class StockInfoFragment extends Fragment {
 
-    @InjectView(R.id.lastPrice)
-    TextView lastPrice;
-    @InjectView(R.id.delta)
-    TextView delta;
-    @InjectView(R.id.pe)
-    TextView pe;
+    @InjectView(R.id.lastPrice) TextView lastPrice;
+    @InjectView(R.id.delta) TextView delta;
+    @InjectView(R.id.pe) TextView pe;
 
     Stock mStock;
 

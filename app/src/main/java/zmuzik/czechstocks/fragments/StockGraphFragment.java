@@ -2,6 +2,7 @@ package zmuzik.czechstocks.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.androidplot.Plot;
 import com.androidplot.ui.SizeLayoutType;
@@ -23,16 +25,23 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.activities.StockDetailActivity;
+import zmuzik.czechstocks.activities.StockGraphActivity;
 import zmuzik.czechstocks.dao.HistoricalQuote;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.local.GraphDateFormat;
 
 public class StockGraphFragment extends Fragment {
 
-    @InjectView(R.id.stockGraph)
-    XYPlot stockGraph;
+    @InjectView(R.id.stockGraph) XYPlot stockGraph;
+    @InjectView(R.id.oneDayBtn) Button oneDayBtn;
+    @InjectView(R.id.oneMonthBtn) Button oneMonthBtn;
+    @InjectView(R.id.sixMonthsBtn) Button sixMonthsBtn;
+    @InjectView(R.id.oneYearBtn) Button oneYearBtn;
+    @InjectView(R.id.fiveYearsBtn) Button fiveYearsBtn;
+    @InjectView(R.id.allTimeBtn) Button allTimeBtn;
 
     Stock mStock;
 
@@ -96,4 +105,9 @@ public class StockGraphFragment extends Fragment {
         stockGraph.getGraphWidget().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
     }
 
+    @OnClick (R.id.stockGraph) void onStockGraphClick() {
+        Intent intent = new Intent(getActivity(), StockGraphActivity.class);
+        intent.putExtra("isin", mStock.getIsin());
+        startActivity(intent);
+    }
 }

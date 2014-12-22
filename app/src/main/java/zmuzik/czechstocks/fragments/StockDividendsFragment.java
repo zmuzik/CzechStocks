@@ -23,8 +23,7 @@ import zmuzik.czechstocks.dao.Stock;
 
 public class StockDividendsFragment extends Fragment {
 
-    @InjectView(R.id.dividendsListView)
-    ListView dividendsListView;
+    @InjectView(R.id.dividendsListView) ListView dividendsListView;
 
     Stock mStock;
 
