@@ -54,7 +54,7 @@ public class Utils {
     public static String getFormattedDateAndTime(long timestamp) {
         if (timestamp == 0L) return "";
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        return timeFormat.format(new Date(timestamp * 1000L));
+        return timeFormat.format(new Date(timestamp));
     }
 
     public static double getDoubleValue(String s) {

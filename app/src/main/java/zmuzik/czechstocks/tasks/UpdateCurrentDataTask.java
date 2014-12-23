@@ -28,6 +28,7 @@ public class UpdateCurrentDataTask extends AsyncTask {
 
     @Override
     protected Object doInBackground(Object... params) {
+        if (!App.get().isOnline()) return null;
         try {
             List<CurrentQuote> currentQuotes = App.getServerApi().getCurrentQuotes();
             CurrentQuoteDao dao = App.getDaoSsn().getCurrentQuoteDao();
@@ -49,9 +50,8 @@ public class UpdateCurrentDataTask extends AsyncTask {
         if (activity != null) {
             if (mDownloadError) {
                 Toast.makeText(App.get(), R.string.toas_check_net, Toast.LENGTH_LONG).show();
-            } else {
-                activity.loadData();
             }
+            activity.loadData();
         }
     }
 }

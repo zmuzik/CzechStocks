@@ -73,7 +73,7 @@ public class DbUtils {
             Scanner scanner = new Scanner(App.get().getAssets().open("stock.csv"));
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                String[] items = line.split(";");
+                String[] items = line.split("\\|");
                 statement.clearBindings();
                 statement.bindString(1, items[0]);
                 statement.bindString(2, items[2]);
@@ -101,10 +101,10 @@ public class DbUtils {
             long counter = 0;
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                String[] items = line.split(";");
+                String[] items = line.split("\\|");
                 statement.clearBindings();
-                long exDate = (items[3] == null || "".equals(items[3]) || "n/a".equals(items[3])) ? 0l : Long.parseLong(items[3]) * 1000;
-                long paymentDate = (items[4] == null || "".equals(items[4]) || "n/a".equals(items[4])) ? 0l : Long.parseLong(items[4]) * 1000;
+                long exDate = (items[3] == null || "".equals(items[3]) || "n/a".equals(items[3])) ? 0l : Long.parseLong(items[3]);
+                long paymentDate = (items[4] == null || "".equals(items[4]) || "n/a".equals(items[4])) ? 0l : Long.parseLong(items[4]);
                 statement.bindLong(1, counter++);
                 statement.bindString(2, items[0]);
                 statement.bindDouble(3, Double.parseDouble(items[1]));
@@ -134,9 +134,9 @@ public class DbUtils {
             long counter = 0;
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                String[] items = line.split(";");
+                String[] items = line.split("\\|");
                 statement.clearBindings();
-                long timeDate = (items[1] == null || "".equals(items[1])) ? 0l : Long.parseLong(items[1]) * 1000;
+                long timeDate = (items[1] == null || "".equals(items[1])) ? 0l : Long.parseLong(items[1]);
                 double amount = Double.parseDouble(items[2]);
                 double volume = Double.parseDouble(items[3]);
                 statement.bindLong(1, counter++);
@@ -163,11 +163,11 @@ public class DbUtils {
         SQLiteStatement statement = db.compileStatement("INSERT INTO STOCK_DETAIL VALUES (?,?,?,?);");
         try {
             db.beginTransaction();
-            Scanner scanner = new Scanner(App.get().getAssets().open("stock_info.csv"));
+            Scanner scanner = new Scanner(App.get().getAssets().open("stock_detail.csv"));
             long counter = 0;
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                String[] items = line.split(";");
+                String[] items = line.split("\\|");
                 statement.clearBindings();
                 statement.bindLong(1, counter++);
                 statement.bindString(2, items[0]);
@@ -184,10 +184,10 @@ public class DbUtils {
     }
 
     public void fillHistoricalQuoteTable(FillDbTablesTask fillDbTablesTask) {
-        Log.d(TAG, "Deleting contents of table STOCK_INFO");
+        Log.d(TAG, "Deleting contents of table HISTORICAL_QUOTE");
         HistoricalQuoteDao historicalQuoteDao = App.getDaoSsn().getHistoricalQuoteDao();
         historicalQuoteDao.deleteAll();
-        Log.d(TAG, "Filling table STOCK_INFO with default data");
+        Log.d(TAG, "Filling table HISTORICAL_QUOTE with default data");
         SQLiteDatabase db = App.getDaoSsn().getDatabase();
         SQLiteStatement statement = db.compileStatement("INSERT INTO HISTORICAL_QUOTE VALUES (?,?,?,?,?);");
         try {
@@ -196,9 +196,9 @@ public class DbUtils {
             long counter = 0;
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                String[] items = line.split(";");
+                String[] items = line.split("\\|");
                 String isin = items[0];
-                long timeDate = (items[1] == null || "".equals(items[1])) ? 0l : Long.parseLong(items[1]) * 1000;
+                long timeDate = (items[1] == null || "".equals(items[1])) ? 0l : Long.parseLong(items[1]);
                 double amount = Double.parseDouble(items[2]);
                 double volume = Double.parseDouble(items[3]);
                 statement.clearBindings();
