@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:padding="10dp"
+        android:padding="5dp"
         android:prompt="@string/choose_stock_prompt" />
 
     <EditText
@@ -32,5 +32,11 @@
         android:hint="@string/average_price_hint"
         android:inputType="numberDecimal"
         android:padding="10dp" />
+
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_ok"/>
 
 </LinearLayout>

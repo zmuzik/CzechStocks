@@ -31,7 +31,7 @@ while read line; do
     day=`echo $exDateStr | cut -d"." -f1`
     month=`echo $exDateStr | cut -d"." -f2`
     year=`echo $exDateStr | cut -d"." -f3`
-    exDate="'"`date -d "$year-$month-$day" +%s`"'"
+    exDate="'"`date -d "$year-$month-$day" +%s`"000'"
   fi
 
   paymentDateStr=`echo $line | cut -d";" -f6`
@@ -41,7 +41,7 @@ while read line; do
     day=`echo $paymentDateStr | cut -d"." -f1`
     month=`echo $paymentDateStr | cut -d"." -f2`
     year=`echo $paymentDateStr | cut -d"." -f3`
-    paymentDate="'"`date -d "$year-$month-$day" +%s`"'"
+    paymentDate="'"`date -d "$year-$month-$day" +%s`"000'"
   fi
 
   echo "insert into dividend (isin, amount, currency, ex_date, payment_date) \

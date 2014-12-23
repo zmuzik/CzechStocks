@@ -43,13 +43,13 @@ public class QuotationListAdapter extends ArrayAdapter<Stock> {
         CurrentQuote currentQuote = stock.getCurrentQuote();
         if (currentQuote != null) {
             double delta =  stock.getCurrentQuote().getDelta();
-            holder.stockDeltaTV.setText(Utils.getFormatedPercentage(delta));
+            holder.stockDeltaTV.setText(Utils.getFormattedPercentage(delta));
             if (delta < 0) {
                 holder.stockDeltaTV.setTextColor(App.get().getResources().getColor(R.color.red));
             } else {
                 holder.stockDeltaTV.setTextColor(App.get().getResources().getColor(R.color.lime));
             }
-            holder.stockPriceTV.setText(Utils.getFormatedDecimal(stock.getCurrentQuote().getPrice()));
+            holder.stockPriceTV.setText(Utils.getFormattedDecimal(stock.getCurrentQuote().getPrice()));
         } else {
             holder.stockDeltaTV.setText("");
             holder.stockPriceTV.setText("");

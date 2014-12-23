@@ -10,6 +10,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.greenrobot.dao.query.QueryBuilder;
+import de.greenrobot.dao.query.WhereCondition;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.adapters.AddStockAdapter;
@@ -21,8 +23,6 @@ public class AddStockActivity extends ListActivity {
 
     private final String TAG = this.getClass().getSimpleName();
 
-    App app;
-
     @InjectView(R.id.okButton)
     Button okButton;
 
@@ -33,7 +33,6 @@ public class AddStockActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_stock_list);
-        app = (App) getApplication();
         ButterKnife.inject(this);
     }
 
@@ -41,8 +40,10 @@ public class AddStockActivity extends ListActivity {
     protected void onResume() {
         super.onResume();
         // initialize the list adapter
-        StockDao stockDao = app.getDaoSsn().getStockDao();
-        List<Stock> allStocks = stockDao.loadAll();
+        QueryBuilder qb = App.getDaoSsn().getStockDao().queryBuilder();
+        qb.where(new WhereCondition.StringCondition("SHOW_IN_QUOTES_LIST != 1 ORDER BY NAME COLLATE LOCALIZED ASC"));
+        List<Stock> allStocks = qb.list();
+
         stocks = new ArrayList<Stock>();
         for (Stock stock : allStocks) {
             if (!stock.getShowInQuotesList()) {
@@ -55,7 +56,7 @@ public class AddStockActivity extends ListActivity {
 
     @OnClick(R.id.okButton)
     public void onOkButtonClicked() {
-        StockDao stockDao = app.getDaoSsn().getStockDao();
+        StockDao stockDao = App.getDaoSsn().getStockDao();
         //save the changed items
         for (int i = 0; i < addStockAdapter.getCount(); i++) {
             Stock stock = addStockAdapter.getItem(i);

@@ -25,15 +25,16 @@ public class AddStockAdapter extends ArrayAdapter<Stock> {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_item_edit_stock, parent, false);
         }
-
+        final Stock stock = getItem(position);
         CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
-        checkBox.setText(getItem(position).getName());
+        checkBox.setText(stock.getName());
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                getItem(position).setShowInQuotesList(b);
+                stock.setShowInQuotesList(b);
             }
         });
+        checkBox.setChecked(stock.getShowInQuotesList());
         return convertView;
     }
 }

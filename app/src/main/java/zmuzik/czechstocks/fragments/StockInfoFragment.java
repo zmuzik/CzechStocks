@@ -21,12 +21,9 @@ import zmuzik.czechstocks.utils.Utils;
 
 public class StockInfoFragment extends Fragment {
 
-    @InjectView(R.id.lastPrice)
-    TextView lastPrice;
-    @InjectView(R.id.delta)
-    TextView delta;
-    @InjectView(R.id.pe)
-    TextView pe;
+    @InjectView(R.id.lastPrice) TextView lastPrice;
+    @InjectView(R.id.delta) TextView delta;
+    @InjectView(R.id.pe) TextView pe;
 
     Stock mStock;
 
@@ -57,9 +54,9 @@ public class StockInfoFragment extends Fragment {
     private void updateBasicInfo() {
         CurrentQuote currentQuote = mStock.getCurrentQuote();
         Resources res = App.get().getResources();
-        lastPrice.setText(Utils.getFormatedCurrencyAmount(currentQuote.getPrice()));
+        lastPrice.setText(Utils.getFormattedCurrencyAmount(currentQuote.getPrice()));
 
-        delta.setText(Utils.getFormatedPercentage(currentQuote.getDelta()));
+        delta.setText(Utils.getFormattedPercentage(currentQuote.getDelta()));
         delta.setTextColor(res.getColor((currentQuote.getDelta() >= 0) ? R.color.lime : R.color.red));
 
         for (StockDetail stockDetail : mStock.getStockDetailList()) {

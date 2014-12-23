@@ -13,6 +13,8 @@ import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.activities.MainActivity;
 import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.CurrentQuoteDao;
+import zmuzik.czechstocks.helpers.PrefsHelper;
+import zmuzik.czechstocks.utils.TimeUtils;
 
 public class UpdateCurrentDataTask extends AsyncTask {
 
@@ -30,6 +32,10 @@ public class UpdateCurrentDataTask extends AsyncTask {
             List<CurrentQuote> currentQuotes = App.getServerApi().getCurrentQuotes();
             CurrentQuoteDao dao = App.getDaoSsn().getCurrentQuoteDao();
             dao.insertOrReplaceInTx(currentQuotes);
+            PrefsHelper.get().setCurrentQuotesLut(TimeUtils.getNow());
+            if (currentQuotes != null && currentQuotes.size() > 0) {
+                PrefsHelper.get().setCurrentQuotesTime(currentQuotes.get(0).getStamp());
+            }
         } catch (RetrofitError e) {
             Log.e(TAG, e.toString());
             mDownloadError = true;

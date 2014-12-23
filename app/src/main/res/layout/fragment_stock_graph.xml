@@ -1,69 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/timeButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/oneDayBtn"
+            style="@style/timeFrameButton"
+            android:text="@string/one_day"/>
+
+        <Button
+            android:id="@+id/oneMonthBtn"
+            style="@style/timeFrameButton"
+            android:text="@string/one_month"/>
+
+        <Button
+            android:id="@+id/sixMonthsBtn"
+            style="@style/timeFrameButton"
+            android:text="@string/six_months"/>
+
+        <Button
+            android:id="@+id/oneYearBtn"
+            style="@style/timeFrameButton"
+            android:text="@string/one_year"/>
+
+        <Button
+            android:id="@+id/fiveYearsBtn"
+            style="@style/timeFrameButton"
+            android:text="@string/five_years"/>
+
+        <Button
+            android:id="@+id/allTimeBtn"
+            style="@style/timeFrameButton"
+            android:text="@string/all"/>
+    </LinearLayout>
 
     <com.androidplot.xy.XYPlot
         android:id="@+id/stockGraph"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_above="@id/timeButtons"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="all"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5Y"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2Y"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1Y"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ytd"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="6M"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3M"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1M"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5D"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1D"/>
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

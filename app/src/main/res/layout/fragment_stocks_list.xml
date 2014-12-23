@@ -38,13 +38,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/lastUpdatedValue"
+                android:id="@+id/lastUpdatedValueTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="" />
 
             <TextView
-                android:id="@+id/dataFromValue"
+                android:id="@+id/dataFromValueTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="" />

@@ -10,8 +10,6 @@ public class CurrentQuote {
     private String isin;
     private double price;
     private double delta;
-    /** Not-null value. */
-    private String timeStr;
     private long stamp;
 
     public CurrentQuote() {
@@ -21,11 +19,10 @@ public class CurrentQuote {
         this.isin = isin;
     }
 
-    public CurrentQuote(String isin, double price, double delta, String timeStr, long stamp) {
+    public CurrentQuote(String isin, double price, double delta, long stamp) {
         this.isin = isin;
         this.price = price;
         this.delta = delta;
-        this.timeStr = timeStr;
         this.stamp = stamp;
     }
 
@@ -53,16 +50,6 @@ public class CurrentQuote {
 
     public void setDelta(double delta) {
         this.delta = delta;
-    }
-
-    /** Not-null value. */
-    public String getTimeStr() {
-        return timeStr;
-    }
-
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setTimeStr(String timeStr) {
-        this.timeStr = timeStr;
     }
 
     public long getStamp() {

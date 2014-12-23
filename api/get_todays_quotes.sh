@@ -44,7 +44,7 @@ do
     minute=`echo $record | cut -d" " -f8`
     second=`echo $record | cut -d" " -f9`
     
-    stamp=`TZ="Europe/Prague" date -d "$year-$month-$day $hour:$minute:$second" +%s`
+    stamp=`TZ="Europe/Prague" date -d "$year-$month-$day $hour:$minute:$second" +%s`"000"
     price=`echo $record | cut -d" " -f15`
     volume=`echo $record | cut -d" " -f17`
     echo "insert into todays_quote (isin, stamp, price, volume) values ('$isin','$stamp', '$price', '$volume');" >> $sqlFile

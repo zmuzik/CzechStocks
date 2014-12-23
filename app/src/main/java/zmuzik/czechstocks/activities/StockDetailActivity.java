@@ -30,8 +30,12 @@ public class StockDetailActivity extends Activity {
         }
         loadStockFromDb();
         setTitle(mStock.getName());
-        setContentView(R.layout.activity_stock_detail);
+        setContentView(getLayout());
         ButterKnife.inject(this);
+    }
+
+    int getLayout() {
+        return R.layout.activity_stock_detail;
     }
 
     private void loadStockFromDb() {

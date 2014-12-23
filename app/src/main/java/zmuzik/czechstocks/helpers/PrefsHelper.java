@@ -5,24 +5,25 @@ import android.content.SharedPreferences;
 
 import zmuzik.czechstocks.App;
 
-public class SharedPrefsHelper {
+public class PrefsHelper {
 
     //LUT = last update time
     private static final String CURRENT_QUOTE_TIME = "CURRENT_QUOTE_TIME";
     private static final String CURRENT_QUOTE_LUT = "CURRENT_QUOTE_LUT";
     private static final String DIVIDEND_LUT = "DIVIDEND_LUT";
     private static final String STOCK_INFO_LUT = "STOCK_INFO_LUT";
+    private static final String GRAPH_TIMEFRAME = "GRAPH_TIMEFRAME";
 
-    private static SharedPrefsHelper instance = null;
+    private static PrefsHelper instance = null;
     private final String PACKAGE_NAME;
 
-    public SharedPrefsHelper() {
+    public PrefsHelper() {
         PACKAGE_NAME = App.get().getPackageName();
     }
 
-    public static synchronized SharedPrefsHelper get() {
+    public static synchronized PrefsHelper get() {
         if (instance == null) {
-            instance = new SharedPrefsHelper();
+            instance = new PrefsHelper();
         }
         return instance;
     }
@@ -31,35 +32,43 @@ public class SharedPrefsHelper {
         return App.get().getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
     }
 
-    public void setCurrentQuoteTime(long timestamp) {
-        getPrefs().edit().putLong(CURRENT_QUOTE_TIME, timestamp).apply();
+    public void setCurrentQuotesTime(long timestamp) {
+        getPrefs().edit().putLong(CURRENT_QUOTE_TIME, timestamp).commit();
     }
 
-    public long getCurrentQuoteTime() {
+    public long getCurrentQuotesTime() {
         return getPrefs().getLong(CURRENT_QUOTE_TIME, 0);
     }
 
-    public void setCurrentQuoteLastUpdateTime(long timestamp) {
-        getPrefs().edit().putLong(CURRENT_QUOTE_LUT, timestamp).apply();
+    public void setCurrentQuotesLut(long timestamp) {
+        getPrefs().edit().putLong(CURRENT_QUOTE_LUT, timestamp).commit();
     }
 
-    public long getCurrentQuoteLastUpdateTime() {
+    public long getCurrentQuotesLut() {
         return getPrefs().getLong(CURRENT_QUOTE_LUT, 0);
     }
 
-    public void setDividendLastUpdateTime(long timestamp) {
+    public void setDividendsLut(long timestamp) {
         getPrefs().edit().putLong(DIVIDEND_LUT, timestamp).apply();
     }
 
-    public long getDividendLastUpdateTime() {
+    public long getDividendsLut() {
         return getPrefs().getLong(DIVIDEND_LUT, 0);
     }
 
-    public void setStockInfoLastUpdateTime(long timestamp) {
+    public void setStockDetailsLut(long timestamp) {
         getPrefs().edit().putLong(STOCK_INFO_LUT, timestamp).apply();
     }
 
-    public long getStockInfoLastUpdateTime() {
+    public long getStockDetailsLut() {
         return getPrefs().getLong(STOCK_INFO_LUT, 0);
+    }
+
+    public void setGraphTimeFrame(int timeFrame) {
+        getPrefs().edit().putInt(GRAPH_TIMEFRAME, timeFrame).apply();
+    }
+
+    public int getGraphTimeFrame() {
+        return getPrefs().getInt(GRAPH_TIMEFRAME, 0);
     }
 }
