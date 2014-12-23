@@ -42,7 +42,7 @@ do
 #    fi
     day=`echo $record | cut -d" " -f6`
 
-    stamp=`TZ="Europe/Prague" date -d "$year-$month-$day" +%s`
+    stamp=`TZ="Europe/Prague" date -d "$year-$month-$day" +%s`"000"
     price=`echo $record | cut -d" " -f12`
     volume=`echo $record | cut -d" " -f14`
     echo "insert into historical_quote (isin, stamp, price, volume) values ('$isin','$stamp', '$price', '$volume');" >> $sqlFile

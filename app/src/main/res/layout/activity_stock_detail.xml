@@ -22,12 +22,11 @@
             android:layout_weight="1">
 
             <fragment
-                android:id="@+id/stockGraphFragment"
-                android:name="zmuzik.czechstocks.fragments.StockGraphFragment"
+                android:id="@+id/stockDividendsFragment"
+                android:name="zmuzik.czechstocks.fragments.StockDividendsFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </FrameLayout>
-
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -35,8 +34,8 @@
             android:layout_weight="1">
 
             <fragment
-                android:id="@+id/stockDividendsFragment"
-                android:name="zmuzik.czechstocks.fragments.StockDividendsFragment"
+                android:id="@+id/stockGraphFragment"
+                android:name="zmuzik.czechstocks.fragments.StockGraphFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </FrameLayout>

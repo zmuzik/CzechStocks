@@ -12,6 +12,7 @@ public class PrefsHelper {
     private static final String CURRENT_QUOTE_LUT = "CURRENT_QUOTE_LUT";
     private static final String DIVIDEND_LUT = "DIVIDEND_LUT";
     private static final String STOCK_INFO_LUT = "STOCK_INFO_LUT";
+    private static final String GRAPH_TIMEFRAME = "GRAPH_TIMEFRAME";
 
     private static PrefsHelper instance = null;
     private final String PACKAGE_NAME;
@@ -61,5 +62,13 @@ public class PrefsHelper {
 
     public long getStockDetailsLut() {
         return getPrefs().getLong(STOCK_INFO_LUT, 0);
+    }
+
+    public void setGraphTimeFrame(int timeFrame) {
+        getPrefs().edit().putInt(GRAPH_TIMEFRAME, timeFrame).apply();
+    }
+
+    public int getGraphTimeFrame() {
+        return getPrefs().getInt(GRAPH_TIMEFRAME, 0);
     }
 }

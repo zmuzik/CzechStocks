@@ -40,13 +40,9 @@ public class Utils {
     }
 
     public static char getDecimalSeparator() {
-        DecimalFormat format= (DecimalFormat) DecimalFormat.getInstance();
-        DecimalFormatSymbols symbols=format.getDecimalFormatSymbols();
+        DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
+        DecimalFormatSymbols symbols = format.getDecimalFormatSymbols();
         return symbols.getDecimalSeparator();
-    }
-
-    public static long getNow() {
-        return System.currentTimeMillis()/1000L;
     }
 
     public static String getFormattedDate(long timestamp) {
