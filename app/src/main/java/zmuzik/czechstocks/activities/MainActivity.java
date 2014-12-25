@@ -26,7 +26,6 @@ import zmuzik.czechstocks.tasks.FillDbTablesTask;
 import zmuzik.czechstocks.tasks.UpdateCurrentDataTask;
 import zmuzik.czechstocks.utils.DbUtils;
 import zmuzik.czechstocks.utils.TimeUtils;
-import zmuzik.czechstocks.utils.Utils;
 
 public class MainActivity extends Activity implements ActionBar.TabListener, UpdateListener {
 
@@ -67,7 +66,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
 
     @Override protected void onResume() {
         super.onResume();
-        if (!updateInProgress) {
+        if (!updateInProgress && isTimeToUpdate()) {
             actionDataRefresh();
         }
     }
@@ -75,11 +74,14 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         mRefreshMenuItem = menu.findItem(R.id.action_refresh);
-        long lastUpdTime = PrefsHelper.get().getCurrentQuotesLut();
-        if (lastUpdTime + Utils.ONE_MINUTE < TimeUtils.getNow()) {
+        if (!updateInProgress && isTimeToUpdate()) {
             actionDataRefresh();
         }
         return true;
+    }
+
+    boolean isTimeToUpdate() {
+        return PrefsHelper.get().getCurrentQuotesLut() + TimeUtils.ONE_MINUTE < TimeUtils.getNow();
     }
 
     @Override

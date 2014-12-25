@@ -33,7 +33,7 @@
         <item name="android:minWidth">10dp</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:padding">3dp</item>
-        <item name="android:textSize">15dp</item>
+        <item name="android:textSize">14dp</item>
     </style>
 
 

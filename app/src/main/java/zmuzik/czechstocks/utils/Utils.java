@@ -15,9 +15,6 @@ import zmuzik.czechstocks.R;
 
 public class Utils {
 
-    public final static long ONE_MINUTE = 60;
-    public final static long FIVE_MINUTES = ONE_MINUTE * 5;
-
     public static String getFormattedDecimal(double value, int decPlaces) {
         Locale currentLocale = Locale.getDefault();
         NumberFormat numberFormatter = NumberFormat.getNumberInstance(currentLocale);

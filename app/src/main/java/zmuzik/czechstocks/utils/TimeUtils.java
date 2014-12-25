@@ -5,7 +5,6 @@ import java.util.Calendar;
 public class TimeUtils {
 
     public final static long ONE_SECOND = 1000;
-
     public final static long ONE_MINUTE = 60 * ONE_SECOND;
     public final static long FIVE_MINUTES = ONE_MINUTE * 5;
 
