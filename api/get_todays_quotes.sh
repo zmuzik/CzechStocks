@@ -29,26 +29,25 @@ do
   id=`echo $confRow | cut -d";" -f2`
   url=$url_prefix$id
   curl -o $rawFile $url
+  cat $rawFile | grep "d:new Date" | tr ":(,}" " " > $tableFile
 
-  cat $rawFile | grep "d:new Date" > $tableFile
-  while read row
-  do
-    record=`echo $row | tr ":(,}" " "`
-    year=`echo $record | cut -d" " -f4`
-    month=`echo $record | cut -d" " -f5`
-    if [ $month -lt 12 ]; then
-      ((month=1+$month))
-    fi
-    day=`echo $record | cut -d" " -f6`
-    hour=`echo $record | cut -d" " -f7`
-    minute=`echo $record | cut -d" " -f8`
-    second=`echo $record | cut -d" " -f9`
-    
-    stamp=`TZ="Europe/Prague" date -d "$year-$month-$day $hour:$minute:$second" +%s`"000"
-    price=`echo $record | cut -d" " -f15`
-    volume=`echo $record | cut -d" " -f17`
-    echo "insert into todays_quote (isin, stamp, price, volume) values ('$isin','$stamp', '$price', '$volume');" >> $sqlFile
-  done < $tableFile
+  record=`head -n 1 $tableFile`
+  year=`echo $record | cut -d" " -f4`
+  month=`echo $record | cut -d" " -f5`
+  day=`echo $record | cut -d" " -f6`
+  baseStamp=`TZ="Europe/Prague" date -d "$year-$month-$day" +%s`"000"
+
+
+  awk -v baseStamp=$baseStamp -v isin=$isin '{
+     hour = $7;
+     minute = $8;
+     second = $9;
+     stamp = baseStamp + 1000 * second + 60000 * minute + 3600000 * hour;
+     price = $15;
+     volume = $17;
+     printf ("insert into todays_quote (isin, stamp, price, volume) values ('\''%s'\'', %s, %s, %s);\n", isin, stamp, price, volume);
+  }' < $tableFile # >> $sqlFile
+
   rm $rawFile $tableFile
 done
 
