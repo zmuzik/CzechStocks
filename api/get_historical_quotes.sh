@@ -1,64 +1,50 @@
 #!/bin/bash
+
 startStamp=`date +%s`
-url_prefix="http://www.bcpp.cz/XML/ProduktKL.aspx?cnpa="
-scriptDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
-
-#main app directory
-#appRootDir=${scriptDir:0:size=${#scriptDir}-4}
-appRootDir=${scriptDir}
-
-#configuration files
-isinsConfFile=$appRootDir"/etc/included_isins"
-
-#temporary files used during processing
-rawFile=$appRootDir"/tmp/raw.html"
-tableFile=$appRootDir"/tmp/table.csv"
-isinsFile=$appRootDir"/tmp/isins.csv"
-completeFile=$appRootDir"/tmp/complete.csv"
+appRootDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
+hist_dir=$appRootDir"/hist_data/"
+tmp_dir=$appRootDir"/tmp/"
+root_url="http://ftp.pse.cz"
+isinsConfFile=$appRootDir"/etc/included_isins.csv"
 sqlFile=$appRootDir"/tmp/update_db.sql"
 logFile=$appRootDir"/log/get_historical_data.log"
 dbFile=$appRootDir"/data.db"
 
-echo "begin transaction;" > $sqlFile
-echo "DELETE FROM historical_quote;" >> $sqlFile
-
-#for every stock
-for confRow in `grep "^[^#;]" $isinsConfFile`
-#for confRow in "CZ0005124420;7061;PLG"
+for fpath in `ls $hist_dir`
 do
-  isin=`echo $confRow | cut -d";" -f1`
-  id=`echo $confRow | cut -d";" -f2`
-  url=$url_prefix$id
-  curl -o $rawFile $url
+  unzip $hist_dir$fpath -d $tmp_dir
 
-  cat $rawFile | grep "d:new Date" > $tableFile
-  while read row
+  fsize=$((${#fpath}-10))
+  datestr=${fpath:$fsize:6}
+  akfile=$tmp_dir"AK"$datestr".csv"
+  bofile=$tmp_dir"BO"$datestr".csv"
+
+  year="20"${datestr:0:2}
+  month=${datestr:2:2}
+  day=${datestr:4:2}
+  stamp=`TZ="Europe/Prague" date -d "$year-$month-$day" +%s`"000"
+
+  echo "begin transaction;" > $sqlFile
+  echo "DELETE FROM current_quote;" >> $sqlFile
+
+  for isin in `grep "^[^#;]" $isinsConfFile | cut -d";" -f1`
   do
-    record=`echo $row | tr ":(,}" " "`
-    year=`echo $record | cut -d" " -f4`
-    month=`echo $record | cut -d" " -f5`
-#    if [ $month -lt 12 ]; then
-#      ((month=1+$month))
-#    fi
-    day=`echo $record | cut -d" " -f6`
+    row=`grep $isin $bofile`
+    if [ ${#row} -gt 0 ]; then
+      price=`echo $row | cut -d"," -f6 | sed 's/ *$//'`
+      volume=`echo $row | cut -d"," -f10 | sed 's/ *$//'`
+      echo "insert into historical_quote (isin, stamp, price, volume) values ('$isin','$stamp', $price, $volume);" >> $sqlFile
+    fi
+  done
 
-    stamp=`TZ="Europe/Prague" date -d "$year-$month-$day" +%s`"000"
-    price=`echo $record | cut -d" " -f12`
-    volume=`echo $record | cut -d" " -f14`
-    echo "insert into historical_quote (isin, stamp, price, volume) values ('$isin','$stamp', '$price', '$volume');" >> $sqlFile
-  done < $tableFile
-  rm $rawFile $tableFile
+  echo "commit;" >> $sqlFile
+  sqlite3 $dbFile < $sqlFile
+
+  rm $akfile $bofile $sqlFile
 done
-
-echo "commit;" >> $sqlFile
-
-sqlite3 $dbFile < $sqlFile
-
-rm $sqlFile
 
 endStamp=`date +%s`
 duration=$((endStamp-startStamp))
 now=`date +"%Y-%m-%d %H:%M:%S"`
 
 echo "$now etl performed in $duration seconds" >> $logFile
-
