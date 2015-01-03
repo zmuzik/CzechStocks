@@ -10,38 +10,47 @@ sqlFile=$appRootDir"/tmp/update_db.sql"
 logFile=$appRootDir"/log/get_historical_data.log"
 dbFile=$appRootDir"/data.db"
 
-for fpath in `ls $hist_dir`
+if [ $# -gt 0 ]; then
+  datestr=$1
+else
+  datestr=`date +"%y%m%d"`
+fi
+
+echo "processing for date "$datestr >> $logFile
+
+fname="pl"$datestr".zip"
+url="http://ftp.pse.cz/Results.ak/"$fname
+
+curl -o $hist_dir$fname $url
+
+
+
+unzip $hist_dir$fname -d $tmp_dir
+akfile=$tmp_dir"AK"$datestr".csv"
+bofile=$tmp_dir"BO"$datestr".csv"
+
+year="20"${datestr:0:2}
+month=${datestr:2:2}
+day=${datestr:4:2}
+stamp=`TZ="Europe/Prague" date -d "$year-$month-$day" +%s`"000"
+
+echo "begin transaction;" > $sqlFile
+echo "DELETE FROM current_quote;" >> $sqlFile
+
+for isin in `grep "^[^#;]" $isinsConfFile | cut -d";" -f1`
 do
-  unzip $hist_dir$fpath -d $tmp_dir
-
-  fsize=$((${#fpath}-10))
-  datestr=${fpath:$fsize:6}
-  akfile=$tmp_dir"AK"$datestr".csv"
-  bofile=$tmp_dir"BO"$datestr".csv"
-
-  year="20"${datestr:0:2}
-  month=${datestr:2:2}
-  day=${datestr:4:2}
-  stamp=`TZ="Europe/Prague" date -d "$year-$month-$day" +%s`"000"
-
-  echo "begin transaction;" > $sqlFile
-  echo "DELETE FROM current_quote;" >> $sqlFile
-
-  for isin in `grep "^[^#;]" $isinsConfFile | cut -d";" -f1`
-  do
-    row=`grep $isin $bofile`
-    if [ ${#row} -gt 0 ]; then
-      price=`echo $row | cut -d"," -f6 | sed 's/ *$//'`
-      volume=`echo $row | cut -d"," -f10 | sed 's/ *$//'`
-      echo "insert into historical_quote (isin, stamp, price, volume) values ('$isin','$stamp', $price, $volume);" >> $sqlFile
-    fi
-  done
-
-  echo "commit;" >> $sqlFile
-  sqlite3 $dbFile < $sqlFile
-
-  rm $akfile $bofile $sqlFile
+  row=`grep $isin $bofile`
+  if [ ${#row} -gt 0 ]; then
+    price=`echo $row | cut -d"," -f6 | sed 's/ *$//'`
+    volume=`echo $row | cut -d"," -f10 | sed 's/ *$//'`
+    echo "insert into historical_quote (isin, stamp, price, volume) values ('$isin','$stamp', $price, $volume);" >> $sqlFile
+  fi
 done
+
+echo "commit;" >> $sqlFile
+sqlite3 $dbFile < $sqlFile
+
+rm $akfile $bofile $sqlFile
 
 endStamp=`date +%s`
 duration=$((endStamp-startStamp))
