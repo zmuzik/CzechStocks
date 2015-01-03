@@ -20,7 +20,6 @@ logFile=$appRootDir"/log/get_todays_data.log"
 dbFile=$appRootDir"/data.db"
 
 echo "begin transaction;" > $sqlFile
-echo "DELETE FROM todays_quote;" >> $sqlFile
 
 #for every stock
 for confRow in `grep "^[^#;]" $isinsConfFile`
@@ -36,17 +35,19 @@ do
   month=`echo $record | cut -d" " -f5`
   day=`echo $record | cut -d" " -f6`
   baseStamp=`TZ="Europe/Prague" date -d "$year-$month-$day" +%s`"000"
+  oldStamp=`sqlite3 $dbFile "select max(stamp) from todays_quote;"`
 
-
-  awk -v baseStamp=$baseStamp -v isin=$isin '{
+  awk -v baseStamp=$baseStamp -v isin=$isin -v oldStamp=$oldStamp '{
      hour = $7;
      minute = $8;
      second = $9;
      stamp = baseStamp + 1000 * second + 60000 * minute + 3600000 * hour;
      price = $15;
      volume = $17;
-     printf ("insert into todays_quote (isin, stamp, price, volume) values ('\''%s'\'', %s, %s, %s);\n", isin, stamp, price, volume);
-  }' < $tableFile # >> $sqlFile
+     if (stamp > oldStamp) {
+       printf ("insert into todays_quote (isin, stamp, price, volume) values ('\''%s'\'', %s, %s, %s);\n", isin, stamp, price, volume);
+     }
+  }' < $tableFile >> $sqlFile
 
   rm $rawFile $tableFile
 done
@@ -62,4 +63,3 @@ duration=$((endStamp-startStamp))
 now=`date +"%Y-%m-%d %H:%M:%S"`
 
 echo "$now etl performed in $duration seconds" >> $logFile
-
