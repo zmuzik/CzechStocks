@@ -1,7 +1,7 @@
 #!/bin/bash
 logFile=$appRootDir"/log/get_todays_data.log"
 
-sqlite3 data.db "delete from todays_quote;"
+sqlite3 data.db "delete from todays_quote; vacuum;"
 
 now=`date +"%Y-%m-%d %H:%M:%S"`
 
