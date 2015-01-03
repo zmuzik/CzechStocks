@@ -23,8 +23,6 @@ url="http://ftp.pse.cz/Results.ak/"$fname
 
 curl -o $hist_dir$fname $url
 
-
-
 unzip $hist_dir$fname -d $tmp_dir
 akfile=$tmp_dir"AK"$datestr".csv"
 bofile=$tmp_dir"BO"$datestr".csv"
@@ -35,7 +33,6 @@ day=${datestr:4:2}
 stamp=`TZ="Europe/Prague" date -d "$year-$month-$day" +%s`"000"
 
 echo "begin transaction;" > $sqlFile
-echo "DELETE FROM current_quote;" >> $sqlFile
 
 for isin in `grep "^[^#;]" $isinsConfFile | cut -d";" -f1`
 do
