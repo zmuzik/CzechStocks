@@ -61,7 +61,11 @@ public class StockInfoFragment extends Fragment {
 
         for (StockDetail stockDetail : mStock.getStockDetailList()) {
             if ("P/E".equals(stockDetail.getIndicator()) && stockDetail.getValue() != null) {
-                pe.setText(stockDetail.getValue().replace('.', Utils.getDecimalSeparator()));
+                if ("O".equals(stockDetail.getValue())) {
+                    pe.setText("N/A");
+                } else {
+                    pe.setText(stockDetail.getValue().replace('.', Utils.getDecimalSeparator()));
+                }
                 break;
             }
         }

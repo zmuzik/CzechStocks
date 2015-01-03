@@ -10,7 +10,7 @@ import de.greenrobot.daogenerator.Schema;
 public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
-        Schema schema = new Schema(1, "zmuzik.czechstocks.dao");
+        Schema schema = new Schema(10, "zmuzik.czechstocks.dao");
 
         // Current quote
         Entity currentQuote = schema.addEntity("CurrentQuote");

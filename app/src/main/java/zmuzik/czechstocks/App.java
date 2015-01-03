@@ -1,8 +1,11 @@
 package zmuzik.czechstocks;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -65,5 +68,11 @@ public class App extends Application {
 
     public boolean isDebuggable() {
         return 0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE);
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

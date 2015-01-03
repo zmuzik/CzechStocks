@@ -9,7 +9,7 @@ scriptDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
 appRootDir=${scriptDir}
 
 #configuration files
-isinsConfFile=$appRootDir"/etc/included_isins"
+isinsConfFile=$appRootDir"/etc/included_isins.csv"
 
 #temporary files used during processing
 rawFile=$appRootDir"/tmp/raw.html"

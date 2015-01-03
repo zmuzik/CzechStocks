@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +53,7 @@ public class StockGraphFragment extends Fragment {
     Stock mStock;
     ArrayList<Number> mPrices;
     ArrayList<Number> mDates;
+    int dateFormat = GraphDateFormat.MONTH_YEAR_FORMAT;
 
     @Override public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -78,16 +80,16 @@ public class StockGraphFragment extends Fragment {
     }
 
     private void updateGraph() {
-        prepareData();
-        drawGraph();
+        new UpdateGraphTask().execute();
     }
 
-    void prepareData() {
+    private void prepareData() {
         mPrices = new ArrayList<Number>();
         mDates = new ArrayList<Number>();
         int graphTimeFrame = PrefsHelper.get().getGraphTimeFrame();
         //todays quotes
         if (graphTimeFrame == TIMEFRAME_1D) {
+            dateFormat = GraphDateFormat.HOUR_MINUTE_FORMAT;
             for (TodaysQuote historicalQuote : mStock.getTodaysQuoteList()) {
                 mPrices.add(historicalQuote.getPrice());
                 mDates.add(historicalQuote.getStamp());
@@ -107,17 +109,22 @@ public class StockGraphFragment extends Fragment {
         long beginningStamp = 0;
         if (graphTimeFrame == TIMEFRAME_1M) {
             beginningStamp = TimeUtils.getXMonthsAgo(1);
+            dateFormat = GraphDateFormat.DAY_MONTH_FORMAT;
         } else if (graphTimeFrame == TIMEFRAME_6M) {
             beginningStamp = TimeUtils.getXMonthsAgo(6);
+            dateFormat = GraphDateFormat.DAY_MONTH_FORMAT;
         } else if (graphTimeFrame == TIMEFRAME_1Y) {
             beginningStamp = TimeUtils.getXYearsAgo(1);
+            dateFormat = GraphDateFormat.DAY_MONTH_FORMAT;
         } else if (graphTimeFrame == TIMEFRAME_5Y) {
             beginningStamp = TimeUtils.getXYearsAgo(5);
+            dateFormat = GraphDateFormat.MONTH_YEAR_FORMAT;
         } else { //TIMEFRAME_ALL
+            dateFormat = GraphDateFormat.MONTH_YEAR_FORMAT;
             return mStock.getHistoricalQuoteList();
         }
         QueryBuilder qb = App.getDaoSsn().getHistoricalQuoteDao().queryBuilder();
-        qb.where(new WhereCondition.StringCondition("STAMP >= " + beginningStamp));
+        qb.where(new WhereCondition.StringCondition("ISIN = '" + mStock.getIsin() + "' AND STAMP >= " + beginningStamp));
         return qb.list();
     }
 
@@ -132,7 +139,8 @@ public class StockGraphFragment extends Fragment {
         lineFill.setShader(new LinearGradient(0, 0, 0, 250, Color.rgb(0, 0, 150), Color.rgb(0, 0, 100), Shader.TileMode.MIRROR));
         priceFormat.setFillPaint(lineFill);
 
-        stockGraph.setDomainValueFormat(new GraphDateFormat(GraphDateFormat.MONTH_YEAR_FORMAT));
+        stockGraph.clear();
+        stockGraph.setDomainValueFormat(new GraphDateFormat(dateFormat));
         stockGraph.addSeries(priceSeries, priceFormat);
         stockGraph.getLegendWidget().setVisible(false);
         stockGraph.setBorderStyle(Plot.BorderStyle.NONE, null, null);
@@ -145,6 +153,7 @@ public class StockGraphFragment extends Fragment {
         stockGraph.getBackgroundPaint().setColor(Color.TRANSPARENT);
         stockGraph.getGraphWidget().getBackgroundPaint().setColor(Color.TRANSPARENT);
         stockGraph.getGraphWidget().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
+        stockGraph.redraw();
     }
 
     @OnClick(R.id.stockGraph) void onStockGraphClick() {
@@ -182,5 +191,19 @@ public class StockGraphFragment extends Fragment {
     @OnClick(R.id.allTimeBtn) void onAllTimeBtnClick() {
         PrefsHelper.get().setGraphTimeFrame(TIMEFRAME_ALL);
         updateGraph();
+    }
+
+    public class UpdateGraphTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            StockGraphFragment.this.prepareData();
+            return null;
+        }
+
+        @Override protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            StockGraphFragment.this.drawGraph();
+        }
     }
 }

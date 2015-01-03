@@ -26,7 +26,6 @@ import zmuzik.czechstocks.tasks.FillDbTablesTask;
 import zmuzik.czechstocks.tasks.UpdateCurrentDataTask;
 import zmuzik.czechstocks.utils.DbUtils;
 import zmuzik.czechstocks.utils.TimeUtils;
-import zmuzik.czechstocks.utils.Utils;
 
 public class MainActivity extends Activity implements ActionBar.TabListener, UpdateListener {
 
@@ -35,6 +34,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private MenuItem mRefreshMenuItem;
+
+    boolean updateInProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,14 +64,24 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
         }
     }
 
+    @Override protected void onResume() {
+        super.onResume();
+        if (!updateInProgress && isTimeToUpdate()) {
+            actionDataRefresh();
+        }
+    }
+
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         mRefreshMenuItem = menu.findItem(R.id.action_refresh);
-        long lastUpdTime = PrefsHelper.get().getCurrentQuotesLut();
-        if (lastUpdTime + Utils.ONE_MINUTE < TimeUtils.getNow()) {
+        if (!updateInProgress && isTimeToUpdate()) {
             actionDataRefresh();
         }
         return true;
+    }
+
+    boolean isTimeToUpdate() {
+        return PrefsHelper.get().getCurrentQuotesLut() + TimeUtils.ONE_MINUTE < TimeUtils.getNow();
     }
 
     @Override
@@ -110,11 +121,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
     }
 
     void actionDataRefresh() {
+        updateInProgress = true;
         setMovingRefreshIcon();
         new UpdateCurrentDataTask(this).execute();
     }
 
     void setMovingRefreshIcon() {
+        if (mRefreshMenuItem == null) return;
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ImageView iv = (ImageView) inflater.inflate(R.layout.icon_action_refresh, null);
         Animation rotation = AnimationUtils.loadAnimation(this, R.anim.clockwise_refresh);
@@ -124,20 +137,18 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
     }
 
     public void setStaticRefreshIcon() {
-        if (mRefreshMenuItem != null && mRefreshMenuItem.getActionView() != null) {
-            mRefreshMenuItem.getActionView().clearAnimation();
-            mRefreshMenuItem.setActionView(null);
-        }
+        if (mRefreshMenuItem == null || mRefreshMenuItem.getActionView() == null) return;
+        mRefreshMenuItem.getActionView().clearAnimation();
+        mRefreshMenuItem.setActionView(null);
     }
 
     public void refreshFragments() {
-        if (mSectionsPagerAdapter != null) {
-            if (mSectionsPagerAdapter.getItem(0) != null) {
-                ((QuoteListFragment) mSectionsPagerAdapter.getItem(0)).refreshData();
-            }
-            if (mSectionsPagerAdapter.getItem(1) != null) {
-                ((PortfolioListFragment) mSectionsPagerAdapter.getItem(1)).refreshData();
-            }
+        if (mSectionsPagerAdapter == null) return;
+        if (mSectionsPagerAdapter.getItem(0) != null) {
+            ((QuoteListFragment) mSectionsPagerAdapter.getItem(0)).refreshData();
+        }
+        if (mSectionsPagerAdapter.getItem(1) != null) {
+            ((PortfolioListFragment) mSectionsPagerAdapter.getItem(1)).refreshData();
         }
     }
 
@@ -159,5 +170,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
     @Override public void loadData() {
         refreshFragments();
         setStaticRefreshIcon();
+        updateInProgress = false;
     }
 }

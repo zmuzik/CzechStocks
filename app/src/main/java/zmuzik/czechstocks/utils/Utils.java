@@ -15,9 +15,6 @@ import zmuzik.czechstocks.R;
 
 public class Utils {
 
-    public final static long ONE_MINUTE = 60;
-    public final static long FIVE_MINUTES = ONE_MINUTE * 5;
-
     public static String getFormattedDecimal(double value, int decPlaces) {
         Locale currentLocale = Locale.getDefault();
         NumberFormat numberFormatter = NumberFormat.getNumberInstance(currentLocale);
@@ -54,7 +51,7 @@ public class Utils {
     public static String getFormattedDateAndTime(long timestamp) {
         if (timestamp == 0L) return "";
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        return timeFormat.format(new Date(timestamp * 1000L));
+        return timeFormat.format(new Date(timestamp));
     }
 
     public static double getDoubleValue(String s) {
