@@ -1,23 +1,24 @@
 #!/bin/bash
 startStamp=`date +%s`
 url_prefix="http://www.bcpp.cz/XML/ProduktKontinualJS.aspx?cnpa="
-scriptDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
-
-#main app directory
-#appRootDir=${scriptDir:0:size=${#scriptDir}-4}
-appRootDir=${scriptDir}
-
-#configuration files
+appRootDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
 isinsConfFile=$appRootDir"/etc/included_isins.csv"
-
-#temporary files used during processing
+closedDaysFile=$appRootDir"/etc/closed_days.csv"
 rawFile=$appRootDir"/tmp/raw.html"
 tableFile=$appRootDir"/tmp/table.csv"
 isinsFile=$appRootDir"/tmp/isins.csv"
 completeFile=$appRootDir"/tmp/complete.csv"
-sqlFile=$appRootDir"/tmp/update_db.sql"
+sqlFile=$appRootDir"/tmp/update_todays_quotes.sql"
 logFile=$appRootDir"/log/get_todays_data.log"
 dbFile=$appRootDir"/data.db"
+
+#quit if exchange closed today
+today=`date +%Y-%m-%d`
+if  grep -q $today $closedDaysFile; then
+    now=`date +"%Y-%m-%d %H:%M:%S"`
+    echo "$now skipping run - stock exchange closed today" >> $logFile
+    exit 0;
+fi
 
 echo "begin transaction;" > $sqlFile
 

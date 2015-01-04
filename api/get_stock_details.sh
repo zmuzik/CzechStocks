@@ -2,16 +2,9 @@
 startStamp=`date +%s`
 url_prefix="www.bcpp.cz/Cenne-Papiry/Detail.aspx?isin="
 url_postfix="#OL"
-scriptDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
-
-#main app directory
-#appRootDir=${scriptDir:0:size=${#scriptDir}-4}
-appRootDir=${scriptDir}
-
-#configuration files
+appRootDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
 isinsConfFile=$appRootDir"/etc/included_isins.csv"
-
-#temporary files used during processing
+closedDaysFile=$appRootDir"/etc/closed_days.csv"
 rawFile=$appRootDir"/tmp/raw.html"
 tableFile=$appRootDir"/tmp/table.csv"
 isinsFile=$appRootDir"/tmp/isins.csv"
@@ -19,7 +12,6 @@ completeFile=$appRootDir"/tmp/complete.csv"
 sqlFile=$appRootDir"/tmp/update_db.sql"
 logFile=$appRootDir"/log/get_stock_info.log"
 dbFile=$appRootDir"/data.db"
-
 
 echo "begin transaction;" > $sqlFile
 echo "DELETE FROM stock_detail;" >> $sqlFile

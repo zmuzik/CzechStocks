@@ -1,12 +1,6 @@
 #!/bin/bash
 startStamp=`date +%s`
-scriptDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
-
-#main app directory
-#appRootDir=${scriptDir:0:size=${#scriptDir}-4}
-appRootDir=${scriptDir}
-
-#configuration files
+appRootDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
 diviFile=$appRootDir"/etc/divi.csv"
 dbFile=$appRootDir"/data.db"
 sqlFile=$appRootDir"/load_divi.sql"
