@@ -52,8 +52,6 @@ public class FillDbTablesTask extends AsyncTask<Void, Integer, Void>{
             onProgressUpdate(4);
             dbUtils.fillStockDetailTable();
             onProgressUpdate(6);
-            dbUtils.fillTodaysQuoteTable();
-            onProgressUpdate(8);
             dbUtils.fillHistoricalQuoteTable(this);
             dbUtils.saveCurrentDbVersion();
         }

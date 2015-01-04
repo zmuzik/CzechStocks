@@ -16,7 +16,6 @@ import zmuzik.czechstocks.dao.DividendDao;
 import zmuzik.czechstocks.dao.HistoricalQuoteDao;
 import zmuzik.czechstocks.dao.StockDao;
 import zmuzik.czechstocks.dao.StockDetailDao;
-import zmuzik.czechstocks.dao.TodaysQuoteDao;
 import zmuzik.czechstocks.tasks.FillDbTablesTask;
 
 public class DbUtils {
@@ -115,39 +114,6 @@ public class DbUtils {
             }
         } catch (IOException e) {
             Crashlytics.log(Log.ERROR, TAG, "Unable to initialize default data for DIVIDEND table");
-        } finally {
-            db.setTransactionSuccessful();
-            db.endTransaction();
-        }
-    }
-
-    public void fillTodaysQuoteTable() {
-        Log.d(TAG, "Deleting contents of table TODAYS_QUOTE");
-        TodaysQuoteDao todaysQuoteDao = App.getDaoSsn().getTodaysQuoteDao();
-        todaysQuoteDao.deleteAll();
-        Log.d(TAG, "Filling table TODAYS_QUOTE with default data");
-        SQLiteDatabase db = App.getDaoSsn().getDatabase();
-        SQLiteStatement statement = db.compileStatement("INSERT INTO TODAYS_QUOTE VALUES (?,?,?,?,?);");
-        try {
-            db.beginTransaction();
-            Scanner scanner = new Scanner(App.get().getAssets().open("todays_quote.csv"));
-            long counter = 0;
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                String[] items = line.split("\\|");
-                statement.clearBindings();
-                long timeDate = (items[1] == null || "".equals(items[1])) ? 0l : Long.parseLong(items[1]);
-                double amount = Double.parseDouble(items[2]);
-                double volume = Double.parseDouble(items[3]);
-                statement.bindLong(1, counter++);
-                statement.bindString(2, items[0]);
-                statement.bindLong(3, timeDate);
-                statement.bindDouble(4, amount);
-                statement.bindDouble(5, volume);
-                statement.execute();
-            }
-        } catch (IOException e) {
-            Crashlytics.log(Log.ERROR, TAG, "Unable to initialize default data for TODAYS_QUOTE table");
         } finally {
             db.setTransactionSuccessful();
             db.endTransaction();
