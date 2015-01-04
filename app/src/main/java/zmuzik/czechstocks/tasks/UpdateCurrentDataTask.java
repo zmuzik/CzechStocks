@@ -20,10 +20,10 @@ public class UpdateCurrentDataTask extends AsyncTask {
 
     private final String TAG = this.getClass().getSimpleName();
     private boolean mDownloadError = false;
-    private WeakReference<MainActivity> activityWeakReference;
+    private WeakReference<MainActivity> activityRef;
 
     public UpdateCurrentDataTask(MainActivity activity) {
-        activityWeakReference = new WeakReference<MainActivity>(activity);
+        activityRef = new WeakReference<MainActivity>(activity);
     }
 
     @Override
@@ -36,6 +36,7 @@ public class UpdateCurrentDataTask extends AsyncTask {
             PrefsHelper.get().setCurrentQuotesLut(TimeUtils.getNow());
             if (currentQuotes != null && currentQuotes.size() > 0) {
                 PrefsHelper.get().setCurrentQuotesTime(currentQuotes.get(0).getStamp());
+                App.getDaoSsn().clear();
             }
         } catch (RetrofitError e) {
             Log.e(TAG, e.toString());
@@ -46,7 +47,7 @@ public class UpdateCurrentDataTask extends AsyncTask {
 
     @Override
     protected void onPostExecute(Object result) {
-        MainActivity activity = activityWeakReference.get();
+        MainActivity activity = activityRef.get();
         if (activity != null) {
             if (mDownloadError) {
                 Toast.makeText(App.get(), R.string.toas_check_net, Toast.LENGTH_LONG).show();
