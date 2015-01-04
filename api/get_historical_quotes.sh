@@ -7,7 +7,7 @@ tmp_dir=$appRootDir"/tmp/"
 root_url="http://ftp.pse.cz"
 isinsConfFile=$appRootDir"/etc/included_isins.csv"
 closedDaysFile=$appRootDir"/etc/closed_days.csv"
-sqlFile=$appRootDir"/tmp/update_db.sql"
+sqlFile=$appRootDir"/tmp/update_historical_quotes.sql"
 logFile=$appRootDir"/log/get_historical_data.log"
 dbFile=$appRootDir"/data.db"
 

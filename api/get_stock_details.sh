@@ -9,7 +9,7 @@ rawFile=$appRootDir"/tmp/raw.html"
 tableFile=$appRootDir"/tmp/table.csv"
 isinsFile=$appRootDir"/tmp/isins.csv"
 completeFile=$appRootDir"/tmp/complete.csv"
-sqlFile=$appRootDir"/tmp/update_db.sql"
+sqlFile=$appRootDir"/tmp/update_stock_details.sql"
 logFile=$appRootDir"/log/get_stock_info.log"
 dbFile=$appRootDir"/data.db"
 

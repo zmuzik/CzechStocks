@@ -8,7 +8,7 @@ rawFile=$appRootDir"/tmp/raw.html"
 tableFile=$appRootDir"/tmp/table.csv"
 isinsFile=$appRootDir"/tmp/isins.csv"
 completeFile=$appRootDir"/tmp/complete.csv"
-sqlFile=$appRootDir"/tmp/update_db.sql"
+sqlFile=$appRootDir"/tmp/update_closing_quotes.sql"
 logFile=$appRootDir"/log/get_closing_quotes.log"
 dbFile=$appRootDir"/data.db"
 
