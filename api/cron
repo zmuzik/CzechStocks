@@ -7,3 +7,5 @@
 17 17 * * 1-5 /home/zb/csapi/api/get_closing_quotes.sh
 30 19 * * 1-5 /home/zb/csapi/api/get_historical_quotes.sh
 32 19 * * 1-5 /home/zb/csapi/api/get_stock_details.sh
+
+0 8 * * 1-5 /home/zb/csapi/api/del_todays_quotes.sh
