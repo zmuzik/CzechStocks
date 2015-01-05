@@ -46,6 +46,8 @@ grep "<td class=\"nowrap\">" $rawFile | awk '{\
 #join the files
 paste -d";" $isinsFile $tableFile > $completeFile
 
+error=0
+
 echo "begin transaction;" > $sqlFile
 echo "delete from current_quote;" >> $sqlFile
 
@@ -57,14 +59,25 @@ do
   stockName=`echo $dataRow | cut -d";" -f4`
   stockPrice=`echo $dataRow | cut -d";" -f9  | tr "," "." | sed 's/\xc2\xa0//g'`
   stockDelta=`echo $dataRow | cut -d";" -f11 | tr "," "." | sed 's/\xc2\xa0//g'`
-  
+
+  if [ -z "$stockPrice" ]; then
+    error=1
+  fi
+
+    if [ -z "$stockDelta" ]; then
+    error=1
+  fi
+
   echo "insert into current_quote (isin, price, delta, timeStr, stamp) \
   values ('$isin', '$stockPrice', '$stockDelta', '$timeStr', '$stamp');" >> $sqlFile
 done
 
 echo "commit;" >> $sqlFile
 
-sqlite3 $dbFile < $sqlFile
+if [ "$error" -eq 0 ]; then
+  sqlite3 $dbFile < $sqlFile
+  echo "incomplete data - db update skipped" >> $logFile
+fi
 
 rm $rawFile $isinsFile $tableFile $completeFile $sqlFile
 
