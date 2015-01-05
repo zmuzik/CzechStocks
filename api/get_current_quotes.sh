@@ -74,9 +74,12 @@ done
 
 echo "commit;" >> $sqlFile
 
+now=`date +"%Y-%m-%d %H:%M:%S"`
 if [ "$error" -eq 0 ]; then
   sqlite3 $dbFile < $sqlFile
-  echo "incomplete data - db update skipped" >> $logFile
+  echo "$now complete data - db updated" >> $logFile
+else
+  echo "$now incomplete data - db update skipped" >> $logFile
 fi
 
 rm $rawFile $isinsFile $tableFile $completeFile $sqlFile
