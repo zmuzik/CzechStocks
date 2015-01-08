@@ -1,5 +1,6 @@
 #!/bin/bash
-logFile=$appRootDir"/log/get_todays_data.log"
+appRootDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
+logFile=$appRootDir"/log/del_todays_quotes.log"
 closedDaysFile=$appRootDir"/etc/closed_days.csv"
 
 #quit if exchange closed today
