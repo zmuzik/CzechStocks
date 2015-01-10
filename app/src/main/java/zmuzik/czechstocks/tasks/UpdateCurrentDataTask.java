@@ -30,9 +30,9 @@ public class UpdateCurrentDataTask extends AsyncTask {
     protected Object doInBackground(Object... params) {
         if (!App.get().isOnline()) return null;
         try {
+            CurrentQuoteDao currentQuoteDao = App.getDaoSsn().getCurrentQuoteDao();
             List<CurrentQuote> currentQuotes = App.getServerApi().getCurrentQuotes();
-            CurrentQuoteDao dao = App.getDaoSsn().getCurrentQuoteDao();
-            dao.insertOrReplaceInTx(currentQuotes);
+            currentQuoteDao.insertOrReplaceInTx(currentQuotes);
             PrefsHelper.get().setCurrentQuotesLut(TimeUtils.getNow());
             if (currentQuotes != null && currentQuotes.size() > 0) {
                 PrefsHelper.get().setCurrentQuotesTime(currentQuotes.get(0).getStamp());
