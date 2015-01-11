@@ -4,14 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import zmuzik.czechstocks.App;
+import zmuzik.czechstocks.utils.TimeUtils;
 
 public class PrefsHelper {
 
     //LUT = last update time
-    private static final String CURRENT_QUOTE_TIME = "CURRENT_QUOTE_TIME";
-    private static final String CURRENT_QUOTE_LUT = "CURRENT_QUOTE_LUT";
-    private static final String DIVIDEND_LUT = "DIVIDEND_LUT";
-    private static final String STOCK_INFO_LUT = "STOCK_INFO_LUT";
+    private static final String CURRENT_DATA_LUT = "CURRENT_DATA_LUT";
+    private static final String HIST_DATA_LUT = "HIST_DATA_LUT";
     private static final String GRAPH_TIMEFRAME = "GRAPH_TIMEFRAME";
 
     private static PrefsHelper instance = null;
@@ -32,36 +31,20 @@ public class PrefsHelper {
         return App.get().getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
     }
 
-    public void setCurrentQuotesTime(long timestamp) {
-        getPrefs().edit().putLong(CURRENT_QUOTE_TIME, timestamp).commit();
+    public void setCurrentDataLut(long timestamp) {
+        getPrefs().edit().putLong(CURRENT_DATA_LUT, timestamp).commit();
     }
 
-    public long getCurrentQuotesTime() {
-        return getPrefs().getLong(CURRENT_QUOTE_TIME, 0);
+    public long getCurrentDataLut() {
+        return getPrefs().getLong(CURRENT_DATA_LUT, 0);
     }
 
-    public void setCurrentQuotesLut(long timestamp) {
-        getPrefs().edit().putLong(CURRENT_QUOTE_LUT, timestamp).commit();
+    public void setHistoricalDataLut(long timestamp) {
+        getPrefs().edit().putLong(HIST_DATA_LUT, timestamp).commit();
     }
 
-    public long getCurrentQuotesLut() {
-        return getPrefs().getLong(CURRENT_QUOTE_LUT, 0);
-    }
-
-    public void setDividendsLut(long timestamp) {
-        getPrefs().edit().putLong(DIVIDEND_LUT, timestamp).apply();
-    }
-
-    public long getDividendsLut() {
-        return getPrefs().getLong(DIVIDEND_LUT, 0);
-    }
-
-    public void setStockDetailsLut(long timestamp) {
-        getPrefs().edit().putLong(STOCK_INFO_LUT, timestamp).apply();
-    }
-
-    public long getStockDetailsLut() {
-        return getPrefs().getLong(STOCK_INFO_LUT, 0);
+    public long getHistoricalDataLut() {
+        return getPrefs().getLong(HIST_DATA_LUT, 0);
     }
 
     public void setGraphTimeFrame(int timeFrame) {
@@ -70,5 +53,13 @@ public class PrefsHelper {
 
     public int getGraphTimeFrame() {
         return getPrefs().getInt(GRAPH_TIMEFRAME, 0);
+    }
+
+    public boolean isTimeToUpdateCurrent() {
+        return getCurrentDataLut() + TimeUtils.ONE_MINUTE < TimeUtils.getNow();
+    }
+
+    public boolean isTimeToUpdateHistorical() {
+        return getCurrentDataLut() + TimeUtils.FOUR_HOURS < TimeUtils.getNow();
     }
 }

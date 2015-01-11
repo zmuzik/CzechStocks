@@ -14,13 +14,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.androidplot.Plot;
+import com.androidplot.ui.AnchorPosition;
 import com.androidplot.ui.SizeLayoutType;
 import com.androidplot.ui.SizeMetrics;
+import com.androidplot.ui.XLayoutStyle;
+import com.androidplot.ui.YLayoutStyle;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYStepMode;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,21 +144,37 @@ public class StockGraphFragment extends Fragment {
         lineFill.setShader(new LinearGradient(0, 0, 0, 250, Color.rgb(0, 0, 150), Color.rgb(0, 0, 100), Shader.TileMode.MIRROR));
         priceFormat.setFillPaint(lineFill);
 
+        DecimalFormat rangeFormat = new DecimalFormat();
+        rangeFormat.setMinimumFractionDigits(2);
+        rangeFormat.setMaximumFractionDigits(2);
+
         stockGraph.clear();
         stockGraph.setDomainValueFormat(new GraphDateFormat(dateFormat));
+        stockGraph.setRangeValueFormat(rangeFormat);
         stockGraph.setDomainStep(XYStepMode.SUBDIVIDE, 8);
         stockGraph.addSeries(priceSeries, priceFormat);
         stockGraph.getLegendWidget().setVisible(false);
         stockGraph.setBorderStyle(Plot.BorderStyle.NONE, null, null);
-        stockGraph.setPlotMargins(0, 0, 0, 0);
-        stockGraph.setPlotPadding(0, 0, 0, 0);
-        stockGraph.setGridPadding(0, 10, 0, 0);
         stockGraph.getGraphWidget().setSize(new SizeMetrics(
                 0, SizeLayoutType.FILL,
                 0, SizeLayoutType.FILL));
         stockGraph.getBackgroundPaint().setColor(Color.TRANSPARENT);
         stockGraph.getGraphWidget().getBackgroundPaint().setColor(Color.TRANSPARENT);
         stockGraph.getGraphWidget().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
+
+        stockGraph.getGraphWidget().position(
+                150, XLayoutStyle.ABSOLUTE_FROM_LEFT,
+                150, YLayoutStyle.ABSOLUTE_FROM_TOP,
+                AnchorPosition.LEFT_TOP);
+
+        stockGraph.getRangeLabelWidget().position(
+                150, XLayoutStyle.ABSOLUTE_FROM_LEFT,
+                150, YLayoutStyle.ABSOLUTE_FROM_TOP,
+                AnchorPosition.LEFT_TOP);
+
+        stockGraph.getGraphWidget().setMarginTop(40);
+        stockGraph.getLegendWidget().setHeight(40);
+
         stockGraph.redraw();
     }
 
