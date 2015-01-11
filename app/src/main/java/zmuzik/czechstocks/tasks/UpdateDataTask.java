@@ -17,7 +17,6 @@ import zmuzik.czechstocks.dao.HistoricalQuoteDao;
 import zmuzik.czechstocks.dao.StockDetail;
 import zmuzik.czechstocks.dao.StockDetailDao;
 import zmuzik.czechstocks.dao.TodaysQuote;
-import zmuzik.czechstocks.dao.TodaysQuoteDao;
 import zmuzik.czechstocks.events.UpdateFinishedEvent;
 import zmuzik.czechstocks.events.UpdateStartedEvent;
 import zmuzik.czechstocks.helpers.PrefsHelper;
@@ -71,11 +70,8 @@ public class UpdateDataTask extends AsyncTask {
         long stamp = getLastTodaysQuoteStamp();
         List<TodaysQuote> todaysQuotes = App.getServerApi().getTodaysQuotes(stamp);
         if (todaysQuotes != null && todaysQuotes.size() > 0) {
-            TodaysQuoteDao dao = App.getDaoSsn().getTodaysQuoteDao();
-            if (isNewBusinessDay(stamp, todaysQuotes)) {
-                dao.deleteAll();
-            }
-            dao.insertOrReplaceInTx(todaysQuotes);
+            App.getDaoSsn().getTodaysQuoteDao().insertOrReplaceInTx(todaysQuotes);
+            deleteOldTodaysQuotes();
             return true;
         }
         return false;
@@ -143,12 +139,11 @@ public class UpdateDataTask extends AsyncTask {
         return result;
     }
 
-    boolean isNewBusinessDay(long localStamp, List<TodaysQuote> serverData) {
-        if (serverData != null && serverData.size() > 0) {
-            TodaysQuote quoteFromServer = serverData.get(0);
-            return (localStamp + TimeUtils.TEN_HOURS) < quoteFromServer.getStamp();
-        } else {
-            return false;
-        }
+    void deleteOldTodaysQuotes() {
+        long stamp = getLastTodaysQuoteStamp();
+        // set stamp to beginning of the last business day
+        stamp = stamp / TimeUtils.ONE_DAY;
+        SQLiteDatabase db = App.getDaoSsn().getDatabase();
+        db.execSQL("delete from todays_quote where stamp < " + stamp + ";");
     }
 }
