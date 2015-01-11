@@ -16,3 +16,5 @@ sqlite3 data.db "delete from todays_quote; vacuum;"
 now=`date +"%Y-%m-%d %H:%M:%S"`
 
 echo "$now table todays_quote deleted" >> $logFile
+
+sqlite3 data.db "select count(0)||' rows in table' from todays_quote;" >>  $logFile
