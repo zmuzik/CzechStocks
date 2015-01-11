@@ -4,6 +4,7 @@ package zmuzik.czechstocks;
 import java.util.List;
 
 import retrofit.http.GET;
+import retrofit.http.Path;
 import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.Dividend;
 import zmuzik.czechstocks.dao.HistoricalQuote;
@@ -21,9 +22,9 @@ public interface ServerApi {
     @GET("/stockDetails")
     List<StockDetail> getStockDetails();
 
-    @GET("/todaysQuotes")
-    List<TodaysQuote> getTodaysQuotes();
+    @GET("/todaysQuotes/{stamp}")
+    List<TodaysQuote> getTodaysQuotes(@Path("stamp") long stamp);
 
-    @GET("/historicalQuotes")
-    List<HistoricalQuote> getHistoricalQuotes();
+    @GET("/historicalQuotes/{stamp}")
+    List<HistoricalQuote> getHistoricalQuotes(@Path("stamp") long stamp);
 }

@@ -19,6 +19,7 @@ import com.androidplot.ui.SizeMetrics;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
+import com.androidplot.xy.XYStepMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,6 +142,7 @@ public class StockGraphFragment extends Fragment {
 
         stockGraph.clear();
         stockGraph.setDomainValueFormat(new GraphDateFormat(dateFormat));
+        stockGraph.setDomainStep(XYStepMode.SUBDIVIDE, 8);
         stockGraph.addSeries(priceSeries, priceFormat);
         stockGraph.getLegendWidget().setVisible(false);
         stockGraph.setBorderStyle(Plot.BorderStyle.NONE, null, null);
