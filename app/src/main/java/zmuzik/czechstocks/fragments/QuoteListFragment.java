@@ -73,7 +73,7 @@ public class QuoteListFragment extends ListFragment {
         mAdapter = new QuotationListAdapter(App.get(), items);
         setListAdapter(mAdapter);
         if (lastUpdatedValueTV != null && dataFromValueTV != null) {
-            lastUpdatedValueTV.setText(Utils.getFormattedDateAndTime(PrefsHelper.get().getCurrentDataLut()));
+            lastUpdatedValueTV.setText(Utils.getFormattedDateAndTime(PrefsHelper.get().getLastUpdateTime()));
             dataFromValueTV.setText(Utils.getFormattedDateAndTime(getDataStamp(items)));
         }
 

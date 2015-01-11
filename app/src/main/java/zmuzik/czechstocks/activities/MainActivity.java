@@ -74,24 +74,24 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         }
     }
 
-    @Override public void onPause() {
-        super.onPause();
-        App.getBus().unregister(this);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
 
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         mRefreshMenuItem = menu.findItem(R.id.action_refresh);
-        if (PrefsHelper.get().isTimeToUpdateCurrent()) {
-            actionDataRefresh();
+        if (updateInProgress) {
+            setMovingRefreshIcon();
         }
         return true;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    @Override public void onPause() {
+        super.onPause();
+        App.getBus().unregister(this);
     }
 
     @Override
@@ -165,7 +165,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     }
 
     @Subscribe public void onUpdateFinished(UpdateFinishedEvent event) {
-        setStaticRefreshIcon();
         updateInProgress = false;
+        setStaticRefreshIcon();
     }
 }

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ public class PortfolioListFragment extends ListFragment {
 
     @InjectView(R.id.lastUpdatedValueTV) TextView lastUpdatedValueTV;
     @InjectView(R.id.dataFromValueTV) TextView dataFromValueTV;
+    @InjectView(R.id.updateTimeInfo) LinearLayout updateTimeInfo;
 
     List<PortfolioItem> portfolioItems;
     PortfolioAdapter mAdapter;
@@ -68,8 +70,13 @@ public class PortfolioListFragment extends ListFragment {
         mAdapter = new PortfolioAdapter(App.get(), portfolioItems);
         setListAdapter(mAdapter);
         if (lastUpdatedValueTV != null && dataFromValueTV != null) {
-            lastUpdatedValueTV.setText(Utils.getFormattedDateAndTime(PrefsHelper.get().getCurrentDataLut()));
-            dataFromValueTV.setText(Utils.getFormattedDateAndTime(getDataStamp(portfolioItems)));
+            if (portfolioItems != null && portfolioItems.size() > 0) {
+                updateTimeInfo.setVisibility(View.VISIBLE);
+                lastUpdatedValueTV.setText(Utils.getFormattedDateAndTime(PrefsHelper.get().getLastUpdateTime()));
+                dataFromValueTV.setText(Utils.getFormattedDateAndTime(getDataStamp(portfolioItems)));
+            } else {
+                updateTimeInfo.setVisibility(View.GONE);
+            }
         }
 
         //add listener for long click (for deleting dialog)

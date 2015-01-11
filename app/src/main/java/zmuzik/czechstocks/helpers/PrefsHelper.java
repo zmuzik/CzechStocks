@@ -4,14 +4,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import zmuzik.czechstocks.App;
+import zmuzik.czechstocks.AppConf;
 import zmuzik.czechstocks.utils.TimeUtils;
 
 public class PrefsHelper {
 
-    //LUT = last update time
-    private static final String CURRENT_DATA_LUT = "CURRENT_DATA_LUT";
-    private static final String HIST_DATA_LUT = "HIST_DATA_LUT";
-    private static final String GRAPH_TIMEFRAME = "GRAPH_TIMEFRAME";
+
+    private static final String LAST_UPDATE_TIME = "lastUpdateTime";
+    private static final String GRAPH_TIME_FRAME = "graphTimeFrame";
 
     private static PrefsHelper instance = null;
     private final String PACKAGE_NAME;
@@ -31,35 +31,27 @@ public class PrefsHelper {
         return App.get().getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
     }
 
-    public void setCurrentDataLut(long timestamp) {
-        getPrefs().edit().putLong(CURRENT_DATA_LUT, timestamp).commit();
+    public void setLastUpdateTime(long timestamp) {
+        getPrefs().edit().putLong(LAST_UPDATE_TIME, timestamp).commit();
     }
 
-    public long getCurrentDataLut() {
-        return getPrefs().getLong(CURRENT_DATA_LUT, 0);
-    }
-
-    public void setHistoricalDataLut(long timestamp) {
-        getPrefs().edit().putLong(HIST_DATA_LUT, timestamp).commit();
-    }
-
-    public long getHistoricalDataLut() {
-        return getPrefs().getLong(HIST_DATA_LUT, 0);
+    public long getLastUpdateTime() {
+        return getPrefs().getLong(LAST_UPDATE_TIME, 0);
     }
 
     public void setGraphTimeFrame(int timeFrame) {
-        getPrefs().edit().putInt(GRAPH_TIMEFRAME, timeFrame).apply();
+        getPrefs().edit().putInt(GRAPH_TIME_FRAME, timeFrame).apply();
     }
 
     public int getGraphTimeFrame() {
-        return getPrefs().getInt(GRAPH_TIMEFRAME, 0);
+        return getPrefs().getInt(GRAPH_TIME_FRAME, 0);
     }
 
     public boolean isTimeToUpdateCurrent() {
-        return getCurrentDataLut() + TimeUtils.ONE_MINUTE < TimeUtils.getNow();
+        return getLastUpdateTime() + AppConf.CURRENT_DATA_UPDATE_INTERVAL < TimeUtils.getNow();
     }
 
     public boolean isTimeToUpdateHistorical() {
-        return getCurrentDataLut() + TimeUtils.FOUR_HOURS < TimeUtils.getNow();
+        return getLastUpdateTime() + AppConf.HIST_DATA_UPDATE_INTERVAL < TimeUtils.getNow();
     }
 }
