@@ -114,56 +114,10 @@ def get_stock_details():
     return response
 
 
-@app.route('/csapi/todaysQuotes')
-def get_todays_quotes():
-    db = get_db()
-    cur = db.execute('select isin, stamp, price, volume from todays_quote')
-    rows = cur.fetchall()
-
-    result_list = []
-    for row in rows:
-        d = collections.OrderedDict()
-        d['isin'] = row[0]
-        d['stamp'] = row[1]
-        d['price'] = row[2]
-        d['volume'] = row[3]
-
-        result_list.append(d)
-
-    #result_string = json.dumps(result_list, ensure_ascii=False).encode(encoding='utf-8')
-    result_string = json.dumps(result_list)
-
-    response = Response(result_string, status=200, mimetype='application/json')
-    return response
-
-
 @app.route('/csapi/todaysQuotes/<timestamp>')
 def get_todays_quotes_newer_than(timestamp):
     db = get_db()
     cur = db.execute('select isin, stamp, price, volume from todays_quote where stamp > ' + timestamp)
-    rows = cur.fetchall()
-
-    result_list = []
-    for row in rows:
-        d = collections.OrderedDict()
-        d['isin'] = row[0]
-        d['stamp'] = row[1]
-        d['price'] = row[2]
-        d['volume'] = row[3]
-
-        result_list.append(d)
-
-    #result_string = json.dumps(result_list, ensure_ascii=False).encode(encoding='utf-8')
-    result_string = json.dumps(result_list)
-
-    response = Response(result_string, status=200, mimetype='application/json')
-    return response
-
-
-@app.route('/csapi/historicalQuotes')
-def get_historical_quotes():
-    db = get_db()
-    cur = db.execute('select isin, stamp, price, volume from historical_quote')
     rows = cur.fetchall()
 
     result_list = []
