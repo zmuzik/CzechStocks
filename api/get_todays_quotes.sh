@@ -12,12 +12,20 @@ sqlFile=$appRootDir"/tmp/update_todays_quotes.sql"
 logFile=$appRootDir"/log/get_todays_data.log"
 dbFile=$appRootDir"/data.db"
 
+now=`date +"%Y-%m-%d %H:%M:%S"`
+echo "$now script started" >> $logFile
+
 #quit if exchange closed today
+
 today=`date +%Y-%m-%d`
 if  grep -q $today $closedDaysFile; then
-    now=`date +"%Y-%m-%d %H:%M:%S"`
-    echo "$now skipping run - stock exchange closed today" >> $logFile
-    exit 0;
+  echo "$now skipping run - stock exchange closed today" >> $logFile
+  exit 0;
+fi
+
+oldStamp=`sqlite3 $dbFile "select max(stamp) from todays_quote;"`
+if [ -z "$oldStamp" ]; then
+  oldStamp=0
 fi
 
 echo "begin transaction;" > $sqlFile
@@ -36,8 +44,7 @@ do
   month=`echo $record | cut -d" " -f5`
   day=`echo $record | cut -d" " -f6`
   baseStamp=`TZ="Europe/Prague" date -d "$year-$month-$day" +%s`"000"
-  oldStamp=`sqlite3 $dbFile "select max(stamp) from todays_quote;"`
-
+  
   awk -v baseStamp=$baseStamp -v isin=$isin -v oldStamp=$oldStamp '{
      hour = $7;
      minute = $8;
@@ -53,11 +60,18 @@ do
   rm $rawFile $tableFile
 done
 
+maxStamp=`sqlite3 $dbFile "select max(stamp) from todays_quote;"`
+
+lim=$((maxStamp-(maxStamp%86400000)))
+
+echo "delete from todays_quote where stamp < "$lim";" >> $sqlFile
+
 echo "commit;" >> $sqlFile
+echo "vacuum;" >> $sqlFile
 
 sqlite3 $dbFile < $sqlFile
 
-rm $sqlFile
+#rm $sqlFile
 
 endStamp=`date +%s`
 duration=$((endStamp-startStamp))
