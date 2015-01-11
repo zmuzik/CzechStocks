@@ -6,7 +6,9 @@ public class TimeUtils {
 
     public final static long ONE_SECOND = 1000;
     public final static long ONE_MINUTE = 60 * ONE_SECOND;
-    public final static long FIVE_MINUTES = ONE_MINUTE * 5;
+    public final static long ONE_HOUR = ONE_MINUTE * 60;
+    public final static long FOUR_HOURS = ONE_HOUR * 4;
+    public final static long TEN_HOURS = ONE_HOUR * 10;
 
     public static long getNow() {
         return System.currentTimeMillis();

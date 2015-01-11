@@ -10,8 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.crashlytics.android.Crashlytics;
+import com.squareup.otto.Subscribe;
 
 import java.util.List;
 
@@ -22,6 +26,7 @@ import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.activities.EditPortfolioItemActivity;
 import zmuzik.czechstocks.adapters.PortfolioAdapter;
 import zmuzik.czechstocks.dao.PortfolioItem;
+import zmuzik.czechstocks.events.UpdateFinishedEvent;
 import zmuzik.czechstocks.helpers.PrefsHelper;
 import zmuzik.czechstocks.utils.Utils;
 
@@ -31,6 +36,7 @@ public class PortfolioListFragment extends ListFragment {
 
     @InjectView(R.id.lastUpdatedValueTV) TextView lastUpdatedValueTV;
     @InjectView(R.id.dataFromValueTV) TextView dataFromValueTV;
+    @InjectView(R.id.updateTimeInfo) LinearLayout updateTimeInfo;
 
     List<PortfolioItem> portfolioItems;
     PortfolioAdapter mAdapter;
@@ -39,6 +45,7 @@ public class PortfolioListFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         refreshData();
+        App.getBus().register(this);
     }
 
     @Override
@@ -46,6 +53,11 @@ public class PortfolioListFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_portfolio, container, false);
         ButterKnife.inject(this, view);
         return view;
+    }
+
+    @Override public void onPause() {
+        super.onPause();
+        App.getBus().unregister(this);
     }
 
     @Override public void onDestroyView() {
@@ -58,8 +70,13 @@ public class PortfolioListFragment extends ListFragment {
         mAdapter = new PortfolioAdapter(App.get(), portfolioItems);
         setListAdapter(mAdapter);
         if (lastUpdatedValueTV != null && dataFromValueTV != null) {
-            lastUpdatedValueTV.setText(Utils.getFormattedDateAndTime(PrefsHelper.get().getCurrentQuotesLut()));
-            dataFromValueTV.setText(Utils.getFormattedDateAndTime(PrefsHelper.get().getCurrentQuotesTime()));
+            if (portfolioItems != null && portfolioItems.size() > 0) {
+                updateTimeInfo.setVisibility(View.VISIBLE);
+                lastUpdatedValueTV.setText(Utils.getFormattedDateAndTime(PrefsHelper.get().getLastUpdateTime()));
+                dataFromValueTV.setText(Utils.getFormattedDateAndTime(getDataStamp(portfolioItems)));
+            } else {
+                updateTimeInfo.setVisibility(View.GONE);
+            }
         }
 
         //add listener for long click (for deleting dialog)
@@ -75,13 +92,24 @@ public class PortfolioListFragment extends ListFragment {
         });
     }
 
+    long getDataStamp(List<PortfolioItem> portfolioItems) {
+        long result = 0L;
+        try {
+            if (portfolioItems != null && portfolioItems.size() > 0) {
+                result = portfolioItems.get(0).getStock().getCurrentQuote().getStamp();
+            }
+        } catch (Exception e) {
+            Crashlytics.logException(e);
+        }
+        return result;
+    }
+
     @Override
     public void onListItemClick(ListView l, View v, int pos, long id) {
-        if (pos < mAdapter.getCount() - 1) {
-            Intent intent = new Intent(getActivity(), EditPortfolioItemActivity.class);
-            intent.putExtra("isin", mAdapter.getItem(pos).getIsin());
-            startActivity(intent);
-        }
+        if (pos == mAdapter.getCount() - 1) return;
+        Intent intent = new Intent(getActivity(), EditPortfolioItemActivity.class);
+        intent.putExtra("isin", mAdapter.getItem(pos).getIsin());
+        startActivity(intent);
     }
 
     public void onListItemLongClick(int pos, String quoteName) {
@@ -103,5 +131,9 @@ public class PortfolioListFragment extends ListFragment {
             }
         });
         builder.show();
+    }
+
+    @Subscribe public void onUpdateFinished(UpdateFinishedEvent event) {
+        refreshData();
     }
 }

@@ -13,6 +13,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+import com.squareup.otto.Subscribe;
+
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -24,6 +27,7 @@ import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.activities.StockDetailActivity;
 import zmuzik.czechstocks.adapters.QuotationListAdapter;
 import zmuzik.czechstocks.dao.Stock;
+import zmuzik.czechstocks.events.UpdateFinishedEvent;
 import zmuzik.czechstocks.helpers.PrefsHelper;
 import zmuzik.czechstocks.utils.Utils;
 
@@ -40,6 +44,7 @@ public class QuoteListFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         refreshData();
+        App.getBus().register(this);
     }
 
     @Override
@@ -47,6 +52,11 @@ public class QuoteListFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_stocks_list, container, false);
         ButterKnife.inject(this, view);
         return view;
+    }
+
+    @Override public void onPause() {
+        super.onPause();
+        App.getBus().unregister(this);
     }
 
     @Override public void onDestroyView() {
@@ -58,13 +68,13 @@ public class QuoteListFragment extends ListFragment {
         QueryBuilder qb = App.getDaoSsn().getStockDao().queryBuilder();
         qb.where(new WhereCondition.StringCondition("SHOW_IN_QUOTES_LIST = 1 AND ISIN IN " +
                 "(SELECT ISIN FROM CURRENT_QUOTE) ORDER BY NAME COLLATE LOCALIZED ASC"));
-        List items = qb.list();
+        List<Stock> items = qb.list();
 
         mAdapter = new QuotationListAdapter(App.get(), items);
         setListAdapter(mAdapter);
         if (lastUpdatedValueTV != null && dataFromValueTV != null) {
-            lastUpdatedValueTV.setText(Utils.getFormattedDateAndTime(PrefsHelper.get().getCurrentQuotesLut()));
-            dataFromValueTV.setText(Utils.getFormattedDateAndTime(PrefsHelper.get().getCurrentQuotesTime()));
+            lastUpdatedValueTV.setText(Utils.getFormattedDateAndTime(PrefsHelper.get().getLastUpdateTime()));
+            dataFromValueTV.setText(Utils.getFormattedDateAndTime(getDataStamp(items)));
         }
 
         //add listener for long click (for deleting dialog)
@@ -76,6 +86,18 @@ public class QuoteListFragment extends ListFragment {
                 return true;
             }
         });
+    }
+
+    long getDataStamp(List<Stock> items) {
+        long result = 0L;
+        try {
+            if (items != null && items.size() > 0) {
+                result = items.get(0).getCurrentQuote().getStamp();
+            }
+        } catch (Exception e) {
+            Crashlytics.logException(e);
+        }
+        return result;
     }
 
     @Override
@@ -105,5 +127,9 @@ public class QuoteListFragment extends ListFragment {
             }
         });
         builder.show();
+    }
+
+    @Subscribe public void onUpdateFinished(UpdateFinishedEvent event) {
+        refreshData();
     }
 }

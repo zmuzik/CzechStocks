@@ -42,7 +42,15 @@
     </LinearLayout>
 
     <com.androidplot.xy.XYPlot
+        android:layout_margin="0dp"
+        android:padding="0dp"
         android:id="@+id/stockGraph"
+        androidPlot.graphWidget.marginLeft="25sp"
+        androidPlot.graphWidget.marginRight="25sp"
+        androidPlot.graphWidget.marginTop="10sp"
+        androidPlot.graphWidget.marginBottom="5sp"
+        androidPlot.graphWidget.rangeLabelPaint.textSize="10sp"
+        androidPlot.graphWidget.domainLabelPaint.textSize="10sp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/timeButtons"/>

@@ -21,6 +21,7 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYStepMode;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +68,7 @@ public class StockGraphFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_stock_graph, container, false);
         ButterKnife.inject(this, view);
+        stockGraph.setVisibility(View.INVISIBLE);
         return view;
     }
 
@@ -140,15 +142,17 @@ public class StockGraphFragment extends Fragment {
         lineFill.setShader(new LinearGradient(0, 0, 0, 250, Color.rgb(0, 0, 150), Color.rgb(0, 0, 100), Shader.TileMode.MIRROR));
         priceFormat.setFillPaint(lineFill);
 
+        DecimalFormat rangeFormat = new DecimalFormat();
+        rangeFormat.setMinimumFractionDigits(2);
+        rangeFormat.setMaximumFractionDigits(2);
+
         stockGraph.clear();
-        stockGraph.setDomainValueFormat(new GraphDateFormat(dateFormat));
-        stockGraph.setDomainStep(XYStepMode.SUBDIVIDE, 8);
         stockGraph.addSeries(priceSeries, priceFormat);
+        stockGraph.setDomainValueFormat(new GraphDateFormat(dateFormat));
+        stockGraph.setRangeValueFormat(rangeFormat);
+        stockGraph.setDomainStep(XYStepMode.SUBDIVIDE, 6);
         stockGraph.getLegendWidget().setVisible(false);
         stockGraph.setBorderStyle(Plot.BorderStyle.NONE, null, null);
-        stockGraph.setPlotMargins(0, 0, 0, 0);
-        stockGraph.setPlotPadding(0, 0, 0, 0);
-        stockGraph.setGridPadding(0, 10, 0, 0);
         stockGraph.getGraphWidget().setSize(new SizeMetrics(
                 0, SizeLayoutType.FILL,
                 0, SizeLayoutType.FILL));
@@ -156,6 +160,7 @@ public class StockGraphFragment extends Fragment {
         stockGraph.getGraphWidget().getBackgroundPaint().setColor(Color.TRANSPARENT);
         stockGraph.getGraphWidget().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
         stockGraph.redraw();
+        stockGraph.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.stockGraph) void onStockGraphClick() {

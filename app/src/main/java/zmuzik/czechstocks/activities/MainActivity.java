@@ -15,19 +15,19 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.squareup.otto.Subscribe;
+
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
-import zmuzik.czechstocks.UpdateListener;
 import zmuzik.czechstocks.adapters.SectionsPagerAdapter;
-import zmuzik.czechstocks.fragments.PortfolioListFragment;
-import zmuzik.czechstocks.fragments.QuoteListFragment;
+import zmuzik.czechstocks.events.UpdateFinishedEvent;
+import zmuzik.czechstocks.events.UpdateStartedEvent;
 import zmuzik.czechstocks.helpers.PrefsHelper;
 import zmuzik.czechstocks.tasks.FillDbTablesTask;
-import zmuzik.czechstocks.tasks.UpdateCurrentDataTask;
+import zmuzik.czechstocks.tasks.UpdateDataTask;
 import zmuzik.czechstocks.utils.DbUtils;
-import zmuzik.czechstocks.utils.TimeUtils;
 
-public class MainActivity extends Activity implements ActionBar.TabListener, UpdateListener {
+public class MainActivity extends Activity implements ActionBar.TabListener {
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -68,28 +68,30 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
 
     @Override protected void onResume() {
         super.onResume();
-        if (!updateInProgress && isTimeToUpdate()) {
+        App.getBus().register(this);
+        if (PrefsHelper.get().isTimeToUpdateCurrent()) {
             actionDataRefresh();
         }
-    }
-
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        mRefreshMenuItem = menu.findItem(R.id.action_refresh);
-        if (!updateInProgress && isTimeToUpdate()) {
-            actionDataRefresh();
-        }
-        return true;
-    }
-
-    boolean isTimeToUpdate() {
-        return PrefsHelper.get().getCurrentQuotesLut() + TimeUtils.ONE_MINUTE < TimeUtils.getNow();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        mRefreshMenuItem = menu.findItem(R.id.action_refresh);
+        if (updateInProgress) {
+            setMovingRefreshIcon();
+        }
+        return true;
+    }
+
+    @Override public void onPause() {
+        super.onPause();
+        App.getBus().unregister(this);
     }
 
     @Override
@@ -123,9 +125,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
     }
 
     void actionDataRefresh() {
-        updateInProgress = true;
-        setMovingRefreshIcon();
-        new UpdateCurrentDataTask(this).execute();
+        if (!updateInProgress) {
+            updateInProgress = true;
+            new UpdateDataTask().execute();
+        }
     }
 
     void setMovingRefreshIcon() {
@@ -144,16 +147,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
         mRefreshMenuItem.setActionView(null);
     }
 
-    public void refreshFragments() {
-        if (mSectionsPagerAdapter == null) return;
-        if (mSectionsPagerAdapter.getItem(0) != null) {
-            ((QuoteListFragment) mSectionsPagerAdapter.getItem(0)).refreshData();
-        }
-        if (mSectionsPagerAdapter.getItem(1) != null) {
-            ((PortfolioListFragment) mSectionsPagerAdapter.getItem(1)).refreshData();
-        }
-    }
-
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         mViewPager.setCurrentItem(tab.getPosition());
@@ -161,17 +154,18 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Upd
 
     @Override
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-
     }
 
     @Override
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
-
     }
 
-    @Override public void loadData() {
-        refreshFragments();
-        setStaticRefreshIcon();
+    @Subscribe public void onUpdateStarted(UpdateStartedEvent event) {
+        setMovingRefreshIcon();
+    }
+
+    @Subscribe public void onUpdateFinished(UpdateFinishedEvent event) {
         updateInProgress = false;
+        setStaticRefreshIcon();
     }
 }
