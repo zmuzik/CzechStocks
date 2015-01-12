@@ -142,7 +142,7 @@ public class UpdateDataTask extends AsyncTask {
     void deleteOldTodaysQuotes() {
         long stamp = getLastTodaysQuoteStamp();
         // set stamp to beginning of the last business day
-        stamp = stamp / TimeUtils.ONE_DAY;
+        stamp = stamp - (stamp % TimeUtils.ONE_DAY);
         SQLiteDatabase db = App.getDaoSsn().getDatabase();
         db.execSQL("delete from todays_quote where stamp < " + stamp + ";");
     }

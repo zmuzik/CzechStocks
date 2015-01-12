@@ -69,6 +69,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     @Override protected void onResume() {
         super.onResume();
         App.getBus().register(this);
+        if (!updateInProgress) {
+            setStaticRefreshIcon();
+        }
         if (PrefsHelper.get().isTimeToUpdateCurrent()) {
             actionDataRefresh();
         }
