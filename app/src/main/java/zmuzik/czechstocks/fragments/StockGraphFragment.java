@@ -102,6 +102,11 @@ public class StockGraphFragment extends Fragment {
 
         //historical quotes
         List<HistoricalQuote> quoteList = getHistoricalQuoteList(graphTimeFrame);
+        //hack - add 4 hours to the last item so that the last x axis label is correct
+        if (quoteList != null && quoteList.size() > 0) {
+            HistoricalQuote quote = quoteList.get(quoteList.size() - 1);
+            quote.setStamp(quote.getStamp() + TimeUtils.FOUR_HOURS);
+        }
         for (HistoricalQuote historicalQuote : quoteList) {
             mPrices.add(historicalQuote.getPrice());
             mDates.add(historicalQuote.getStamp());
