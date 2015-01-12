@@ -45,6 +45,7 @@ public class UpdateDataTask extends AsyncTask {
                 historyUpdated = updateHistoricalData();
                 stockInfoUpdated = updateStockDetails();
                 stockInfoUpdated = stockInfoUpdated | updateDividends();
+                PrefsHelper.get().setLastHistUpdateTime(TimeUtils.getNow());
             }
 
             if (currentDataUpdated || historyUpdated || stockInfoUpdated) {
