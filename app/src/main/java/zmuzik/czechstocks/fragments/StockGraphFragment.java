@@ -137,6 +137,7 @@ public class StockGraphFragment extends Fragment {
     }
 
     void drawGraph() {
+        if (stockGraph == null) return;
         SimpleXYSeries priceSeries = new SimpleXYSeries(mDates, mPrices, null);
         LineAndPointFormatter priceFormat = new LineAndPointFormatter(
                 Color.rgb(0, 0, 200),           // line color
