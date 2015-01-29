@@ -59,11 +59,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
             actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
         }
 
-        // fill tables with default data if there's new db version
-        if (!DbUtils.getInstance().isCurrentDbVersion()) {
-            FillDbTablesTask fillDbTablesTask = new FillDbTablesTask(this);
-            fillDbTablesTask.execute();
-        }
+        //fill the default data (especially historical) if necessary
+        if (!DbUtils.getInstance().isDataFilled()) new FillDbTablesTask(this).execute();
     }
 
     @Override protected void onResume() {

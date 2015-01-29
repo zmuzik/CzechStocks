@@ -10,7 +10,7 @@ import java.lang.ref.WeakReference;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.utils.DbUtils;
 
-public class FillDbTablesTask extends AsyncTask<Void, Integer, Void>{
+public class FillDbTablesTask extends AsyncTask<Void, Integer, Void> {
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -45,16 +45,13 @@ public class FillDbTablesTask extends AsyncTask<Void, Integer, Void>{
     @Override
     protected Void doInBackground(Void... voids) {
         DbUtils dbUtils = DbUtils.getInstance();
-        if (!dbUtils.isCurrentDbVersion()) {
-            dbUtils.fillStockTable();
-            onProgressUpdate(2);
-            dbUtils.fillDividendTable();
-            onProgressUpdate(4);
-            dbUtils.fillStockDetailTable();
-            onProgressUpdate(6);
-            dbUtils.fillHistoricalQuoteTable(this);
-            dbUtils.saveCurrentDbVersion();
-        }
+        dbUtils.fillStockTable();
+        onProgressUpdate(2);
+        dbUtils.fillDividendTable();
+        onProgressUpdate(4);
+        dbUtils.fillStockDetailTable();
+        onProgressUpdate(6);
+        dbUtils.fillHistoricalQuoteTable(this);
         return null;
     }
 
