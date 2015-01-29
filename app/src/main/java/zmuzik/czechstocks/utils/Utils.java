@@ -15,6 +15,10 @@ import zmuzik.czechstocks.R;
 
 public class Utils {
 
+    private static final String TIME_FORMAT_DATE = "yyyy-MM-dd";
+    private static final String TIME_FORMAT_DATE_TIME = "yyyy-MM-dd HH:mm";
+    private static final String TIME_FORMAT_DATE_TIME_ZONE = "yyyy-MM-dd HH:mm z";
+
     public static String getFormattedDecimal(double value, int decPlaces) {
         Locale currentLocale = Locale.getDefault();
         NumberFormat numberFormatter = NumberFormat.getNumberInstance(currentLocale);
@@ -44,13 +48,19 @@ public class Utils {
 
     public static String getFormattedDate(long timestamp) {
         if (timestamp == 0L) return "";
-        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT_DATE);
         return timeFormat.format(new Date(timestamp));
     }
 
     public static String getFormattedDateAndTime(long timestamp) {
         if (timestamp == 0L) return "";
-        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT_DATE_TIME);
+        return timeFormat.format(new Date(timestamp));
+    }
+
+    public static String getFormattedDateTimeAndZone(long timestamp) {
+        if (timestamp == 0L) return "";
+        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT_DATE_TIME_ZONE);
         return timeFormat.format(new Date(timestamp));
     }
 
