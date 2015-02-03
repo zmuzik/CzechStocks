@@ -1,7 +1,5 @@
 package zmuzik.czechstocks.utils;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
@@ -21,7 +19,6 @@ import zmuzik.czechstocks.tasks.FillDbTablesTask;
 public class DbUtils {
 
     private final String TAG = this.getClass().getSimpleName();
-    private final String APP_VERSION_CODE_KEY = "appVersionCode";
 
     private static DbUtils instance = null;
 
@@ -32,32 +29,8 @@ public class DbUtils {
         return instance;
     }
 
-    public boolean isCurrentDbVersion() {
-        SharedPreferences sharedPref = App.get().getSharedPreferences(App.get().getPackageName(), Context.MODE_PRIVATE);
-        try {
-            if (sharedPref.contains(APP_VERSION_CODE_KEY)) {
-                int dbVersionCode = sharedPref.getInt(APP_VERSION_CODE_KEY, 0);
-                int appVersionCode = App.get().getPackageManager().getPackageInfo(App.get().getPackageName(), 0).versionCode;
-                return (dbVersionCode == appVersionCode);
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            Crashlytics.logException(e);
-            return false;
-        }
-    }
-
-    public void saveCurrentDbVersion() {
-        SharedPreferences sharedPref = App.get().getSharedPreferences(App.get().getPackageName(), Context.MODE_PRIVATE);
-        try {
-            int appVersionCode = App.get().getPackageManager().getPackageInfo(App.get().getPackageName(), 0).versionCode;
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putInt(APP_VERSION_CODE_KEY, appVersionCode);
-            editor.commit();
-        } catch (Exception e) {
-            Crashlytics.logException(e);
-        }
+    public boolean isDataFilled() {
+        return App.getDaoSsn().getHistoricalQuoteDao().queryBuilder().limit(1).list().size() > 0;
     }
 
     public void fillStockTable() {
