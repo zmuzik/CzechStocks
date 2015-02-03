@@ -23,7 +23,7 @@ fi
 
 curl -o $rawFile $url
 
-timeStr=`grep "<strong>" $rawFile | sed 's/&nbsp;//g' | sed 's/strong//g' | tr "<>." "   "`
+timeStr=`grep "ctl00_BCPP_jsdate" $rawFile | head -n 1 | cut -d\" -f 6  | sed 's/&nbsp;//g' | sed 's/strong//g' | tr "<>." "   "`
 
 year=`echo $timeStr | cut -d' ' -f 3`
 month=`echo $timeStr | cut -d' ' -f 2`
