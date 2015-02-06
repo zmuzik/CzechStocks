@@ -2,6 +2,7 @@ package zmuzik.czechstocks.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -13,7 +14,7 @@ import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.StockDao;
 
 
-public class StockDetailActivity extends Activity {
+public class StockDetailActivity extends ActionBarActivity {
 
     private final String TAG = this.getClass().getSimpleName();
 

@@ -1,13 +1,13 @@
 package zmuzik.czechstocks.activities;
 
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +27,7 @@ import zmuzik.czechstocks.tasks.FillDbTablesTask;
 import zmuzik.czechstocks.tasks.UpdateDataTask;
 import zmuzik.czechstocks.utils.DbUtils;
 
-public class MainActivity extends Activity implements ActionBar.TabListener {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -41,11 +41,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final ActionBar actionBar = getActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         }
-        mSectionsPagerAdapter = new SectionsPagerAdapter(App.get(), getFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(App.get(), getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -147,19 +147,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         mRefreshMenuItem.setActionView(null);
     }
 
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        mViewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-    }
-
-    @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
-    }
-
     @Subscribe public void onUpdateStarted(UpdateStartedEvent event) {
         setMovingRefreshIcon();
     }
@@ -167,5 +154,17 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     @Subscribe public void onUpdateFinished(UpdateFinishedEvent event) {
         updateInProgress = false;
         setStaticRefreshIcon();
+    }
+
+    @Override public void onTabSelected(Tab tab, FragmentTransaction fragmentTransaction) {
+        mViewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override public void onTabUnselected(Tab tab, FragmentTransaction fragmentTransaction) {
+
+    }
+
+    @Override public void onTabReselected(Tab tab, FragmentTransaction fragmentTransaction) {
+
     }
 }

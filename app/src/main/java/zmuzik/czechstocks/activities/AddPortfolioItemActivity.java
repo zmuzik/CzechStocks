@@ -1,8 +1,8 @@
 package zmuzik.czechstocks.activities;
 
-import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +23,7 @@ import zmuzik.czechstocks.dao.PortfolioItem;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.utils.Utils;
 
-public class AddPortfolioItemActivity extends Activity {
+public class AddPortfolioItemActivity extends ActionBarActivity {
 
     private final String TAG = this.getClass().getSimpleName();
 
