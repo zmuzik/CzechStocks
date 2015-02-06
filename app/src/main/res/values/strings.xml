@@ -65,5 +65,6 @@
     <string name="one_year">1Y</string>
     <string name="five_years">5Y</string>
     <string name="all">All</string>
+    <string name="action_add">Add</string>
 
 </resources>

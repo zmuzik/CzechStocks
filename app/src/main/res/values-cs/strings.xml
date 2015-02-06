@@ -66,5 +66,6 @@
     <string name="one_year">1Y</string>
     <string name="five_years">5Y</string>
     <string name="all">Vše</string>
+    <string name="action_add">Přidat</string>
 
 </resources>
