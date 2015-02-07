@@ -1,6 +1,5 @@
 package zmuzik.czechstocks.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -54,16 +53,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override public void onPause() {
         super.onPause();
-    }
-
-    void actionAddStock() {
-        Intent intent = new Intent(this, AddStockActivity.class);
-        startActivity(intent);
-    }
-
-    void actionAddPortfolioItem() {
-        Intent intent = new Intent(this, AddPortfolioItemActivity.class);
-        startActivity(intent);
     }
 
     @Override public void onTabSelected(Tab tab, FragmentTransaction fragmentTransaction) {

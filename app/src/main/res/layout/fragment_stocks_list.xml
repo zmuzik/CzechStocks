@@ -73,4 +73,14 @@
         android:gravity="center"
         android:text="@string/no_data_stocks_list"/>
 
+    <com.shamanland.fab.FloatingActionButton
+        android:id="@+id/fabAdd"
+        style="@style/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_action_new"
+        />
+
 </RelativeLayout>

@@ -21,10 +21,12 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import de.greenrobot.dao.query.QueryBuilder;
 import de.greenrobot.dao.query.WhereCondition;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
+import zmuzik.czechstocks.activities.AddStockActivity;
 import zmuzik.czechstocks.activities.StockDetailActivity;
 import zmuzik.czechstocks.adapters.QuotationListAdapter;
 import zmuzik.czechstocks.dao.Stock;
@@ -141,6 +143,10 @@ public class QuoteListFragment extends ListFragment
             }
         });
         builder.show();
+    }
+
+    @OnClick(R.id.fabAdd) void onFabClicked(View v) {
+        startActivity(new Intent(getActivity(), AddStockActivity.class));
     }
 
     @Subscribe public void onUpdateFinished(UpdateFinishedEvent event) {

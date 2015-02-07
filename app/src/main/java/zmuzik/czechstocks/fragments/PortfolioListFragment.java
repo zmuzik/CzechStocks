@@ -1,11 +1,11 @@
 package zmuzik.czechstocks.fragments;
 
 import android.app.AlertDialog;
-import android.support.v4.app.ListFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +22,10 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
+import zmuzik.czechstocks.activities.AddPortfolioItemActivity;
 import zmuzik.czechstocks.activities.EditPortfolioItemActivity;
 import zmuzik.czechstocks.adapters.PortfolioAdapter;
 import zmuzik.czechstocks.dao.PortfolioItem;
@@ -145,6 +147,10 @@ public class PortfolioListFragment extends ListFragment
             }
         });
         builder.show();
+    }
+
+    @OnClick(R.id.fabAdd) void onFabClicked(View v) {
+        startActivity(new Intent(getActivity(), AddPortfolioItemActivity.class));
     }
 
     @Subscribe public void onUpdateFinished(UpdateFinishedEvent event) {
