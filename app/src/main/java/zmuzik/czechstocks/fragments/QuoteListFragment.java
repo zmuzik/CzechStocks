@@ -1,11 +1,12 @@
 package zmuzik.czechstocks.fragments;
 
 import android.app.AlertDialog;
-import android.support.v4.app.ListFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,29 +30,42 @@ import zmuzik.czechstocks.adapters.QuotationListAdapter;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.events.UpdateFinishedEvent;
 import zmuzik.czechstocks.helpers.PrefsHelper;
+import zmuzik.czechstocks.tasks.UpdateDataTask;
 import zmuzik.czechstocks.utils.Utils;
 
-public class QuoteListFragment extends ListFragment {
+public class QuoteListFragment extends ListFragment
+        implements SwipeRefreshLayout.OnRefreshListener {
 
     final String TAG = this.getClass().getSimpleName();
 
     @InjectView(R.id.lastUpdatedValueTV) TextView lastUpdatedValueTV;
     @InjectView(R.id.dataFromValueTV) TextView dataFromValueTV;
+    @InjectView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     QuotationListAdapter mAdapter;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_stocks_list, container, false);
+        ButterKnife.inject(this, view);
+        swipeContainer.setOnRefreshListener(this);
+        swipeContainer.setProgressBackgroundColor(R.color.gray);
+        swipeContainer.setColorSchemeResources(R.color.red, R.color.lime);
+        return view;
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         refreshData();
         App.getBus().register(this);
+        if (PrefsHelper.get().isTimeToUpdateCurrent()) {
+            new UpdateDataTask().execute();
+        }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_stocks_list, container, false);
-        ButterKnife.inject(this, view);
-        return view;
+    @Override public void onRefresh() {
+        new UpdateDataTask().execute();
     }
 
     @Override public void onPause() {
@@ -131,5 +145,6 @@ public class QuoteListFragment extends ListFragment {
 
     @Subscribe public void onUpdateFinished(UpdateFinishedEvent event) {
         refreshData();
+        if (swipeContainer != null) swipeContainer.setRefreshing(false);
     }
 }

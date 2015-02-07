@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/updateTimeInfo"
@@ -22,13 +22,13 @@
                 android:id="@+id/lastUpdatedLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/last_updated" />
+                android:text="@string/last_updated"/>
 
             <TextView
                 android:id="@+id/dataFromLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/data_from" />
+                android:text="@string/data_from"/>
         </LinearLayout>
 
         <LinearLayout
@@ -41,30 +41,36 @@
                 android:id="@+id/lastUpdatedValueTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="" />
+                android:text=""/>
 
             <TextView
                 android:id="@+id/dataFromValueTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="" />
+                android:text=""/>
         </LinearLayout>
     </LinearLayout>
 
-    <ListView
-        android:id="@id/android:list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/updateTimeInfo"
-        android:layout_alignBaseline="@id/updateTimeInfo"
-        android:drawSelectorOnTop="false"
-        android:gravity="center" />
+        android:layout_alignBaseline="@id/updateTimeInfo">
+
+        <ListView
+            android:id="@id/android:list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawSelectorOnTop="false"
+            android:gravity="center"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@id/android:empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/no_data_stocks_list" />
+        android:text="@string/no_data_stocks_list"/>
 
 </RelativeLayout>

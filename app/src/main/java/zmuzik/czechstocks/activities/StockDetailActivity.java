@@ -1,6 +1,5 @@
 package zmuzik.czechstocks.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -32,6 +31,8 @@ public class StockDetailActivity extends ActionBarActivity {
         loadStockFromDb();
         setTitle(mStock.getName());
         setContentView(getLayout());
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.ic_launcher);
         ButterKnife.inject(this);
     }
 
