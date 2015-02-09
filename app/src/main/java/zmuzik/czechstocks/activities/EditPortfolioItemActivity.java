@@ -16,6 +16,7 @@ import zmuzik.czechstocks.dao.Stock;
 
 public class EditPortfolioItemActivity extends AddPortfolioItemActivity {
 
+
     @InjectView(R.id.stockNameTV) TextView stockNameTV;
     @InjectView(R.id.numberOfStocksET) EditText numberOfStocksET;
     @InjectView(R.id.averagePriceET) EditText averagePriceET;

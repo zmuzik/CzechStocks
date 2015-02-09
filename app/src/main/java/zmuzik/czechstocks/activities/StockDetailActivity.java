@@ -2,11 +2,13 @@ package zmuzik.czechstocks.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.dao.Stock;
@@ -17,23 +19,26 @@ public class StockDetailActivity extends ActionBarActivity {
 
     private final String TAG = this.getClass().getSimpleName();
 
+    @InjectView(R.id.toolbar) Toolbar toolbar;
+
     Stock mStock;
     String mIsin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mIsin = getIntent().getStringExtra("isin");
         if (mIsin == null) {
             Crashlytics.log(Log.ERROR, TAG, "Invalid ISIN. Unable to open stock detail");
             finish();
         }
         loadStockFromDb();
-        setTitle(mStock.getName());
+
         setContentView(getLayout());
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_launcher);
         ButterKnife.inject(this);
+        setSupportActionBar(toolbar);
+        setTitle(mStock.getName());
     }
 
     int getLayout() {

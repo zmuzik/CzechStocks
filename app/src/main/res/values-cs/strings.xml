@@ -2,8 +2,8 @@
 <resources>
 
     <string name="app_name">České akcie</string>
-    <string name="tab_title_section1">Kurzy</string>
-    <string name="tab_title_section2">Portfolio</string>
+    <string name="quotes">Kurzy</string>
+    <string name="portfolio">Portfolio</string>
     <string name="action_edit">Editace</string>
     <string name="action_refresh">Aktualizace</string>
     <string name="action_settings">Nastavení</string>
@@ -67,5 +67,6 @@
     <string name="five_years">5Y</string>
     <string name="all">Vše</string>
     <string name="action_add">Přidat</string>
+    <string name="trades">Obchody</string>
 
 </resources>

@@ -4,6 +4,9 @@
               android:layout_height="match_parent"
               android:orientation="vertical"
               tools:context="zmuzik.czechstocks.activities.StockDetailActivity">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
 
     <fragment
         android:id="@+id/stockInfoFragment"

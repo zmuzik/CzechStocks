@@ -3,6 +3,7 @@ package zmuzik.czechstocks.tasks;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -53,6 +54,7 @@ public class UpdateDataTask extends AsyncTask {
                 App.getDaoSsn().clear();
             }
         } catch (Exception e) {
+            Log.e(TAG, e.toString());
             Crashlytics.logException(e);
         }
         return null;

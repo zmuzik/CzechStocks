@@ -2,8 +2,9 @@
 <resources>
 
     <string name="app_name">Czech Stocks</string>
-    <string name="tab_title_section1">Quotes</string>
-    <string name="tab_title_section2">Portfolio</string>
+    <string name="quotes">Quotes</string>
+    <string name="trades">Trades</string>
+    <string name="portfolio">Portfolio</string>
     <string name="action_edit">Edit</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>
