@@ -3,53 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/updateTimeInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/transparent"
-        android:orientation="horizontal"
-        android:textAppearance="?android:textAppearanceSmall">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2sp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/lastUpdatedLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/last_updated"/>
-
-            <TextView
-                android:id="@+id/dataFromLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/data_from"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5sp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/lastUpdatedValueTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""/>
-
-            <TextView
-                android:id="@+id/dataFromValueTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""/>
-        </LinearLayout>
-    </LinearLayout>
+    <include layout="@layout/footer_main_activity" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
@@ -75,11 +29,9 @@
 
     <com.shamanland.fab.FloatingActionButton
         android:id="@+id/fabAdd"
-        style="@style/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/fabPlus"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:src="@drawable/ic_action_new"
         />
 </RelativeLayout>
