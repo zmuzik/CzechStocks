@@ -3,7 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context="zmuzik.czechstocks.activities.AddStockActivity">
+    tools:context="zmuzik.czechstocks.activities.AddStockActivity"
+    android:paddingBottom="2.0dip"
+    android:paddingLeft="@dimen/screen_padding"
+    android:paddingRight="@dimen/screen_padding"
+    android:paddingTop="2.0dip">
 
     <CheckBox
         android:id="@+id/checkBox"

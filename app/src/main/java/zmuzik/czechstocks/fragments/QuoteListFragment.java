@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -53,7 +54,15 @@ public class QuoteListFragment extends ListFragment
         swipeContainer.setOnRefreshListener(this);
         swipeContainer.setProgressBackgroundColor(R.color.gray);
         swipeContainer.setColorSchemeResources(R.color.red, R.color.lime);
+
         return view;
+    }
+
+    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        View emptyFooter = getLayoutInflater(savedInstanceState).inflate(R.layout.empty_footer, null, false);
+        getListView().addFooterView(emptyFooter);
+        getListView().setFooterDividersEnabled(false);
     }
 
     @Override
