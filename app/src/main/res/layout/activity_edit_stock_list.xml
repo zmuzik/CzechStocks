@@ -5,13 +5,6 @@
                 android:orientation="vertical"
                 tools:context="zmuzik.czechstocks.activities.AddStockActivity">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"/>
-
     <Button
         android:id="@+id/okButton"
         android:layout_width="match_parent"
@@ -23,8 +16,8 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/okButton"
-        android:layout_below="@id/toolbar">
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/okButton">
     </ListView>
 
 </RelativeLayout>

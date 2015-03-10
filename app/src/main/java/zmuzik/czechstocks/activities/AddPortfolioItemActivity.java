@@ -3,7 +3,6 @@ package zmuzik.czechstocks.activities;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +27,6 @@ public class AddPortfolioItemActivity extends ActionBarActivity {
 
     private final String TAG = this.getClass().getSimpleName();
 
-    @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.okButton) Button okButton;
     @InjectView(R.id.chooseStockSpinner) Spinner chooseStockSpinner;
     @InjectView(R.id.numberOfStocksET) EditText numberOfStocksET;
@@ -41,7 +39,6 @@ public class AddPortfolioItemActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
         ButterKnife.inject(this);
-        setSupportActionBar(toolbar);
         initSpinner();
     }
 
