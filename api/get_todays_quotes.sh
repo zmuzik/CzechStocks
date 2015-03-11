@@ -71,7 +71,7 @@ echo "vacuum;" >> $sqlFile
 
 sqlite3 $dbFile < $sqlFile
 
-#rm $sqlFile
+rm $sqlFile
 
 endStamp=`date +%s`
 duration=$((endStamp-startStamp))
