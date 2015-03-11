@@ -117,7 +117,7 @@ def get_stock_details():
 @app.route('/csapi/todaysQuotes/<timestamp>')
 def get_todays_quotes_newer_than(timestamp):
     db = get_db()
-    cur = db.execute('select isin, stamp, price, volume from todays_quote where stamp > ' + timestamp)
+    cur = db.execute('select isin, stamp, price, volume from todays_quote where stamp > ' + timestamp + ' order by stamp asc')
     rows = cur.fetchall()
 
     result_list = []
@@ -140,7 +140,7 @@ def get_todays_quotes_newer_than(timestamp):
 @app.route('/csapi/historicalQuotes/<timestamp>')
 def get_historical_quotes_newer_than(timestamp):
     db = get_db()
-    cur = db.execute('select isin, stamp, price, volume from historical_quote where stamp > ' + timestamp)
+    cur = db.execute('select isin, stamp, price, volume from historical_quote where stamp > ' + timestamp + ' order by stamp asc')
     rows = cur.fetchall()
 
     result_list = []

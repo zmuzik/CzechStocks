@@ -1,22 +1,26 @@
 #!/bin/bash
-startStamp=`date +%s`
+
 url_prefix="http://www.bcpp.cz/XML/ProduktKontinualJS.aspx?cnpa="
 appRootDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
-isinsConfFile=$appRootDir"/etc/included_isins.csv"
-closedDaysFile=$appRootDir"/etc/closed_days.csv"
-rawFile=$appRootDir"/tmp/raw.html"
-tableFile=$appRootDir"/tmp/table.csv"
-isinsFile=$appRootDir"/tmp/isins.csv"
-completeFile=$appRootDir"/tmp/complete.csv"
-sqlFile=$appRootDir"/tmp/update_todays_quotes.sql"
+
 logFile=$appRootDir"/log/get_todays_data.log"
 dbFile=$appRootDir"/data.db"
 
+isinsConfFile=$appRootDir"/etc/included_isins.csv"
+closedDaysFile=$appRootDir"/etc/closed_days.csv"
+
+tmpPrefix=$appRootDir"/tmp/"`basename $0`"-"
+rawFile=$tmpPrefix"raw.html"
+tableFile=$tmpPrefix"table.csv"
+isinsFile=$tmpPrefix"isins.csv"
+completeFile=$tmpPrefix"complete.csv"
+sqlFile=$tmpPrefix"update_todays_quotes.sql"
+
+startStamp=`date +%s`
 now=`date +"%Y-%m-%d %H:%M:%S"`
 echo "$now script started" >> $logFile
 
 #quit if exchange closed today
-
 today=`date +%Y-%m-%d`
 if  grep -q $today $closedDaysFile; then
   echo "$now skipping run - stock exchange closed today" >> $logFile
@@ -42,6 +46,7 @@ do
   record=`head -n 1 $tableFile`
   year=`echo $record | cut -d" " -f4`
   month=`echo $record | cut -d" " -f5`
+  month=$((month+1))
   day=`echo $record | cut -d" " -f6`
   baseStamp=`TZ="Europe/Prague" date -d "$year-$month-$day" +%s`"000"
   
@@ -71,7 +76,7 @@ echo "vacuum;" >> $sqlFile
 
 sqlite3 $dbFile < $sqlFile
 
-#rm $sqlFile
+rm $sqlFile
 
 endStamp=`date +%s`
 duration=$((endStamp-startStamp))
