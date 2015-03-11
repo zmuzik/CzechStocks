@@ -1,70 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:id="@+id/updateTimeInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/transparent"
-        android:orientation="horizontal"
-        android:textAppearance="?android:textAppearanceSmall">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2sp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/lastUpdatedLabel"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/last_updated" />
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/dataFromLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/data_from" />
-        </LinearLayout>
+    <include layout="@layout/footer_main_activity"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5sp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/lastUpdatedValueTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-            <TextView
-                android:id="@+id/dataFromValueTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <ListView
-        android:id="@id/android:list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/updateTimeInfo"
-        android:layout_alignBaseline="@id/updateTimeInfo"
-        android:drawSelectorOnTop="false"
-        android:gravity="center" />
+        android:layout_alignBaseline="@id/updateTimeInfo">
+
+        <ListView
+            android:id="@id/android:list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawSelectorOnTop="false"
+            android:gravity="center"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@id/android:empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/no_data_stocks_list" />
+        android:text="@string/no_data_stocks_list"/>
+
+    <com.shamanland.fab.FloatingActionButton
+        android:id="@+id/fabAdd"
+        style="@style/fabPlus"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        />
 
 </RelativeLayout>

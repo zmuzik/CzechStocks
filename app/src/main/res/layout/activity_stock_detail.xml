@@ -5,6 +5,7 @@
               android:orientation="vertical"
               tools:context="zmuzik.czechstocks.activities.StockDetailActivity">
 
+
     <fragment
         android:id="@+id/stockInfoFragment"
         android:name="zmuzik.czechstocks.fragments.StockInfoFragment"

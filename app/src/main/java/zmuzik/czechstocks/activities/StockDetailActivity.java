@@ -1,7 +1,7 @@
 package zmuzik.czechstocks.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -13,7 +13,7 @@ import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.StockDao;
 
 
-public class StockDetailActivity extends Activity {
+public class StockDetailActivity extends ActionBarActivity {
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -23,15 +23,17 @@ public class StockDetailActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mIsin = getIntent().getStringExtra("isin");
         if (mIsin == null) {
             Crashlytics.log(Log.ERROR, TAG, "Invalid ISIN. Unable to open stock detail");
             finish();
         }
         loadStockFromDb();
-        setTitle(mStock.getName());
+
         setContentView(getLayout());
         ButterKnife.inject(this);
+        setTitle(mStock.getName());
     }
 
     int getLayout() {

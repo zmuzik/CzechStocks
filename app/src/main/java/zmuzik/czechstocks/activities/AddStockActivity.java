@@ -1,8 +1,9 @@
 package zmuzik.czechstocks.activities;
 
-import android.app.ListActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.widget.Button;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +20,12 @@ import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.dao.StockDao;
 
 
-public class AddStockActivity extends ListActivity {
+public class AddStockActivity extends ActionBarActivity {
 
     private final String TAG = this.getClass().getSimpleName();
 
-    @InjectView(R.id.okButton)
-    Button okButton;
+    @InjectView(R.id.okButton) Button okButton;
+    @InjectView(R.id.list) ListView list;
 
     ArrayList<Stock> stocks;
     AddStockAdapter addStockAdapter;
@@ -51,7 +52,7 @@ public class AddStockActivity extends ListActivity {
             }
         }
         addStockAdapter = new AddStockAdapter(this, R.layout.list_item_edit_stock, stocks);
-        setListAdapter(addStockAdapter);
+        list.setAdapter(addStockAdapter);
     }
 
     @OnClick(R.id.okButton)

@@ -2,8 +2,8 @@
 <resources>
 
     <string name="app_name">České akcie</string>
-    <string name="tab_title_section1">Kurzy</string>
-    <string name="tab_title_section2">Portfolio</string>
+    <string name="quotes">Kurzy</string>
+    <string name="portfolio">Portfolio</string>
     <string name="action_edit">Editace</string>
     <string name="action_refresh">Aktualizace</string>
     <string name="action_settings">Nastavení</string>
@@ -25,7 +25,7 @@
     <string name="no_data_portfolio">Pro přidání akcií do portfolia použijte ikonu +</string>
     <string name="toas_check_net">Síťová chyba, zkontrolujte připojení k internetu.</string>
     <string name="no_data_stocks_list">Stahuji aktuální data ze serveru. Pokud to trvá příliš dlouho, zkontrolujte vaše internetové připojení.</string>
-    <string name="last_updated">Poslední aktualizace:</string>
+    <string name="last_updated">Aktualizováno:</string>
     <string name="data_from">Data z:</string>
     <string name="total">CELKEM</string>
     <string name="no_other_stocks">Žádné další akcie nejsou k dispozici.</string>
@@ -66,5 +66,7 @@
     <string name="one_year">1Y</string>
     <string name="five_years">5Y</string>
     <string name="all">Vše</string>
+    <string name="action_add">Přidat</string>
+    <string name="trades">Obchody</string>
 
 </resources>

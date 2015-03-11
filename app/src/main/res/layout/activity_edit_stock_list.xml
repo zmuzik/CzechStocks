@@ -1,10 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="zmuzik.czechstocks.activities.AddStockActivity">
-
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:context="zmuzik.czechstocks.activities.AddStockActivity">
 
     <Button
         android:id="@+id/okButton"
@@ -14,18 +13,11 @@
         android:text="@string/button_ok"/>
 
     <ListView
-        android:id="@android:id/list"
-        android:layout_height="match_parent"
+        android:id="@+id/list"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
         android:layout_above="@id/okButton">
     </ListView>
-
-    <TextView
-        android:id="@id/android:empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/no_other_stocks" />
-
 
 </RelativeLayout>

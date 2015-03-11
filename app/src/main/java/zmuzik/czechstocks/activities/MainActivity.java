@@ -1,171 +1,106 @@
 package zmuzik.czechstocks.activities;
 
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBarActivity;
 
-import com.squareup.otto.Subscribe;
-
-import zmuzik.czechstocks.App;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import zmuzik.czechstocks.R;
-import zmuzik.czechstocks.adapters.SectionsPagerAdapter;
-import zmuzik.czechstocks.events.UpdateFinishedEvent;
-import zmuzik.czechstocks.events.UpdateStartedEvent;
-import zmuzik.czechstocks.helpers.PrefsHelper;
+import zmuzik.czechstocks.fragments.PortfolioListFragment;
+import zmuzik.czechstocks.fragments.QuoteListFragment;
 import zmuzik.czechstocks.tasks.FillDbTablesTask;
-import zmuzik.czechstocks.tasks.UpdateDataTask;
+import zmuzik.czechstocks.ui.SlidingTabLayout;
 import zmuzik.czechstocks.utils.DbUtils;
 
-public class MainActivity extends Activity implements ActionBar.TabListener {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
     private final String TAG = this.getClass().getSimpleName();
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
-    private MenuItem mRefreshMenuItem;
+    @InjectView(R.id.viewPager) ViewPager viewPager;
+    @InjectView(R.id.slidingTabs) SlidingTabLayout slidingTabs;
 
-    boolean updateInProgress;
+    private SectionsPagerAdapter sectionsPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        }
-        mSectionsPagerAdapter = new SectionsPagerAdapter(App.get(), getFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                actionBar.setSelectedNavigationItem(position);
-            }
-        });
+        ButterKnife.inject(this);
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(sectionsPagerAdapter);
+        slidingTabs.setDistributeEvenly(true);
+        slidingTabs.setViewPager(viewPager);
 
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
-        }
-
-        //fill the default data (especially historical) if necessary
+        //fill the default data if necessary
         if (!DbUtils.getInstance().isDataFilled()) new FillDbTablesTask(this).execute();
     }
 
     @Override protected void onResume() {
         super.onResume();
-        App.getBus().register(this);
-        if (!updateInProgress) {
-            setStaticRefreshIcon();
-        }
-        if (PrefsHelper.get().isTimeToUpdateCurrent()) {
-            actionDataRefresh();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        mRefreshMenuItem = menu.findItem(R.id.action_refresh);
-        if (updateInProgress) {
-            setMovingRefreshIcon();
-        }
-        return true;
     }
 
     @Override public void onPause() {
         super.onPause();
-        App.getBus().unregister(this);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_edit:
-                if (mViewPager.getCurrentItem() == 0) {
-                    actionAddStock();
-                } else {
-                    actionAddPortfolioItem();
-                }
-                break;
-            case R.id.action_refresh:
-                mRefreshMenuItem = item;
-                actionDataRefresh();
-                break;
-            default:
-                break;
+    @Override public void onTabSelected(Tab tab, FragmentTransaction fragmentTransaction) {
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override public void onTabUnselected(Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Override public void onTabReselected(Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        QuoteListFragment stocksListFragment;
+        PortfolioListFragment portfolioListFragment;
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
         }
-        return true;
-    }
 
-    void actionAddStock() {
-        Intent intent = new Intent(this, AddStockActivity.class);
-        startActivity(intent);
-    }
-
-    void actionAddPortfolioItem() {
-        Intent intent = new Intent(this, AddPortfolioItemActivity.class);
-        startActivity(intent);
-    }
-
-    void actionDataRefresh() {
-        if (!updateInProgress) {
-            updateInProgress = true;
-            new UpdateDataTask().execute();
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    if (stocksListFragment == null) {
+                        stocksListFragment = new QuoteListFragment();
+                    }
+                    return stocksListFragment;
+                case 1:
+                    if (portfolioListFragment == null) {
+                        portfolioListFragment = new PortfolioListFragment();
+                    }
+                    return portfolioListFragment;
+                default:
+                    return null;
+            }
         }
-    }
 
-    void setMovingRefreshIcon() {
-        if (mRefreshMenuItem == null) return;
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ImageView iv = (ImageView) inflater.inflate(R.layout.icon_action_refresh, null);
-        Animation rotation = AnimationUtils.loadAnimation(this, R.anim.clockwise_refresh);
-        rotation.setRepeatCount(Animation.INFINITE);
-        iv.startAnimation(rotation);
-        mRefreshMenuItem.setActionView(iv);
-    }
+        @Override
+        public int getCount() {
+            return 2;
+        }
 
-    public void setStaticRefreshIcon() {
-        if (mRefreshMenuItem == null || mRefreshMenuItem.getActionView() == null) return;
-        mRefreshMenuItem.getActionView().clearAnimation();
-        mRefreshMenuItem.setActionView(null);
-    }
-
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        mViewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-    }
-
-    @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
-    }
-
-    @Subscribe public void onUpdateStarted(UpdateStartedEvent event) {
-        setMovingRefreshIcon();
-    }
-
-    @Subscribe public void onUpdateFinished(UpdateFinishedEvent event) {
-        updateInProgress = false;
-        setStaticRefreshIcon();
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return getResources().getString(R.string.quotes);
+                case 1:
+                    return getResources().getString(R.string.portfolio);
+            }
+            return null;
+        }
     }
 }
