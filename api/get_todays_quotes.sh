@@ -67,16 +67,17 @@ done
 
 maxStamp=`sqlite3 $dbFile "select max(stamp) from todays_quote;"`
 
-lim=$((maxStamp-(maxStamp%86400000)))
+lowLim=$baseStamp
+upLim=$((baseStamp+86400000))
 
-echo "delete from todays_quote where stamp < "$lim";" >> $sqlFile
+echo "delete from todays_quote where stamp < "$lowLim" or stamp > "$upLim";" >> $sqlFile
 
 echo "commit;" >> $sqlFile
 echo "vacuum;" >> $sqlFile
 
 sqlite3 $dbFile < $sqlFile
 
-rm $sqlFile
+#rm $sqlFile
 
 endStamp=`date +%s`
 duration=$((endStamp-startStamp))
