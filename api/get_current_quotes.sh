@@ -35,13 +35,23 @@ year=`echo $timeStr | tr '|' '/' | cut -d'/' -f 3`
 month=`echo $timeStr | cut -d'/' -f 1`
 day=`echo $timeStr | cut -d'/' -f 2`
 time=`echo $timeStr | cut -d'|' -f 2`
+hour=`echo $timeStr | tr ':' '|' | cut -d'|' -f 2`
+minute=`echo $timeStr | tr ':' '|' | cut -d'|' -f 3`
+
 echo "time string "$timeStr
 echo "year "$year
 echo "month "$month
 echo "day "$day
 echo "time "$time
+echo "hour "$hour
+echo "minute "$minute
 
-stamp=`TZ="Europe/Prague" date -d "$year-$month-$day $time" +%s`"000"
+if [ "$hour" -lt 8 ]; then
+  hour=$((hour+12))
+fi
+echo "hour "$hour
+
+stdamp=`TZ="Europe/Prague" date -d "$year-$month-$day $time" +%s`"000"
 
 # take rows with securities listings, strip them from html and leading whitespaces
 grep "<td class=\"nowrap\">" $rawFile | sed 's|<[^>]*>|;|g' | sed 's/^\s*//' > $tableFile
