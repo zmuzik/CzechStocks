@@ -1,6 +1,6 @@
 #!/bin/bash
 startStamp=`date +%s`
-url="http://www.bcpp.cz/Kurzovni-Listek/Oficialni-KL/"
+url="http://www.pse.cz/Kurzovni-Listek/Oficialni-KL/"
 appRootDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
 isinsConfFile=$appRootDir"/etc/included_isins.csv"
 closedDaysFile=$appRootDir"/etc/closed_days.csv"
@@ -23,11 +23,17 @@ fi
 
 curl -o $rawFile $url
 
-timeStr=`grep "ctl00_BCPP_jsdate" $rawFile | head -n 1 | cut -d\" -f 6  | sed 's/&nbsp;//g' | sed 's/strong//g' | tr "<>." "   "`
-
-year=`echo $timeStr | cut -d' ' -f 3`
-month=`echo $timeStr | cut -d' ' -f 2`
-day=`echo $timeStr | cut -d' ' -f 1`
+#timeStr=`grep "ctl00_BCPP_jsdate" $rawFile | head -n 1 | cut -d\" -f 6  | sed 's/&nbsp;//g' | sed 's/strong//g' | tr "<>." "   "`
+timeStr=`grep "strong" $rawFile | sed 's/&nbsp;//g' | sed 's/strong//g' | tr "<>." "   "`
+#timeStr=`grep "strong" $rawFile`
+echo "time string "$timeStr
+year=`echo $timeStr | cut -d'/' -f 3`
+month=`echo $timeStr | cut -d'/' -f 1`
+day=`echo $timeStr | cut -d'/' -f 2`
+echo "year "$year
+echo "month "$month
+echo "day "$day
+#exit
 hour=17
 minute=15
 stamp=`TZ="Europe/Prague" date -d "$year-$month-$day $hour:$minute" +%s`

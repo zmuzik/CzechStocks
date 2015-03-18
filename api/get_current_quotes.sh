@@ -1,6 +1,6 @@
 #!/bin/bash
 startStamp=`date +%s`
-url="http://www.bcpp.cz/On-Line/Kontinual/"
+url="http://www.pse.cz/On-Line/Kontinual/"
 appRootDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
 isinsConfFile=$appRootDir"/etc/included_isins.csv"
 closedDaysFile=$appRootDir"/etc/closed_days.csv"
