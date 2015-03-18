@@ -51,7 +51,8 @@ if [ "$hour" -lt 8 ]; then
 fi
 echo "hour "$hour
 
-stdamp=`TZ="Europe/Prague" date -d "$year-$month-$day $time" +%s`"000"
+stamp=`TZ="Europe/Prague" date -d "$year-$month-$day $hour:$minute" +%s`"000"
+echo $stamp
 
 # take rows with securities listings, strip them from html and leading whitespaces
 grep "<td class=\"nowrap\">" $rawFile | sed 's|<[^>]*>|;|g' | sed 's/^\s*//' > $tableFile
