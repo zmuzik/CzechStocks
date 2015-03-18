@@ -68,8 +68,8 @@ for isin in `grep "^[^#;]" $isinsConfFile | cut -d";" -f1`
 do
   dataRow=`grep $isin $completeFile`
   stockName=`echo $dataRow | cut -d";" -f4`
-  stockPrice=`echo $dataRow | cut -d";" -f9  | tr "," "" | sed 's/\xc2\xa0//g'`
-  stockDelta=`echo $dataRow | cut -d";" -f11 | tr "," "" | sed 's/\xc2\xa0//g'`
+  stockPrice=`echo $dataRow | cut -d";" -f9  | tr -d "," | sed 's/\xc2\xa0//g'`
+  stockDelta=`echo $dataRow | cut -d";" -f11 | tr -d "," | sed 's/\xc2\xa0//g'`
 
   if [ -z "$stockPrice" ]; then
     error=1
