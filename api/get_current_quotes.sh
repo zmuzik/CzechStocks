@@ -16,9 +16,9 @@ isinsFile=$appRootDir"/tmp/"$scriptName"-isins.csv"
 completeFile=$appRootDir"/tmp/"$scriptName"-complete.csv"
 sqlFile=$appRootDir"/tmp/"$scriptName"-update_todays_quotes.sql"
 
-
 #quit if exchange closed today
 today=`date +%Y-%m-%d`
+
 if  grep -q $today $closedDaysFile; then
     now=`date +"%Y-%m-%d %H:%M:%S"`
     echo "$now skipping run - stock exchange closed today" >> $logFile
