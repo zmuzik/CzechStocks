@@ -1,22 +1,22 @@
 #!/bin/bash
-
-url_prefix="http://www.bcpp.cz/XML/ProduktKontinualJS.aspx?cnpa="
+startStamp=`date +%s`
+url_prefix="http://www.pse.cz/XML/ProduktKontinualJS.aspx?cnpa="
 appRootDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
 
-logFile=$appRootDir"/log/get_todays_data.log"
 dbFile=$appRootDir"/data.db"
 
 isinsConfFile=$appRootDir"/etc/included_isins.csv"
 closedDaysFile=$appRootDir"/etc/closed_days.csv"
 
-tmpPrefix=$appRootDir"/tmp/"`basename $0`"-"
-rawFile=$tmpPrefix"raw.html"
-tableFile=$tmpPrefix"table.csv"
-isinsFile=$tmpPrefix"isins.csv"
-completeFile=$tmpPrefix"complete.csv"
-sqlFile=$tmpPrefix"update_todays_quotes.sql"
+scriptName=`basename $0 | cut -d"." -f1`
+logFile=$appRootDir"/log/"$scriptName".log"
+rawFile=$appRootDir"/tmp/"$scriptName"-raw.html"
+tableFile=$appRootDir"/tmp/"$scriptName"-table.csv"
+isinsFile=$appRootDir"/tmp/"$scriptName"-isins.csv"
+completeFile=$appRootDir"/tmp/"$scriptName"-complete.csv"
+sqlFile=$appRootDir"/tmp/"$scriptName"-update_todays_quotes.sql"
 
-startStamp=`date +%s`
+
 now=`date +"%Y-%m-%d %H:%M:%S"`
 echo "$now script started" >> $logFile
 

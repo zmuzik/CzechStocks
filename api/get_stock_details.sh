@@ -1,6 +1,6 @@
 #!/bin/bash
 startStamp=`date +%s`
-url_prefix="www.bcpp.cz/Cenne-Papiry/Detail.aspx?isin="
+url_prefix="www.pse.cz/Cenne-Papiry/Detail.aspx?isin="
 url_postfix="#OL"
 appRootDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
 isinsConfFile=$appRootDir"/etc/included_isins.csv"

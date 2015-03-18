@@ -2,15 +2,20 @@
 startStamp=`date +%s`
 url="http://www.pse.cz/On-Line/Kontinual/"
 appRootDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
+
+dbFile=$appRootDir"/data.db"
+
 isinsConfFile=$appRootDir"/etc/included_isins.csv"
 closedDaysFile=$appRootDir"/etc/closed_days.csv"
-rawFile=$appRootDir"/tmp/raw.html"
-tableFile=$appRootDir"/tmp/table.csv"
-isinsFile=$appRootDir"/tmp/isins.csv"
-completeFile=$appRootDir"/tmp/complete.csv"
-sqlFile=$appRootDir"/tmp/update_current_quotes.sql"
-logFile=$appRootDir"/log/get_current_quotes.log"
-dbFile=$appRootDir"/data.db"
+
+scriptName=`basename $0 | cut -d"." -f1`
+logFile=$appRootDir"/log/"$scriptName".log"
+rawFile=$appRootDir"/tmp/"$scriptName"-raw.html"
+tableFile=$appRootDir"/tmp/"$scriptName"-table.csv"
+isinsFile=$appRootDir"/tmp/"$scriptName"-isins.csv"
+completeFile=$appRootDir"/tmp/"$scriptName"-complete.csv"
+sqlFile=$appRootDir"/tmp/"$scriptName"-update_todays_quotes.sql"
+
 
 #quit if exchange closed today
 today=`date +%Y-%m-%d`
@@ -26,10 +31,16 @@ curl -o $rawFile $url
 
 #extract the timestamp of the data included
 timeStr=`grep "Online data:" $rawFile | sed 's|<[^>]*>||g' | awk '{ print $3 $4 $5 " " $7; }' | sed 's/\x0d//g'`
-year=`echo $timeStr | tr " " "." | cut -d'.' -f 3`
-month=`echo $timeStr | cut -d'.' -f 2`
-day=`echo $timeStr | cut -d'.' -f 1`
-time=`echo $timeStr | cut -d' ' -f 2`
+year=`echo $timeStr | tr '|' '/' | cut -d'/' -f 3`
+month=`echo $timeStr | cut -d'/' -f 1`
+day=`echo $timeStr | cut -d'/' -f 2`
+time=`echo $timeStr | cut -d'|' -f 2`
+echo "time string "$timeStr
+echo "year "$year
+echo "month "$month
+echo "day "$day
+echo "time "$time
+
 stamp=`TZ="Europe/Prague" date -d "$year-$month-$day $time" +%s`"000"
 
 # take rows with securities listings, strip them from html and leading whitespaces

@@ -2,15 +2,19 @@
 startStamp=`date +%s`
 url="http://www.pse.cz/Kurzovni-Listek/Oficialni-KL/"
 appRootDir=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
+
+dbFile=$appRootDir"/data.db"
+
 isinsConfFile=$appRootDir"/etc/included_isins.csv"
 closedDaysFile=$appRootDir"/etc/closed_days.csv"
-rawFile=$appRootDir"/tmp/raw.html"
-tableFile=$appRootDir"/tmp/table.csv"
-isinsFile=$appRootDir"/tmp/isins.csv"
-completeFile=$appRootDir"/tmp/complete.csv"
-sqlFile=$appRootDir"/tmp/update_closing_quotes.sql"
-logFile=$appRootDir"/log/get_closing_quotes.log"
-dbFile=$appRootDir"/data.db"
+
+scriptName=`basename $0 | cut -d"." -f1`
+logFile=$appRootDir"/log/"$scriptName".log"
+rawFile=$appRootDir"/tmp/"$scriptName"-raw.html"
+tableFile=$appRootDir"/tmp/"$scriptName"-table.csv"
+isinsFile=$appRootDir"/tmp/"$scriptName"-isins.csv"
+completeFile=$appRootDir"/tmp/"$scriptName"-complete.csv"
+sqlFile=$appRootDir"/tmp/"$scriptName"-update_todays_quotes.sql"
 
 #quit if exchange closed today
 today=`date +%Y-%m-%d`
