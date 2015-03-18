@@ -70,14 +70,23 @@ public class UpdateDataTask extends AsyncTask {
     }
 
     boolean updateTodaysData() {
+        deleteOldTodaysQuotes(getCurrentDataStamp());
         long stamp = getLastTodaysQuoteStamp();
         List<TodaysQuote> todaysQuotes = App.getServerApi().getTodaysQuotes(stamp);
         if (todaysQuotes != null && todaysQuotes.size() > 0) {
             App.getDaoSsn().getTodaysQuoteDao().insertOrReplaceInTx(todaysQuotes);
-            deleteOldTodaysQuotes();
             return true;
         }
         return false;
+    }
+
+    long getCurrentDataStamp() {
+        long result = 0L;
+        List<CurrentQuote> quotes = App.getDaoSsn().getCurrentQuoteDao().loadAll();
+        if (quotes != null && quotes.size() > 0) {
+            result = quotes.get(0).getStamp();
+        }
+        return result;
     }
 
     boolean updateHistoricalData() {
@@ -142,11 +151,16 @@ public class UpdateDataTask extends AsyncTask {
         return result;
     }
 
-    void deleteOldTodaysQuotes() {
-        long stamp = getLastTodaysQuoteStamp();
-        // set stamp to beginning of the last business day
-        stamp = stamp - (stamp % TimeUtils.ONE_DAY);
+    /**
+     * delete any todays quotes that whose timestap is from a different day than the supplied one
+     *
+     * @param incomingDataStamp
+     */
+    void deleteOldTodaysQuotes(long incomingDataStamp) {
+        long dayBegin = incomingDataStamp - (incomingDataStamp % TimeUtils.ONE_DAY);
+        long dayEnd = dayBegin + TimeUtils.ONE_DAY;
         SQLiteDatabase db = App.getDaoSsn().getDatabase();
-        db.execSQL("delete from todays_quote where stamp < " + stamp + ";");
+        db.execSQL("delete from todays_quote where stamp < " + dayBegin + " or stamp > " + dayEnd + ";");
+        App.getDaoSsn().clear();
     }
 }

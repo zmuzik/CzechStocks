@@ -44,3 +44,5 @@ local.properties
 
 #Crashlytics conf file
 app/src/main/res/values/com_crashlytics_export_strings.xml
+
+todo

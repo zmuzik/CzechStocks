@@ -4,8 +4,8 @@
 
     <style name="AppTheme.Base" parent="Theme.AppCompat">
         <item name="floatingActionButtonStyle">@style/FloatingActionButton</item>
-        <!--<item name="actionBarSize">36dip</item>
-        <item name="android:actionBarSize">36dip</item> -->
+        <item name="actionBarSize">48dip</item>
+        <item name="android:actionBarSize">48dip</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">true</item>
     </style>

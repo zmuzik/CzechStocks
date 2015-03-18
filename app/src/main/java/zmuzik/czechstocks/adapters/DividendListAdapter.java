@@ -43,9 +43,13 @@ public class DividendListAdapter extends ArrayAdapter<Dividend> {
             } else {
                 holder.exDateTV.setText(Utils.getFormattedDate(dividend.getExDate()));
             }
+        } else {
+            holder.exDateTV.setText("");
         }
         if (dividend.getPaymentDate() != null) {
             holder.paymentDateTV.setText(Utils.getFormattedDate(dividend.getPaymentDate()));
+        } else {
+            holder.paymentDateTV.setText("");
         }
         holder.amountTV.setText(Utils.getFormattedDecimal(dividend.getAmount())+" "+ dividend.getCurrency());
         return convertView;
