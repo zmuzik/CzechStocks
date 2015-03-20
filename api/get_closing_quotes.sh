@@ -67,8 +67,8 @@ for isin in `grep "^[^#;]" $isinsConfFile | cut -d";" -f1`
 do
   dataRow=`grep $isin $completeFile`
   stockName=`echo $dataRow | cut -d";" -f4`
-  stockPrice=`echo $dataRow | cut -d";" -f9  | tr "," "." | sed 's/\xc2\xa0//g'`
-  stockDelta=`echo $dataRow | cut -d";" -f13 | tr "," "." | sed 's/\xc2\xa0//g'`
+  stockPrice=`echo $dataRow | cut -d";" -f9  | tr -d "," | sed 's/\xc2\xa0//g'`
+  stockDelta=`echo $dataRow | cut -d";" -f13 | tr -d "," | sed 's/\xc2\xa0//g'`
   
   echo "insert into current_quote (isin, price, delta, timeStr, stamp) \
   values ('$isin', '$stockPrice', '$stockDelta', '$timeStr', '$stamp');" >> $sqlFile
