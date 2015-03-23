@@ -20,6 +20,7 @@ import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYStepMode;
+import com.crashlytics.android.Crashlytics;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -138,6 +139,10 @@ public class StockGraphFragment extends Fragment {
 
     void drawGraph() {
         if (stockGraph == null) return;
+        if (mDates == null || mPrices == null || mDates.size() != mPrices.size()) {
+            Crashlytics.log("graph dates and prices are of different sizes");
+            return;
+        }
         SimpleXYSeries priceSeries = new SimpleXYSeries(mDates, mPrices, null);
         LineAndPointFormatter priceFormat = new LineAndPointFormatter(
                 Color.rgb(0, 0, 200),           // line color
