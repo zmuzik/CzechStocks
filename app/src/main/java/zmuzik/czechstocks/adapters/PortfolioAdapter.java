@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -48,19 +50,23 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
     }
 
     private void renderNormalItem(ViewHolder holder, int position) {
-        PortfolioItem portfolioItem = getItem(position);
-        holder.stockNameTV.setText(portfolioItem.getStock().getName());
-        holder.quantityTV.setText(getAmountString(portfolioItem.getQuantity()));
-        holder.originalPriceTV.setText(" " + Utils.getFormattedCurrencyAmount(portfolioItem.getPrice()));
-        holder.deltaTV.setText(Utils.getFormattedPercentage(getDelta(portfolioItem)));
-        holder.profitTV.setText(Utils.getFormattedCurrencyAmount(getProfit(portfolioItem)));
-        // set color
-        if (getProfit(portfolioItem) >= 0) {
-            holder.deltaTV.setTextColor(App.get().getResources().getColor(R.color.lime));
-            holder.profitTV.setTextColor(App.get().getResources().getColor(R.color.lime));
-        } else {
-            holder.deltaTV.setTextColor(App.get().getResources().getColor(R.color.red));
-            holder.profitTV.setTextColor(App.get().getResources().getColor(R.color.red));
+        try {
+            PortfolioItem portfolioItem = getItem(position);
+            holder.stockNameTV.setText(portfolioItem.getStock().getName());
+            holder.quantityTV.setText(getAmountString(portfolioItem.getQuantity()));
+            holder.originalPriceTV.setText(" " + Utils.getFormattedCurrencyAmount(portfolioItem.getPrice()));
+            holder.deltaTV.setText(Utils.getFormattedPercentage(getDelta(portfolioItem)));
+            holder.profitTV.setText(Utils.getFormattedCurrencyAmount(getProfit(portfolioItem)));
+            // set color
+            if (getProfit(portfolioItem) >= 0) {
+                holder.deltaTV.setTextColor(App.get().getResources().getColor(R.color.lime));
+                holder.profitTV.setTextColor(App.get().getResources().getColor(R.color.lime));
+            } else {
+                holder.deltaTV.setTextColor(App.get().getResources().getColor(R.color.red));
+                holder.profitTV.setTextColor(App.get().getResources().getColor(R.color.red));
+            }
+        } catch (Exception e) {
+            Crashlytics.logException(e);
         }
     }
 
@@ -70,6 +76,7 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
         for (int i = 0; i < super.getCount(); i++) {
             PortfolioItem portfolioItem = getItem(i);
             CurrentQuote currentQuote = portfolioItem.getStock().getCurrentQuote();
+            if (currentQuote == null) return;
             totalInvested += portfolioItem.getPrice() * portfolioItem.getQuantity();
             totalProfit += (currentQuote.getPrice() - portfolioItem.getPrice()) * portfolioItem.getQuantity();
         }
