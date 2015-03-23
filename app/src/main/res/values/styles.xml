@@ -24,7 +24,8 @@
 
     <style name="fabPlus">
         <item name="floatingActionButtonColor">@color/green</item>
-        <item name="floatingActionButtonSize">mini</item>
+        <item name="floatingActionButtonSize">normal</item>
+        <item name="android:padding">0dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:src">@drawable/ic_action_new</item>

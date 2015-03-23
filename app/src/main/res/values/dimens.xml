@@ -5,7 +5,9 @@
     <dimen name="screen_padding">5dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="empty_footer_height">10dp</dimen>
-    <dimen name="fab_margin">10dp</dimen>
+    <dimen name="empty_footer_height">16dp</dimen>
+    <dimen name="fab_margin">12dp</dimen>
+    <dimen name="main_activity_footer_height">48dp</dimen>
+    <dimen name="main_activity_footer_line_height">24dp</dimen>
 
 </resources>
