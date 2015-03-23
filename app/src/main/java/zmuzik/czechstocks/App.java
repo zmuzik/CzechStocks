@@ -10,16 +10,16 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.squareup.otto.Bus;
 
 import retrofit.RestAdapter;
 import zmuzik.czechstocks.dao.DaoMaster;
 import zmuzik.czechstocks.dao.DaoSession;
+import zmuzik.czechstocks.events.MainThreadBus;
 
 public class App extends Application {
 
     private final String TAG = this.getClass().getSimpleName();
-    private static final Bus BUS = new Bus();
+    private static final MainThreadBus BUS = new MainThreadBus();
     private static App mApp;
     private static DaoSession mDaoSession;
     private static ServerApi mServerApi;
@@ -38,7 +38,7 @@ public class App extends Application {
         return mServerApi;
     }
 
-    public static Bus getBus() {
+    public static MainThreadBus getBus() {
         return BUS;
     }
 

@@ -9,13 +9,20 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.Toast;
+
+import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
+import zmuzik.czechstocks.events.InternetNotFoundEvent;
 import zmuzik.czechstocks.fragments.PortfolioListFragment;
 import zmuzik.czechstocks.fragments.QuoteListFragment;
+import zmuzik.czechstocks.helpers.PrefsHelper;
 import zmuzik.czechstocks.tasks.FillDbTablesTask;
+import zmuzik.czechstocks.tasks.UpdateDataTask;
 import zmuzik.czechstocks.ui.SlidingTabLayout;
 import zmuzik.czechstocks.utils.DbUtils;
 
@@ -44,10 +51,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override protected void onResume() {
         super.onResume();
+        App.getBus().register(this);
+        if (PrefsHelper.get().isTimeToUpdateCurrent()) {
+            new UpdateDataTask().execute();
+        }
     }
 
     @Override public void onPause() {
         super.onPause();
+        App.getBus().unregister(this);
     }
 
     @Override public void onTabSelected(Tab tab, FragmentTransaction fragmentTransaction) {
@@ -58,6 +70,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     }
 
     @Override public void onTabReselected(Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Subscribe public void onInternetNotFound(InternetNotFoundEvent event) {
+        Toast.makeText(this, getString(R.string.internet_not_available), Toast.LENGTH_LONG).show();
     }
 
     class SectionsPagerAdapter extends FragmentPagerAdapter {

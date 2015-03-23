@@ -31,7 +31,8 @@ import zmuzik.czechstocks.activities.AddStockActivity;
 import zmuzik.czechstocks.activities.StockDetailActivity;
 import zmuzik.czechstocks.adapters.QuotationListAdapter;
 import zmuzik.czechstocks.dao.Stock;
-import zmuzik.czechstocks.events.UpdateFinishedEvent;
+import zmuzik.czechstocks.events.CurrentDataUpdatedEvent;
+import zmuzik.czechstocks.events.InternetNotFoundEvent;
 import zmuzik.czechstocks.helpers.PrefsHelper;
 import zmuzik.czechstocks.tasks.UpdateDataTask;
 import zmuzik.czechstocks.utils.Utils;
@@ -70,9 +71,6 @@ public class QuoteListFragment extends ListFragment
         super.onResume();
         refreshData();
         App.getBus().register(this);
-        if (PrefsHelper.get().isTimeToUpdateCurrent()) {
-            new UpdateDataTask().execute();
-        }
     }
 
     @Override public void onRefresh() {
@@ -94,6 +92,7 @@ public class QuoteListFragment extends ListFragment
         qb.where(new WhereCondition.StringCondition("SHOW_IN_QUOTES_LIST = 1 AND ISIN IN " +
                 "(SELECT ISIN FROM CURRENT_QUOTE) ORDER BY NAME COLLATE LOCALIZED ASC"));
         List<Stock> items = qb.list();
+        if (items == null || items.size() == 0) return;
 
         mAdapter = new QuotationListAdapter(App.get(), items);
         setListAdapter(mAdapter);
@@ -159,8 +158,16 @@ public class QuoteListFragment extends ListFragment
         startActivity(new Intent(getActivity(), AddStockActivity.class));
     }
 
-    @Subscribe public void onUpdateFinished(UpdateFinishedEvent event) {
+    @Subscribe public void onCurrentDataUpdated(CurrentDataUpdatedEvent event) {
         refreshData();
+        finishSwipeToRefresh();
+    }
+
+    @Subscribe public void onInternetNotFound(InternetNotFoundEvent event) {
+        finishSwipeToRefresh();
+    }
+
+    void finishSwipeToRefresh() {
         if (swipeContainer != null) swipeContainer.setRefreshing(false);
     }
 }

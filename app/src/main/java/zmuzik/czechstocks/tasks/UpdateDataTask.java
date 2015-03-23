@@ -18,40 +18,41 @@ import zmuzik.czechstocks.dao.HistoricalQuoteDao;
 import zmuzik.czechstocks.dao.StockDetail;
 import zmuzik.czechstocks.dao.StockDetailDao;
 import zmuzik.czechstocks.dao.TodaysQuote;
-import zmuzik.czechstocks.events.UpdateFinishedEvent;
-import zmuzik.czechstocks.events.UpdateStartedEvent;
+import zmuzik.czechstocks.events.CurrentDataUpdatedEvent;
+import zmuzik.czechstocks.events.InternetNotFoundEvent;
+import zmuzik.czechstocks.events.TodaysDataUpdatedEvent;
 import zmuzik.czechstocks.helpers.PrefsHelper;
 import zmuzik.czechstocks.utils.TimeUtils;
 
 public class UpdateDataTask extends AsyncTask {
 
     private final String TAG = this.getClass().getSimpleName();
-    private boolean currentDataUpdated = false;
-    private boolean historyUpdated = false;
-    private boolean stockInfoUpdated = false;
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        App.getBus().post(new UpdateStartedEvent());
-    }
 
     @Override
     protected Object doInBackground(Object... params) {
-        if (!App.get().isOnline()) return null;
-        try {
-            currentDataUpdated = updateCurrentQuotes();
-            currentDataUpdated = currentDataUpdated | updateTodaysData();
-            if (PrefsHelper.get().isTimeToUpdateHistorical()) {
-                historyUpdated = updateHistoricalData();
-                stockInfoUpdated = updateStockDetails();
-                stockInfoUpdated = stockInfoUpdated | updateDividends();
-                PrefsHelper.get().setLastHistUpdateTime(TimeUtils.getNow());
-            }
+        if (!App.get().isOnline()) {
+            App.getBus().post(new InternetNotFoundEvent());
+            return null;
+        }
 
-            if (currentDataUpdated || historyUpdated || stockInfoUpdated) {
+        try {
+            if (updateCurrentQuotes()) {
                 PrefsHelper.get().setLastUpdateTime(TimeUtils.getNow());
                 App.getDaoSsn().clear();
+                App.getBus().post(new CurrentDataUpdatedEvent());
+            }
+
+            if (updateTodaysData()) {
+                App.getDaoSsn().clear();
+                App.getBus().post(new TodaysDataUpdatedEvent());
+            }
+
+            if (PrefsHelper.get().isTimeToUpdateHistorical()) {
+                updateHistoricalData();
+                updateStockDetails();
+                updateDividends();
+                App.getDaoSsn().clear();
+                PrefsHelper.get().setLastHistUpdateTime(TimeUtils.getNow());
             }
         } catch (Exception e) {
             Log.e(TAG, e.toString());
@@ -120,11 +121,6 @@ public class UpdateDataTask extends AsyncTask {
             return true;
         }
         return false;
-    }
-
-    @Override
-    protected void onPostExecute(Object result) {
-        App.getBus().post(new UpdateFinishedEvent(historyUpdated, stockInfoUpdated));
     }
 
     long getLastTodaysQuoteStamp() {

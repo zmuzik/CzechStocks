@@ -30,7 +30,8 @@ import zmuzik.czechstocks.activities.AddPortfolioItemActivity;
 import zmuzik.czechstocks.activities.EditPortfolioItemActivity;
 import zmuzik.czechstocks.adapters.PortfolioAdapter;
 import zmuzik.czechstocks.dao.PortfolioItem;
-import zmuzik.czechstocks.events.UpdateFinishedEvent;
+import zmuzik.czechstocks.events.CurrentDataUpdatedEvent;
+import zmuzik.czechstocks.events.InternetNotFoundEvent;
 import zmuzik.czechstocks.helpers.PrefsHelper;
 import zmuzik.czechstocks.tasks.UpdateDataTask;
 import zmuzik.czechstocks.utils.Utils;
@@ -70,9 +71,6 @@ public class PortfolioListFragment extends ListFragment
         super.onResume();
         refreshData();
         App.getBus().register(this);
-        if (PrefsHelper.get().isTimeToUpdateCurrent()) {
-            new UpdateDataTask().execute();
-        }
     }
 
     @Override public void onRefresh() {
@@ -91,6 +89,8 @@ public class PortfolioListFragment extends ListFragment
 
     public void refreshData() {
         portfolioItems = App.getDaoSsn().getPortfolioItemDao().loadAll();
+        if (portfolioItems == null || portfolioItems.size() == 0) return;
+
         mAdapter = new PortfolioAdapter(App.get(), portfolioItems);
         setListAdapter(mAdapter);
         if (lastUpdatedValueTV != null && dataFromValueTV != null) {
@@ -161,8 +161,16 @@ public class PortfolioListFragment extends ListFragment
         startActivity(new Intent(getActivity(), AddPortfolioItemActivity.class));
     }
 
-    @Subscribe public void onUpdateFinished(UpdateFinishedEvent event) {
+    @Subscribe public void onCurrentDataUpdated(CurrentDataUpdatedEvent event) {
         refreshData();
+        finishSwipeToRefresh();
+    }
+
+    @Subscribe public void onInternetNotFound(InternetNotFoundEvent event) {
+        finishSwipeToRefresh();
+    }
+
+    void finishSwipeToRefresh() {
         if (swipeContainer != null) swipeContainer.setRefreshing(false);
     }
 }

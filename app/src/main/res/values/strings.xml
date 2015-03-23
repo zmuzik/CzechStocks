@@ -67,5 +67,6 @@
     <string name="five_years">5Y</string>
     <string name="all">All</string>
     <string name="action_add">Add</string>
+    <string name="internet_not_available">Internet connection is not available</string>
 
 </resources>
