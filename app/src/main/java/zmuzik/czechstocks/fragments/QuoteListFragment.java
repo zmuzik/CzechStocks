@@ -107,6 +107,7 @@ public class QuoteListFragment extends ListFragment
 
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
+                if (pos >= mAdapter.getCount()) return true;
                 onListItemLongClick(pos, mAdapter.getItem(pos).getName());
                 return true;
             }
