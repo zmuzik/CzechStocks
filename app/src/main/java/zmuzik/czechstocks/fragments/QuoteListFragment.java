@@ -127,12 +127,14 @@ public class QuoteListFragment extends ListFragment
 
     @Override
     public void onListItemClick(ListView l, View v, int pos, long id) {
+        if (pos >= mAdapter.getCount()) return;
         Intent intent = new Intent(getActivity(), StockDetailActivity.class);
         intent.putExtra("isin", mAdapter.getItem(pos).getIsin());
         startActivity(intent);
     }
 
     public void onListItemLongClick(int pos, String quoteName) {
+        if (pos >= mAdapter.getCount()) return;
         final int position = pos;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         Resources res = getResources();

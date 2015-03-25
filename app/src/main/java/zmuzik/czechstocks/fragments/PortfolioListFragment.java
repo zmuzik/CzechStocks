@@ -108,9 +108,8 @@ public class PortfolioListFragment extends ListFragment
 
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-                if (pos < mAdapter.getCount() - 1) {
-                    onListItemLongClick(pos, mAdapter.getItem(pos).getStock().getName());
-                }
+                if (pos >= mAdapter.getCount() - 1) return true;
+                onListItemLongClick(pos, mAdapter.getItem(pos).getStock().getName());
                 return true;
             }
         });
@@ -130,13 +129,14 @@ public class PortfolioListFragment extends ListFragment
 
     @Override
     public void onListItemClick(ListView l, View v, int pos, long id) {
-        if (pos == mAdapter.getCount() - 1) return;
+        if (pos >= mAdapter.getCount() - 1) return;
         Intent intent = new Intent(getActivity(), EditPortfolioItemActivity.class);
         intent.putExtra("isin", mAdapter.getItem(pos).getIsin());
         startActivity(intent);
     }
 
     public void onListItemLongClick(int pos, String quoteName) {
+        if (pos >= mAdapter.getCount() - 1) return;
         final int position = pos;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         Resources res = getResources();
