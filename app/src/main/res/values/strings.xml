@@ -51,10 +51,10 @@
     <string name="please_wait">Please wait</string>
     <string name="initializing_db">Initializing database</string>
     <string name="invested">Invested</string>
-    <string name="delete_from_quotes_list_title">Delete from quotes list</string>
-    <string name="do_you_want_to_delete_quote">Do you really want to delete %1$s from quotes list?</string>
-    <string name="delete_from_portfolio_title">Delete from portfolio</string>
-    <string name="do_you_want_to_delete_portfolio_item">Do you really want to delete %1$s from portfolio?</string>
+    <string name="delete_from_quotes_list_title">Remove from quotes list</string>
+    <string name="do_you_want_to_delete_quote">Do you really want to remove %1$s from quotes list?</string>
+    <string name="delete_from_portfolio_title">Remove from portfolio</string>
+    <string name="do_you_want_to_delete_portfolio_item">Do you really want to remove %1$s from portfolio?</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
