@@ -69,6 +69,15 @@ public class MyDaoGenerator {
         portfolioItem.addIntProperty("quantity").notNull();
         portfolioItem.addToOne(stock, portfolioIsinProperty);
 
+        // Portfolio item
+        Entity trade = schema.addEntity("Trade");
+        trade.addStringProperty("id").notNull().primaryKey().getProperty();
+        Property tradeIsinProperty = trade.addStringProperty("isin").getProperty();
+        trade.addDoubleProperty("price").notNull();
+        trade.addIntProperty("quantity").notNull();
+        trade.addBooleanProperty("isSell").notNull();
+        trade.addToOne(stock, portfolioIsinProperty);
+
         try {
             new DaoGenerator().generateAll(schema, args[0]);
         } catch (IOException e) {
