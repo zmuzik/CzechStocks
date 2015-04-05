@@ -4,7 +4,7 @@ buildscript {
         maven { url 'http://download.crashlytics.com/maven' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:1.1.+'
         classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
     }
 }
@@ -25,6 +25,8 @@ android {
         applicationId "zmuzik.czechstocks"
         minSdkVersion 14
         targetSdkVersion 19
+        versionName "2.4"
+        versionCode 10
     }
 
     sourceSets {
@@ -35,17 +37,17 @@ android {
         }
     }
 
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            output.outputFile = new File(
-                    output.outputFile.parent,
-                    output.outputFile.name.replace(".apk",
-                            "-v${variant.versionName}-"
-                                    + getDate()
-                                    + "-c${variant.versionCode}"
-                                    + ".apk"))
-        }
-    }
+//    applicationVariants.all { variant ->
+//        variant.outputs.each { output ->
+//            output.outputFile = new File(
+//                    output.outputFile.parent,
+//                    output.outputFile.name.replace(".apk",
+//                            "-v${variant.versionName}-"
+//                                    + getDate()
+//                                    + "-c${variant.versionCode}"
+//                                    + ".apk"))
+//        }
+//    }
 
     buildTypes {
         debug {

@@ -68,5 +68,8 @@
     <string name="all">All</string>
     <string name="action_add">Add</string>
     <string name="internet_not_available">Internet connection is not available</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>
