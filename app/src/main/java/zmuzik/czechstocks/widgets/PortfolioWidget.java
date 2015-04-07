@@ -18,9 +18,7 @@ public class PortfolioWidget extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        for (int i = 0; i < appWidgetIds.length; i++) {
-            PortfolioWidgetConfigureActivity.deleteTitlePref(context, appWidgetIds[i]);
-        }
+        
     }
 
     @Override
