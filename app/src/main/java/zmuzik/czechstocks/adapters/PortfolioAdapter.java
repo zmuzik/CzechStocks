@@ -1,11 +1,15 @@
 package zmuzik.czechstocks.adapters;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RemoteViews;
+import android.widget.RemoteViewsService;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
@@ -16,13 +20,21 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
-import zmuzik.czechstocks.utils.Utils;
 import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.PortfolioItem;
+import zmuzik.czechstocks.utils.Utils;
 
-public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
+public class PortfolioAdapter extends ArrayAdapter<PortfolioItem>
+        implements RemoteViewsService.RemoteViewsFactory {
 
     private final String TAG = this.getClass().getSimpleName();
+    private int mAppWidgetId;
+
+    public PortfolioAdapter(Context context, Intent intent) {
+        super(context, R.layout.list_item_portfolio, App.getDaoSsn().getPortfolioItemDao().loadAll());
+        mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                AppWidgetManager.INVALID_APPWIDGET_ID);
+    }
 
     public PortfolioAdapter(Context context, List<PortfolioItem> objects) {
         super(context, R.layout.list_item_portfolio, objects);
@@ -112,18 +124,82 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
         return res.getQuantityString(R.plurals.pieces_bought_at, amount, amount);
     }
 
-    private int getCountNoSummary() {
-        return super.getCount();
+    @Override public void onCreate() {
+
+    }
+
+    @Override public void onDataSetChanged() {
+
+    }
+
+    @Override public void onDestroy() {
+
     }
 
     @Override
     public int getCount() {
-        int noSummaryCount = getCountNoSummary();
-        if (noSummaryCount > 0) {
-            return noSummaryCount + 1;
+        int noSummaryCount = super.getCount();
+        return (noSummaryCount > 0) ? noSummaryCount + 1 : 0;
+    }
+
+    @Override public RemoteViews getViewAt(int position) {
+        RemoteViews rv = new RemoteViews(getContext().getPackageName(), R.layout.list_item_portfolio);
+        if (isTotalItem(position)) {
+            return getTotalWidgetItem(rv);
         } else {
-            return 0;
+            return getNormalWidgetItem(rv, getItem(position));
         }
+    }
+
+    public RemoteViews getNormalWidgetItem(RemoteViews rv, PortfolioItem item) {
+        rv.setTextViewText(R.id.stockNameTV, item.getStock().getName());
+        rv.setTextViewText(R.id.quantityTV, getAmountString(item.getQuantity()));
+        rv.setTextViewText(R.id.originalPriceTV, " " + Utils.getFormattedCurrencyAmount(item.getPrice()));
+        rv.setTextViewText(R.id.deltaTV, Utils.getFormattedPercentage(getDelta(item)));
+        rv.setTextViewText(R.id.profitTV, Utils.getFormattedCurrencyAmount(getProfit(item)));
+
+        if (getProfit(item) >= 0) {
+            rv.setTextColor(R.id.deltaTV, App.get().getResources().getColor(R.color.lime));
+            rv.setTextColor(R.id.profitTV, App.get().getResources().getColor(R.color.lime));
+        } else {
+            rv.setTextColor(R.id.deltaTV, App.get().getResources().getColor(R.color.red));
+            rv.setTextColor(R.id.profitTV, App.get().getResources().getColor(R.color.red));
+        }
+
+        return rv;
+    }
+
+    public RemoteViews getTotalWidgetItem(RemoteViews rv) {
+        double totalInvested = 0;
+        double totalProfit = 0;
+        for (int i = 0; i < super.getCount(); i++) {
+            PortfolioItem portfolioItem = getItem(i);
+            CurrentQuote currentQuote = portfolioItem.getStock().getCurrentQuote();
+            if (currentQuote == null) return null;
+            totalInvested += portfolioItem.getPrice() * portfolioItem.getQuantity();
+            totalProfit += (currentQuote.getPrice() - portfolioItem.getPrice()) * portfolioItem.getQuantity();
+        }
+        double perCentProfit = (totalProfit / totalInvested) * 100;
+        String investedStr = App.get().getResources().getString(R.string.invested);
+
+        rv.setTextViewText(R.id.stockNameTV, App.get().getResources().getString(R.string.total));
+        rv.setTextViewText(R.id.quantityTV, investedStr + " " + Utils.getFormattedCurrencyAmount(totalInvested));
+        rv.setTextViewText(R.id.originalPriceTV, "");
+        rv.setTextViewText(R.id.deltaTV, Utils.getFormattedPercentage(perCentProfit));
+        rv.setTextViewText(R.id.profitTV, Utils.getFormattedCurrencyAmount(totalProfit));
+
+        if (totalProfit >= 0) {
+            rv.setTextColor(R.id.deltaTV, App.get().getResources().getColor(R.color.lime));
+            rv.setTextColor(R.id.profitTV, App.get().getResources().getColor(R.color.lime));
+        } else {
+            rv.setTextColor(R.id.deltaTV, App.get().getResources().getColor(R.color.red));
+            rv.setTextColor(R.id.profitTV, App.get().getResources().getColor(R.color.red));
+        }
+        return rv;
+    }
+
+    @Override public RemoteViews getLoadingView() {
+        return null;
     }
 
     private boolean isTotalItem(int position) {
@@ -132,16 +208,11 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
     }
 
     static class ViewHolder {
-        @InjectView(R.id.stockNameTV)
-        TextView stockNameTV;
-        @InjectView(R.id.deltaTV)
-        TextView deltaTV;
-        @InjectView(R.id.quantityTV)
-        TextView quantityTV;
-        @InjectView(R.id.originalPriceTV)
-        TextView originalPriceTV;
-        @InjectView(R.id.profitTV)
-        TextView profitTV;
+        @InjectView(R.id.stockNameTV) TextView stockNameTV;
+        @InjectView(R.id.deltaTV) TextView deltaTV;
+        @InjectView(R.id.quantityTV) TextView quantityTV;
+        @InjectView(R.id.originalPriceTV) TextView originalPriceTV;
+        @InjectView(R.id.profitTV) TextView profitTV;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);

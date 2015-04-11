@@ -44,8 +44,8 @@ public class PortfolioWidgetProvider extends AppWidgetProvider {
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
         RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_portfolio);
-        rv.setRemoteAdapter(R.id.stackView, intent);
-        rv.setEmptyView(R.id.stackView, R.id.emptyView);
+        rv.setRemoteAdapter(R.id.listView, intent);
+        rv.setEmptyView(R.id.listView, R.id.emptyView);
 
         appWidgetManager.updateAppWidget(appWidgetId, rv);
     }
