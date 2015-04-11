@@ -3,17 +3,23 @@ package zmuzik.czechstocks.widgets;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import zmuzik.czechstocks.R;
 
-public class PortfolioWidget extends AppWidgetProvider {
+public class PortfolioWidgetProvider extends AppWidgetProvider {
+
+    public static final String TAG = "PortfolioWidgetProvider";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int i = 0; i < appWidgetIds.length; i++) {
             updateAppWidget(context, appWidgetManager, appWidgetIds[i]);
         }
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
     @Override
@@ -32,11 +38,16 @@ public class PortfolioWidget extends AppWidgetProvider {
     }
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.portfolio_widget);
+        Log.d(TAG, "updating widget id: " + appWidgetId);
+        Intent intent = new Intent(context, PortfolioWidgetService.class);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_portfolio);
+        rv.setRemoteAdapter(R.id.stackView, intent);
+        rv.setEmptyView(R.id.stackView, R.id.emptyView);
+
+        appWidgetManager.updateAppWidget(appWidgetId, rv);
     }
 }
 
