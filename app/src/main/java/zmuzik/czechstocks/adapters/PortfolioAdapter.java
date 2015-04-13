@@ -1,6 +1,5 @@
 package zmuzik.czechstocks.adapters;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -23,6 +22,7 @@ import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.dao.CurrentQuote;
 import zmuzik.czechstocks.dao.PortfolioItem;
 import zmuzik.czechstocks.utils.Utils;
+import zmuzik.czechstocks.widgets.PortfolioWidgetProvider;
 
 public class PortfolioAdapter extends ArrayAdapter<PortfolioItem>
         implements RemoteViewsService.RemoteViewsFactory {
@@ -32,8 +32,8 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem>
 
     public PortfolioAdapter(Context context, Intent intent) {
         super(context, R.layout.list_item_portfolio, App.getDaoSsn().getPortfolioItemDao().loadAll());
-        mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                AppWidgetManager.INVALID_APPWIDGET_ID);
+        mAppWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart())
+                - PortfolioWidgetProvider.randomNumber;
     }
 
     public PortfolioAdapter(Context context, List<PortfolioItem> objects) {

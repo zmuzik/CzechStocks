@@ -147,6 +147,7 @@ public class PortfolioListFragment extends ListFragment
                 PortfolioItem portfolioItem = mAdapter.getItem(position);
                 App.getDaoSsn().getPortfolioItemDao().delete(portfolioItem);
                 refreshData();
+                App.get().updatePortfolioWidget();
             }
         });
         builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

@@ -72,5 +72,6 @@ public class EditPortfolioItemActivity extends AddPortfolioItemActivity {
         mPortfolioItem.setPrice(price);
         mPortfolioItem.setQuantity(quantity);
         App.getDaoSsn().getPortfolioItemDao().update(mPortfolioItem);
+        App.get().updatePortfolioWidget();
     }
 }

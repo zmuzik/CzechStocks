@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/updateTimeInfo"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/transparent"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/screen_padding"
+        android:paddingRight="@dimen/screen_padding"
+        android:textAppearance="?android:textAppearanceSmall">
+
+        <TextView
+            android:id="@+id/dataFromLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/data_from"/>
+
+        <TextView
+            android:id="@+id/dataFromValueTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""/>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/listView"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/updateTimeInfo"
+        android:layout_alignBaseline="@id/updateTimeInfo"
         android:footerDividersEnabled="false"
         android:gravity="center"
         android:loopViews="true"/>
@@ -18,8 +45,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="empty"
+        android:text="@string/no_data_available"
         android:textColor="#ffffff"
         android:textSize="20sp"
         android:textStyle="bold"/>
-</FrameLayout>
+</RelativeLayout>

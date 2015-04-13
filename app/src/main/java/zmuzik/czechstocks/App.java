@@ -1,7 +1,10 @@
 package zmuzik.czechstocks;
 
 import android.app.Application;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,6 +18,7 @@ import retrofit.RestAdapter;
 import zmuzik.czechstocks.dao.DaoMaster;
 import zmuzik.czechstocks.dao.DaoSession;
 import zmuzik.czechstocks.events.MainThreadBus;
+import zmuzik.czechstocks.widgets.PortfolioWidgetProvider;
 
 public class App extends Application {
 
@@ -89,5 +93,14 @@ public class App extends Application {
         } catch (PackageManager.NameNotFoundException e) {
             return 0;
         }
+    }
+
+    public void updatePortfolioWidget() {
+        Intent intent = new Intent(this, PortfolioWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = AppWidgetManager.getInstance(this).
+                getAppWidgetIds(new ComponentName(this, PortfolioWidgetProvider.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(intent);
     }
 }

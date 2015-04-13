@@ -69,5 +69,6 @@
     <string name="action_add">Přidat</string>
     <string name="trades">Obchody</string>
     <string name="internet_not_available">Připojení k internetu není k dispozici</string>
+    <string name="no_data_available">Data nejsou k dispozici</string>
 
 </resources>
