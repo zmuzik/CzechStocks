@@ -32,8 +32,11 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem>
 
     public PortfolioAdapter(Context context, Intent intent) {
         super(context, R.layout.list_item_portfolio, App.getDaoSsn().getPortfolioItemDao().loadAll());
-        mAppWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart())
-                - PortfolioWidgetProvider.randomNumber;
+        String numberStr = intent.getData().getSchemeSpecificPart();
+        if (numberStr != null && !"".equals(numberStr)) {
+            mAppWidgetId = Integer.valueOf(intent.getData().getSchemeSpecificPart())
+                    - PortfolioWidgetProvider.randomNumber;
+        }
     }
 
     public PortfolioAdapter(Context context, List<PortfolioItem> objects) {

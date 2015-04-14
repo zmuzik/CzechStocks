@@ -12,9 +12,9 @@
         android:layout_alignParentBottom="true"
         android:background="@color/transparent"
         android:orientation="horizontal"
+        android:paddingBottom="@dimen/screen_padding"
         android:paddingLeft="@dimen/screen_padding"
         android:paddingRight="@dimen/screen_padding"
-        android:paddingBottom="@dimen/screen_padding"
         android:textAppearance="?android:textAppearanceSmall">
 
         <TextView
@@ -26,8 +26,8 @@
         <TextView
             android:id="@+id/dataFromValueTV"
             android:layout_width="wrap_content"
-            android:paddingLeft="2pt"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:paddingLeft="2pt"/>
     </LinearLayout>
 
     <ListView
