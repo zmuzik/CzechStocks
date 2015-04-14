@@ -26,8 +26,8 @@
     <string name="no_data_portfolio">Add items to portfolio by taping the + icon.</string>
     <string name="toas_check_net">Network error, check your internet connection</string>
     <string name="no_data_stocks_list">Attempting to download stock quotes from server. If this lasts too long, check your Intenet connection.</string>
-    <string name="last_updated">Updated:</string>
-    <string name="data_from">Data from:</string>
+    <string name="last_updated">Updated: </string>
+    <string name="data_from">Data from: </string>
     <string name="total">TOTAL</string>
     <string name="no_other_stocks">There are no other stocks available.</string>
 

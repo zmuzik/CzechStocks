@@ -25,8 +25,8 @@
     <string name="no_data_portfolio">Pro přidání akcií do portfolia použijte ikonu +</string>
     <string name="toas_check_net">Síťová chyba, zkontrolujte připojení k internetu.</string>
     <string name="no_data_stocks_list">Stahuji aktuální data ze serveru. Pokud to trvá příliš dlouho, zkontrolujte vaše internetové připojení.</string>
-    <string name="last_updated">Aktualizováno:</string>
-    <string name="data_from">Data z:</string>
+    <string name="last_updated">Aktualizováno: </string>
+    <string name="data_from">Data z: </string>
     <string name="total">CELKEM</string>
     <string name="no_other_stocks">Žádné další akcie nejsou k dispozici.</string>
 

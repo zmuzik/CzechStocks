@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/primary_material_dark">
 
     <LinearLayout
         android:id="@+id/updateTimeInfo"
@@ -17,15 +18,15 @@
 
         <TextView
             android:id="@+id/dataFromLabel"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/data_from"/>
 
         <TextView
             android:id="@+id/dataFromValueTV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""/>
+            android:layout_width="wrap_content"
+            android:paddingLeft="2pt"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <ListView
@@ -34,7 +35,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/updateTimeInfo"
-        android:layout_alignBaseline="@id/updateTimeInfo"
         android:footerDividersEnabled="false"
         android:gravity="center"
         android:loopViews="true"/>

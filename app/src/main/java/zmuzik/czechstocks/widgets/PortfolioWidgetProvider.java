@@ -14,6 +14,7 @@ import java.util.Random;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.dao.CurrentQuote;
+import zmuzik.czechstocks.utils.Utils;
 
 public class PortfolioWidgetProvider extends AppWidgetProvider {
 
@@ -32,7 +33,7 @@ public class PortfolioWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        
+
     }
 
     @Override
@@ -50,12 +51,11 @@ public class PortfolioWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, PortfolioWidgetService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.setData(Uri.fromParts("content",
-                        String.valueOf(appWidgetId + randomNumber), null));
+                String.valueOf(appWidgetId + randomNumber), null));
         RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_portfolio);
         rv.setRemoteAdapter(R.id.listView, intent);
         rv.setEmptyView(R.id.listView, R.id.emptyView);
-        //rv.setTextViewText(R.id.dataFromValueTV, Utils.getFormattedDateAndTime(getDataTimestamp()));
-        rv.setTextViewText(R.id.dataFromValueTV, "blah");
+        rv.setTextViewText(R.id.dataFromValueTV, Utils.getFormattedDateAndTime(getDataTimestamp()));
 
         appWidgetManager.updateAppWidget(appWidgetId, rv);
     }
