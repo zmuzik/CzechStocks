@@ -99,6 +99,6 @@ public class AddPortfolioItemActivity extends ActionBarActivity {
         portfolioItem.setPrice(price);
         portfolioItem.setQuantity(quantity);
         App.getDaoSsn().getPortfolioItemDao().insert(portfolioItem);
-        App.get().updatePortfolioWidget();
+        App.get().refreshPortfolioWidget();
     }
 }

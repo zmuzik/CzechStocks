@@ -14,21 +14,35 @@ import java.util.Random;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.dao.CurrentQuote;
+import zmuzik.czechstocks.tasks.UpdatePortfolioWidgetTask;
 import zmuzik.czechstocks.utils.Utils;
 
 public class PortfolioWidgetProvider extends AppWidgetProvider {
 
     public static final String TAG = "PortfolioWidgetProvider";
+    public static final String ACTION_PORTFOLIO_WIDGET_REFRESH = "zmuzik.czechstocks.ACTION_PORTFOLIO_WIDGET_REFRESH";
+    public static int[] mAppWidgetIds;
+
     private Random randomGenerator = new Random();
     public static int randomNumber;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        randomNumber = randomGenerator.nextInt(Integer.MAX_VALUE - 1);
-        for (int i = 0; i < appWidgetIds.length; i++) {
-            updateAppWidget(context, appWidgetManager, appWidgetIds[i]);
-        }
+        mAppWidgetIds = appWidgetIds;
+        new UpdatePortfolioWidgetTask(context).execute();
         super.onUpdate(context, appWidgetManager, appWidgetIds);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        randomNumber = randomGenerator.nextInt(Integer.MAX_VALUE - 1);
+        String action = intent.getAction();
+        if (ACTION_PORTFOLIO_WIDGET_REFRESH.equals(action)) {
+            for (int i = 0; i < mAppWidgetIds.length; i++) {
+                refreshAppWidget(context, AppWidgetManager.getInstance(context), mAppWidgetIds[i]);
+            }
+        }
+        super.onReceive(context, intent);
     }
 
     @Override
@@ -46,7 +60,7 @@ public class PortfolioWidgetProvider extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+    static void refreshAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         Log.d(TAG, "updating widget id: " + appWidgetId);
         Intent intent = new Intent(context, PortfolioWidgetService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
