@@ -31,6 +31,7 @@ public class EditPortfolioItemActivity extends AddPortfolioItemActivity {
         if (isin == null) finish();
         mStock = App.getDaoSsn().getStockDao().load(isin);
         mPortfolioItem = App.getDaoSsn().getPortfolioItemDao().load(isin);
+        if (mStock == null || mPortfolioItem == null) finish();
         stockNameTV.setText(mStock.getName());
         numberOfStocksET.setText("" + mPortfolioItem.getQuantity());
         averagePriceET.setText("" + mPortfolioItem.getPrice());
