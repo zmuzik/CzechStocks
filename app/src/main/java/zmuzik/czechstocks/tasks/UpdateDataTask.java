@@ -21,6 +21,7 @@ import zmuzik.czechstocks.dao.TodaysQuote;
 import zmuzik.czechstocks.events.CurrentDataUpdatedEvent;
 import zmuzik.czechstocks.events.InternetNotFoundEvent;
 import zmuzik.czechstocks.events.TodaysDataUpdatedEvent;
+import zmuzik.czechstocks.events.UpdateErrorEvent;
 import zmuzik.czechstocks.helpers.PrefsHelper;
 import zmuzik.czechstocks.utils.TimeUtils;
 
@@ -40,6 +41,8 @@ public class UpdateDataTask extends AsyncTask {
                 PrefsHelper.get().setLastUpdateTime(TimeUtils.getNow());
                 App.getDaoSsn().clear();
                 App.getBus().post(new CurrentDataUpdatedEvent());
+            } else {
+                App.getBus().post(new UpdateErrorEvent());
             }
 
             if (updateTodaysData()) {
@@ -57,6 +60,7 @@ public class UpdateDataTask extends AsyncTask {
         } catch (Exception e) {
             Log.e(TAG, e.toString());
             Crashlytics.logException(e);
+            App.getBus().post(new UpdateErrorEvent());
         }
         return null;
     }

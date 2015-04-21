@@ -33,6 +33,7 @@ import zmuzik.czechstocks.adapters.QuotationListAdapter;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.events.CurrentDataUpdatedEvent;
 import zmuzik.czechstocks.events.InternetNotFoundEvent;
+import zmuzik.czechstocks.events.UpdateErrorEvent;
 import zmuzik.czechstocks.helpers.PrefsHelper;
 import zmuzik.czechstocks.tasks.UpdateDataTask;
 import zmuzik.czechstocks.utils.Utils;
@@ -166,6 +167,10 @@ public class QuoteListFragment extends ListFragment
     }
 
     @Subscribe public void onInternetNotFound(InternetNotFoundEvent event) {
+        finishSwipeToRefresh();
+    }
+
+    @Subscribe public void onUpdateError(UpdateErrorEvent event) {
         finishSwipeToRefresh();
     }
 

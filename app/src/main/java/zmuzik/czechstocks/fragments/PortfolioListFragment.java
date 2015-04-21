@@ -32,6 +32,7 @@ import zmuzik.czechstocks.adapters.PortfolioAdapter;
 import zmuzik.czechstocks.dao.PortfolioItem;
 import zmuzik.czechstocks.events.CurrentDataUpdatedEvent;
 import zmuzik.czechstocks.events.InternetNotFoundEvent;
+import zmuzik.czechstocks.events.UpdateErrorEvent;
 import zmuzik.czechstocks.helpers.PrefsHelper;
 import zmuzik.czechstocks.tasks.UpdateDataTask;
 import zmuzik.czechstocks.utils.Utils;
@@ -168,6 +169,10 @@ public class PortfolioListFragment extends ListFragment
     }
 
     @Subscribe public void onInternetNotFound(InternetNotFoundEvent event) {
+        finishSwipeToRefresh();
+    }
+
+    @Subscribe public void onUpdateError(UpdateErrorEvent event) {
         finishSwipeToRefresh();
     }
 
