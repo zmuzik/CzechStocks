@@ -25,8 +25,6 @@ public class UpdatePortfolioWidgetTask extends UpdateDataTask {
 
     @Override
     protected Object doInBackground(Object... params) {
-        if (!App.get().isOnline()) return null;
-
         try {
             if (updateCurrentQuotes()) {
                 PrefsHelper.get().setLastUpdateTime(TimeUtils.getNow());

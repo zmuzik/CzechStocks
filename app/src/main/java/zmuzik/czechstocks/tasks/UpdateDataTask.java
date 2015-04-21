@@ -66,8 +66,10 @@ public class UpdateDataTask extends AsyncTask {
         if (currentQuotes != null && currentQuotes.size() > 0) {
             App.getDaoSsn().getCurrentQuoteDao().insertOrReplaceInTx(currentQuotes);
             return true;
+        } else {
+            Log.d(TAG, "updateCurrentQuotes: no data returned");
+            return false;
         }
-        return false;
     }
 
     boolean updateTodaysData() {

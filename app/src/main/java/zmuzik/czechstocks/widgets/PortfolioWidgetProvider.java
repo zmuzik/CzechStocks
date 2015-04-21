@@ -61,7 +61,7 @@ public class PortfolioWidgetProvider extends AppWidgetProvider {
     }
 
     static void refreshAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-        Log.d(TAG, "updating widget id: " + appWidgetId);
+        Log.d(TAG, "refreshing widget id: " + appWidgetId);
         Intent intent = new Intent(context, PortfolioWidgetService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.setData(Uri.fromParts("content",
