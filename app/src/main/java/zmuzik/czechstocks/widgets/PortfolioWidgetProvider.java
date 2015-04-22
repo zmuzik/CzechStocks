@@ -1,5 +1,6 @@
 package zmuzik.czechstocks.widgets;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -28,6 +29,7 @@ public class PortfolioWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Log.d(TAG, "onUpdate called");
         mAppWidgetIds = appWidgetIds;
         new UpdatePortfolioWidgetTask(context).execute();
         super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -35,11 +37,12 @@ public class PortfolioWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        randomNumber = randomGenerator.nextInt(Integer.MAX_VALUE - 1);
         String action = intent.getAction();
+        Log.d(TAG, "onReceive - action: " + action);
+        randomNumber = randomGenerator.nextInt(Integer.MAX_VALUE - 1);
         if (ACTION_PORTFOLIO_WIDGET_REFRESH.equals(action)) {
-            for (int i = 0; i < mAppWidgetIds.length; i++) {
-                refreshAppWidget(context, AppWidgetManager.getInstance(context), mAppWidgetIds[i]);
+            for (int id : mAppWidgetIds) {
+                refreshAppWidget(context, AppWidgetManager.getInstance(context), id);
             }
         }
         super.onReceive(context, intent);
@@ -64,14 +67,23 @@ public class PortfolioWidgetProvider extends AppWidgetProvider {
         Log.d(TAG, "refreshing widget id: " + appWidgetId);
         Intent intent = new Intent(context, PortfolioWidgetService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        intent.setData(Uri.fromParts("content",
-                String.valueOf(appWidgetId + randomNumber), null));
-        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_portfolio);
-        rv.setRemoteAdapter(R.id.listView, intent);
-        rv.setEmptyView(R.id.listView, R.id.emptyView);
-        rv.setTextViewText(R.id.dataFromValueTV, Utils.getFormattedDateAndTime(getDataTimestamp()));
+        Uri uri = Uri.fromParts("content", String.valueOf(appWidgetId + randomNumber), null);
+        intent.setData(uri);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_portfolio);
+        remoteViews.setRemoteAdapter(R.id.listView, intent);
+        remoteViews.setEmptyView(R.id.listView, R.id.emptyView);
+        remoteViews.setTextViewText(R.id.dataFromValueTV, Utils.getFormattedDateAndTime(getDataTimestamp()));
 
-        appWidgetManager.updateAppWidget(appWidgetId, rv);
+        Intent refreshIntent = new Intent(context, PortfolioWidgetProvider.class);
+        refreshIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//        refreshIntent.setData(uri);
+        refreshIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, mAppWidgetIds);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, refreshIntent, 0);
+        remoteViews.setOnClickPendingIntent(R.id.root, pendingIntent);
+        remoteViews.setPendingIntentTemplate(R.id.listView, pendingIntent);
+
+        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 
     static long getDataTimestamp() {

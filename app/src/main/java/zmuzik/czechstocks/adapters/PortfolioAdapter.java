@@ -168,7 +168,7 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem>
             rv.setTextColor(R.id.deltaTV, App.get().getResources().getColor(R.color.red));
             rv.setTextColor(R.id.profitTV, App.get().getResources().getColor(R.color.red));
         }
-
+        rv.setOnClickFillInIntent(R.id.root, new Intent());
         return rv;
     }
 
@@ -198,6 +198,7 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem>
             rv.setTextColor(R.id.deltaTV, App.get().getResources().getColor(R.color.red));
             rv.setTextColor(R.id.profitTV, App.get().getResources().getColor(R.color.red));
         }
+        rv.setOnClickFillInIntent(R.id.root, new Intent());
         return rv;
     }
 
