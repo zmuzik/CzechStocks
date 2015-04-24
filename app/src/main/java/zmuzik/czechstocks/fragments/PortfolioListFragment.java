@@ -90,7 +90,7 @@ public class PortfolioListFragment extends ListFragment
 
     public void refreshData() {
         portfolioItems = App.getDaoSsn().getPortfolioItemDao().loadAll();
-        if (portfolioItems == null || portfolioItems.size() == 0) return;
+        if (portfolioItems == null) return;
 
         mAdapter = new PortfolioAdapter(App.get(), portfolioItems);
         setListAdapter(mAdapter);
