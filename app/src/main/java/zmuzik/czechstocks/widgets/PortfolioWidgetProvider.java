@@ -39,6 +39,7 @@ public class PortfolioWidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         Log.d(TAG, "onReceive - action: " + action);
+        if (mAppWidgetIds == null) return;
         randomNumber = randomGenerator.nextInt(Integer.MAX_VALUE - 1);
         if (ACTION_PORTFOLIO_WIDGET_REFRESH.equals(action)) {
             for (int id : mAppWidgetIds) {
