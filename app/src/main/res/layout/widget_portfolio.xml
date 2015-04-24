@@ -33,24 +33,31 @@
             android:paddingLeft="2pt"/>
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/listView"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout
+        android:id="@+id/listContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/updateTimeInfo"
-        android:footerDividersEnabled="false"
-        android:gravity="center"
-        android:loopViews="true"/>
+        android:layout_above="@id/updateTimeInfo">
 
-    <TextView
-        android:id="@+id/emptyView"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/no_data_available"
-        android:textColor="#ffffff"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        <ListView
+            android:id="@+id/listView"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:footerDividersEnabled="false"
+            android:gravity="center"
+            android:loopViews="true"/>
+
+        <TextView
+            android:id="@+id/emptyView"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/no_data_available"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+    </FrameLayout>
+
 </RelativeLayout>
