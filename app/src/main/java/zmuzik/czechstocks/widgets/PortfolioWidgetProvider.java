@@ -3,6 +3,7 @@ package zmuzik.czechstocks.widgets;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -39,6 +40,8 @@ public class PortfolioWidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         Log.d(TAG, "onReceive - action: " + action);
+        ComponentName name = new ComponentName(context, PortfolioWidgetProvider.class);
+        mAppWidgetIds = AppWidgetManager.getInstance(context).getAppWidgetIds(name);
         if (mAppWidgetIds == null) return;
         randomNumber = randomGenerator.nextInt(Integer.MAX_VALUE - 1);
         if (ACTION_PORTFOLIO_WIDGET_REFRESH.equals(action)) {
