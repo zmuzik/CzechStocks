@@ -95,7 +95,7 @@ public class App extends Application {
         }
     }
 
-    public void refreshPortfolioWidget() {
+    public void refreshPortfolioWidgets() {
         Intent intent = new Intent(this, PortfolioWidgetProvider.class);
         intent.setAction(PortfolioWidgetProvider.ACTION_PORTFOLIO_WIDGET_REFRESH);
         int[] ids = AppWidgetManager.getInstance(this).

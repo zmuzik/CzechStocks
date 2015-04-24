@@ -32,7 +32,7 @@ public class PortfolioWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.d(TAG, "onUpdate called");
         mAppWidgetIds = appWidgetIds;
-        new UpdatePortfolioWidgetTask(context).execute();
+        new UpdatePortfolioWidgetTask().execute();
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
