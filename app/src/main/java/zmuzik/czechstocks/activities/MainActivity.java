@@ -58,8 +58,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     }
 
     @Override public void onPause() {
-        super.onPause();
         App.getBus().unregister(this);
+        super.onPause();
+    }
+
+    @Override protected void onStop() {
+        App.get().refreshPortfolioWidgets();
+        super.onStop();
     }
 
     @Override public void onTabSelected(Tab tab, FragmentTransaction fragmentTransaction) {
