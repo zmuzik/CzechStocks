@@ -53,6 +53,7 @@ public class EditPortfolioItemActivity extends AddPortfolioItemActivity {
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialogInterface, int i) {
                 App.getDaoSsn().getPortfolioItemDao().delete(mPortfolioItem);
+                App.get().refreshPortfolioWidgets();
                 finish();
             }
         });
