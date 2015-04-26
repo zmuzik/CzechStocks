@@ -68,6 +68,6 @@
     <string name="all">All</string>
     <string name="action_add">Add</string>
     <string name="internet_not_available">Internet connection is not available</string>
-    <string name="no_data_available">No data available</string>
+    <string name="loading_data">Loading data…</string>
 
 </resources>

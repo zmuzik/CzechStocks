@@ -29,7 +29,7 @@ import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.activities.AddStockActivity;
 import zmuzik.czechstocks.activities.StockDetailActivity;
-import zmuzik.czechstocks.adapters.QuotationListAdapter;
+import zmuzik.czechstocks.adapters.QuoteListAdapter;
 import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.events.CurrentDataUpdatedEvent;
 import zmuzik.czechstocks.events.InternetNotFoundEvent;
@@ -47,7 +47,7 @@ public class QuoteListFragment extends ListFragment
     @InjectView(R.id.dataFromValueTV) TextView dataFromValueTV;
     @InjectView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
-    QuotationListAdapter mAdapter;
+    QuoteListAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,7 +95,7 @@ public class QuoteListFragment extends ListFragment
         List<Stock> items = qb.list();
         if (items == null || items.size() == 0) return;
 
-        mAdapter = new QuotationListAdapter(App.get(), items);
+        mAdapter = new QuoteListAdapter(App.get(), items);
         setListAdapter(mAdapter);
         if (lastUpdatedValueTV != null && dataFromValueTV != null) {
             lastUpdatedValueTV.setText(Utils.getFormattedDateAndTime(PrefsHelper.get().getLastUpdateTime()));

@@ -19,6 +19,7 @@ import zmuzik.czechstocks.dao.DaoMaster;
 import zmuzik.czechstocks.dao.DaoSession;
 import zmuzik.czechstocks.events.MainThreadBus;
 import zmuzik.czechstocks.widgets.PortfolioWidgetProvider;
+import zmuzik.czechstocks.widgets.QuoteListWidgetProvider;
 
 public class App extends Application {
 
@@ -101,6 +102,22 @@ public class App extends Application {
         int[] ids = AppWidgetManager.getInstance(this).
                 getAppWidgetIds(new ComponentName(this, PortfolioWidgetProvider.class));
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        Log.d(TAG, "sending intent to refresh portfolio widgets");
         sendBroadcast(intent);
+    }
+
+    public void refreshQuoteListWidgets() {
+        Intent intent = new Intent(this, QuoteListWidgetProvider.class);
+        intent.setAction(PortfolioWidgetProvider.ACTION_WIDGETS_REFRESH);
+        int[] ids = AppWidgetManager.getInstance(this).
+                getAppWidgetIds(new ComponentName(this, QuoteListWidgetProvider.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        Log.d(TAG, "sending intent to refresh quote list widgets");
+        sendBroadcast(intent);
+    }
+
+    public void refreshAllWidgets() {
+        refreshPortfolioWidgets();
+        refreshQuoteListWidgets();
     }
 }

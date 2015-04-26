@@ -14,3 +14,5 @@ public class PortfolioWidgetService extends RemoteViewsService {
         return new PortfolioAdapter(this.getApplicationContext(), intent);
     }
 }
+
+

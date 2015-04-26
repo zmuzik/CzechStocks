@@ -16,12 +16,13 @@ import java.util.Random;
 import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.R;
 import zmuzik.czechstocks.dao.CurrentQuote;
-import zmuzik.czechstocks.tasks.UpdatePortfolioWidgetTask;
+import zmuzik.czechstocks.tasks.UpdateWidgetsTask;
 import zmuzik.czechstocks.utils.Utils;
 
 public class PortfolioWidgetProvider extends AppWidgetProvider {
 
     public static final String TAG = "PortfolioWidgetProvider";
+    public static final String ACTION_WIDGETS_REFRESH = "zmuzik.czechstocks.ACTION_WIDGETS_REFRESH";
     public static final String ACTION_PORTFOLIO_WIDGET_REFRESH = "zmuzik.czechstocks.ACTION_PORTFOLIO_WIDGET_REFRESH";
     public static int[] mAppWidgetIds;
 
@@ -32,7 +33,7 @@ public class PortfolioWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.d(TAG, "onUpdate called");
         mAppWidgetIds = appWidgetIds;
-        new UpdatePortfolioWidgetTask().execute();
+        new UpdateWidgetsTask().execute();
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
@@ -44,7 +45,7 @@ public class PortfolioWidgetProvider extends AppWidgetProvider {
         mAppWidgetIds = AppWidgetManager.getInstance(context).getAppWidgetIds(name);
         if (mAppWidgetIds == null) return;
         randomNumber = randomGenerator.nextInt(Integer.MAX_VALUE - 1);
-        if (ACTION_PORTFOLIO_WIDGET_REFRESH.equals(action)) {
+        if (ACTION_WIDGETS_REFRESH.equals(action) || ACTION_PORTFOLIO_WIDGET_REFRESH.equals(action)) {
             for (int id : mAppWidgetIds) {
                 refreshAppWidget(context, AppWidgetManager.getInstance(context), id);
             }
