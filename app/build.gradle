@@ -25,8 +25,8 @@ android {
         applicationId "zmuzik.czechstocks"
         minSdkVersion 14
         targetSdkVersion 19
-        versionName "2.5"
-        versionCode 11
+        versionName "2.6"
+        versionCode 12
     }
 
     sourceSets {
