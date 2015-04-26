@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:minWidth="250dp"
-                    android:minHeight="110dp"
-                    android:updatePeriodMillis="1800000"
+                    android:initialKeyguardLayout="@layout/widget_quote_list"
                     android:initialLayout="@layout/widget_quote_list"
+                    android:minHeight="110dp"
+                    android:minWidth="250dp"
+                    android:previewImage="@drawable/quote_list_widget_preview"
                     android:resizeMode="horizontal|vertical"
-                    android:widgetCategory="home_screen|keyguard"
-                    android:initialKeyguardLayout="@layout/widget_quote_list">
+                    android:updatePeriodMillis="1800000"
+                    android:widgetCategory="home_screen|keyguard">
 </appwidget-provider>
-
-    <!--                    android:previewImage="@drawable/quotes_list_widget_preview"-->
