@@ -57,14 +57,9 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
             holder.originalPriceTV.setText(" " + Utils.getFormattedCurrencyAmount(portfolioItem.getPrice()));
             holder.deltaTV.setText(Utils.getFormattedPercentage(getDelta(portfolioItem)));
             holder.profitTV.setText(Utils.getFormattedCurrencyAmount(getProfit(portfolioItem)));
-            // set color
-            if (getProfit(portfolioItem) >= 0) {
-                holder.deltaTV.setTextColor(App.get().getResources().getColor(R.color.lime));
-                holder.profitTV.setTextColor(App.get().getResources().getColor(R.color.lime));
-            } else {
-                holder.deltaTV.setTextColor(App.get().getResources().getColor(R.color.red));
-                holder.profitTV.setTextColor(App.get().getResources().getColor(R.color.red));
-            }
+
+            holder.deltaTV.setTextColor(getColor(getProfit(portfolioItem)));
+            holder.profitTV.setTextColor(getColor(getProfit(portfolioItem)));
         } catch (Exception e) {
             Crashlytics.logException(e);
         }
@@ -87,14 +82,9 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
         String investedStr = App.get().getResources().getString(R.string.invested);
         holder.quantityTV.setText(investedStr + " " + Utils.getFormattedCurrencyAmount(totalInvested));
         holder.originalPriceTV.setText("");
-        // set color
-        if (totalProfit >= 0) {
-            holder.deltaTV.setTextColor(App.get().getResources().getColor(R.color.lime));
-            holder.profitTV.setTextColor(App.get().getResources().getColor(R.color.lime));
-        } else {
-            holder.deltaTV.setTextColor(App.get().getResources().getColor(R.color.red));
-            holder.profitTV.setTextColor(App.get().getResources().getColor(R.color.red));
-        }
+
+        holder.deltaTV.setTextColor(getColor(totalProfit));
+        holder.profitTV.setTextColor(getColor(totalProfit));
     }
 
     private double getDelta(PortfolioItem portfolioItem) {
@@ -121,6 +111,10 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
     private boolean isTotalItem(int position) {
         int count = getCount();
         return (count > 1) && (position == count - 1);
+    }
+
+    private int getColor(double delta) {
+        return getContext().getResources().getColor((delta >= 0) ? R.color.lime : R.color.red);
     }
 
     static class ViewHolder {

@@ -80,13 +80,9 @@ class PortfolioRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
         rv.setTextViewText(R.id.deltaTV, Utils.getFormattedPercentage(perCentProfit));
         rv.setTextViewText(R.id.profitTV, Utils.getFormattedCurrencyAmount(totalProfit));
 
-        if (totalProfit >= 0) {
-            rv.setTextColor(R.id.deltaTV, App.get().getResources().getColor(R.color.lime));
-            rv.setTextColor(R.id.profitTV, App.get().getResources().getColor(R.color.lime));
-        } else {
-            rv.setTextColor(R.id.deltaTV, App.get().getResources().getColor(R.color.red));
-            rv.setTextColor(R.id.profitTV, App.get().getResources().getColor(R.color.red));
-        }
+        rv.setTextColor(R.id.deltaTV, getColor(totalProfit));
+        rv.setTextColor(R.id.profitTV, getColor(totalProfit));
+
         rv.setOnClickFillInIntent(R.id.root, new Intent());
         return rv;
     }
@@ -99,13 +95,8 @@ class PortfolioRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
         rv.setTextViewText(R.id.deltaTV, Utils.getFormattedPercentage(getDelta(item)));
         rv.setTextViewText(R.id.profitTV, Utils.getFormattedCurrencyAmount(getProfit(item)));
 
-        if (getProfit(item) >= 0) {
-            rv.setTextColor(R.id.deltaTV, App.get().getResources().getColor(R.color.lime));
-            rv.setTextColor(R.id.profitTV, App.get().getResources().getColor(R.color.lime));
-        } else {
-            rv.setTextColor(R.id.deltaTV, App.get().getResources().getColor(R.color.red));
-            rv.setTextColor(R.id.profitTV, App.get().getResources().getColor(R.color.red));
-        }
+        rv.setTextColor(R.id.deltaTV, getColor(getProfit(item)));
+        rv.setTextColor(R.id.profitTV, getColor(getProfit(item)));
         rv.setOnClickFillInIntent(R.id.root, new Intent());
         return rv;
     }
