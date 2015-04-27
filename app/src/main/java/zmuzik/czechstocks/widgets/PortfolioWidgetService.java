@@ -79,6 +79,9 @@ class PortfolioRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
         rv.setTextViewText(R.id.originalPriceTV, "");
         rv.setTextViewText(R.id.deltaTV, Utils.getFormattedPercentage(perCentProfit));
         rv.setTextViewText(R.id.profitTV, Utils.getFormattedCurrencyAmount(totalProfit));
+        rv.setTextViewText(R.id.lastPriceLbl, "");
+        rv.setTextViewText(R.id.lastPriceTV, "");
+        rv.setTextViewText(R.id.lastPriceDeltaTV, "");
 
         rv.setTextColor(R.id.deltaTV, getColor(totalProfit));
         rv.setTextColor(R.id.profitTV, getColor(totalProfit));
@@ -89,11 +92,23 @@ class PortfolioRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
 
 
     public RemoteViews getNormalWidgetItem(RemoteViews rv, PortfolioItem item) {
+        CurrentQuote quote = item.getStock().getCurrentQuote();
         rv.setTextViewText(R.id.stockNameTV, item.getStock().getName());
         rv.setTextViewText(R.id.quantityTV, getAmountString(item.getQuantity()));
         rv.setTextViewText(R.id.originalPriceTV, " " + Utils.getFormattedCurrencyAmount(item.getPrice()));
         rv.setTextViewText(R.id.deltaTV, Utils.getFormattedPercentage(getDelta(item)));
         rv.setTextViewText(R.id.profitTV, Utils.getFormattedCurrencyAmount(getProfit(item)));
+
+        if (quote != null) {
+            rv.setTextViewText(R.id.lastPriceLbl, mContext.getResources().getString(R.string.last_price));
+            rv.setTextViewText(R.id.lastPriceTV, Utils.getFormattedCurrencyAmount(quote.getPrice()));
+            rv.setTextViewText(R.id.lastPriceDeltaTV, "(" + Utils.getFormattedPercentage(quote.getDelta()) + ")");
+            rv.setTextColor(R.id.lastPriceDeltaTV, getColor(quote.getDelta()));
+        } else {
+            rv.setTextViewText(R.id.lastPriceLbl, "");
+            rv.setTextViewText(R.id.lastPriceTV, "");
+            rv.setTextViewText(R.id.lastPriceDeltaTV, "");
+        }
 
         rv.setTextColor(R.id.deltaTV, getColor(getProfit(item)));
         rv.setTextColor(R.id.profitTV, getColor(getProfit(item)));
@@ -103,11 +118,13 @@ class PortfolioRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
 
     private double getDelta(PortfolioItem portfolioItem) {
         CurrentQuote quote = portfolioItem.getStock().getCurrentQuote();
+        if (quote == null) return 0;
         return ((quote.getPrice() / portfolioItem.getPrice()) - 1) * 100;
     }
 
     private double getProfit(PortfolioItem portfolioItem) {
         CurrentQuote quote = portfolioItem.getStock().getCurrentQuote();
+        if (quote == null) return 0;
         return (quote.getPrice() - portfolioItem.getPrice()) * portfolioItem.getQuantity();
     }
 

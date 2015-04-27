@@ -52,11 +52,23 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
     private void renderNormalItem(ViewHolder holder, int position) {
         try {
             PortfolioItem portfolioItem = getItem(position);
+            CurrentQuote quote = portfolioItem.getStock().getCurrentQuote();
             holder.stockNameTV.setText(portfolioItem.getStock().getName());
             holder.quantityTV.setText(getAmountString(portfolioItem.getQuantity()));
             holder.originalPriceTV.setText(" " + Utils.getFormattedCurrencyAmount(portfolioItem.getPrice()));
             holder.deltaTV.setText(Utils.getFormattedPercentage(getDelta(portfolioItem)));
             holder.profitTV.setText(Utils.getFormattedCurrencyAmount(getProfit(portfolioItem)));
+
+            if (quote != null) {
+                holder.lastPriceLbl.setText(getContext().getResources().getString(R.string.last_price));
+                holder.lastPriceTV.setText(Utils.getFormattedCurrencyAmount(quote.getPrice()));
+                holder.lastPriceDeltaTV.setText("(" + Utils.getFormattedPercentage(quote.getDelta()) + ")");
+                holder.lastPriceDeltaTV.setTextColor(getColor(quote.getDelta()));
+            } else {
+                holder.lastPriceLbl.setText("");
+                holder.lastPriceTV.setText("");
+                holder.lastPriceDeltaTV.setText("");
+            }
 
             holder.deltaTV.setTextColor(getColor(getProfit(portfolioItem)));
             holder.profitTV.setTextColor(getColor(getProfit(portfolioItem)));
@@ -82,18 +94,24 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
         String investedStr = App.get().getResources().getString(R.string.invested);
         holder.quantityTV.setText(investedStr + " " + Utils.getFormattedCurrencyAmount(totalInvested));
         holder.originalPriceTV.setText("");
+        holder.lastPriceLbl.setText("");
+        holder.lastPriceTV.setText("");
+        holder.lastPriceDeltaTV.setText("");
 
         holder.deltaTV.setTextColor(getColor(totalProfit));
         holder.profitTV.setTextColor(getColor(totalProfit));
+
     }
 
     private double getDelta(PortfolioItem portfolioItem) {
         CurrentQuote quote = portfolioItem.getStock().getCurrentQuote();
+        if (quote == null) return 0;
         return ((quote.getPrice() / portfolioItem.getPrice()) - 1) * 100;
     }
 
     private double getProfit(PortfolioItem portfolioItem) {
         CurrentQuote quote = portfolioItem.getStock().getCurrentQuote();
+        if (quote == null) return 0;
         return (quote.getPrice() - portfolioItem.getPrice()) * portfolioItem.getQuantity();
     }
 
@@ -123,6 +141,9 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
         @InjectView(R.id.quantityTV) TextView quantityTV;
         @InjectView(R.id.originalPriceTV) TextView originalPriceTV;
         @InjectView(R.id.profitTV) TextView profitTV;
+        @InjectView(R.id.lastPriceLbl) TextView lastPriceLbl;
+        @InjectView(R.id.lastPriceTV) TextView lastPriceTV;
+        @InjectView(R.id.lastPriceDeltaTV) TextView lastPriceDeltaTV;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);

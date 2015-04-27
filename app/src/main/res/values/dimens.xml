@@ -9,6 +9,8 @@
     <dimen name="fab_margin">12dp</dimen>
     <dimen name="main_activity_footer_height">48dp</dimen>
     <dimen name="main_activity_footer_line_height">24dp</dimen>
+    <dimen name="portfolio_item_left_padding">3dp</dimen>
+
 
     <!--
 Refer to App Widget Documentation for margin information

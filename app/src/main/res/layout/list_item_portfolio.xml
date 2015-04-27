@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/root"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:paddingBottom="2.0dip"
-              android:paddingLeft="@dimen/screen_padding"
-              android:paddingRight="@dimen/screen_padding"
-              android:paddingTop="2.0dip">
+<LinearLayout
+    android:id="@+id/root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="2.0dip"
+    android:paddingLeft="@dimen/screen_padding"
+    android:paddingRight="@dimen/screen_padding"
+    android:paddingTop="2.0dip">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
+            android:paddingLeft="@dimen/portfolio_item_left_padding"
             android:textAppearance="?android:textAppearanceSmall"/>
 
         <TextView
@@ -56,6 +58,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
+            android:textAppearance="?android:textAppearanceSmall"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lastPriceLbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:singleLine="true"
+            android:textAppearance="?android:textAppearanceSmall"/>
+
+        <TextView
+            android:id="@+id/lastPriceTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingLeft="@dimen/portfolio_item_left_padding"
+            android:textAppearance="?android:textAppearanceSmall"/>
+
+        <TextView
+            android:id="@+id/lastPriceDeltaTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingLeft="@dimen/portfolio_item_left_padding"
             android:textAppearance="?android:textAppearanceSmall"/>
     </LinearLayout>
 
