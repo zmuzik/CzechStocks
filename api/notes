@@ -1,6 +1,0 @@
-sudo apt-get install python3-pip
-sudo pip3 install Flask
-# schedule scripts
-
-#server restart
-sudo service uwsgi restart
