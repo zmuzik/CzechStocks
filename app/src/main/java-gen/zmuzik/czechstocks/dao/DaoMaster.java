@@ -8,6 +8,7 @@ import android.util.Log;
 import de.greenrobot.dao.AbstractDaoMaster;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 
+import zmuzik.czechstocks.App;
 import zmuzik.czechstocks.dao.CurrentQuoteDao;
 import zmuzik.czechstocks.dao.DividendDao;
 import zmuzik.czechstocks.dao.StockDetailDao;
@@ -21,7 +22,7 @@ import zmuzik.czechstocks.dao.PortfolioItemDao;
  * Master of DAO (schema version 10): knows all DAOs.
 */
 public class DaoMaster extends AbstractDaoMaster {
-    public static final int SCHEMA_VERSION = 10;
+    public static final int SCHEMA_VERSION = 11;
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
@@ -67,8 +68,18 @@ public class DaoMaster extends AbstractDaoMaster {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             Log.i("greenDAO", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
-            dropAllTables(db, true);
-            onCreate(db);
+            if (newVersion == 11) {
+                Stock cetin = new Stock("CZ0009000089", "CETIN", true);
+                Stock kofola = new Stock("CZ0009000121", "KOFOLA ČS", true);
+                StockDao stockDao = App.getDaoSsn().getStockDao();
+                if (stockDao != null) {
+                    stockDao.insert(cetin);
+                    stockDao.insert(kofola);
+                }
+            } else {
+                dropAllTables(db, true);
+                onCreate(db);
+            }
         }
     }
 
