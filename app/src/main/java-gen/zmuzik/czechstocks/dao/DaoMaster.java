@@ -69,13 +69,8 @@ public class DaoMaster extends AbstractDaoMaster {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             Log.i("greenDAO", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
             if (newVersion == 11) {
-                Stock cetin = new Stock("CZ0009000089", "CETIN", true);
-                Stock kofola = new Stock("CZ0009000121", "KOFOLA ČS", true);
-                StockDao stockDao = App.getDaoSsn().getStockDao();
-                if (stockDao != null) {
-                    stockDao.insert(cetin);
-                    stockDao.insert(kofola);
-                }
+                db.execSQL("insert or update into stock values('CZ0009000089','CETIN','Y');");
+                db.execSQL("insert or update into stock values('CZ0009000121','KOFOLA ČS','Y');");
             } else {
                 dropAllTables(db, true);
                 onCreate(db);
