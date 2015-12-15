@@ -59,7 +59,7 @@ public class UpdateDataTask extends AsyncTask {
             }
         } catch (Exception e) {
             Log.e(TAG, e.toString());
-            Crashlytics.logException(e);
+            //Crashlytics.logException(e);
             App.getBus().post(new UpdateErrorEvent());
         }
         return null;
