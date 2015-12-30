@@ -37,18 +37,6 @@ android {
         }
     }
 
-//    applicationVariants.all { variant ->
-//        variant.outputs.each { output ->
-//            output.outputFile = new File(
-//                    output.outputFile.parent,
-//                    output.outputFile.name.replace(".apk",
-//                            "-v${variant.versionName}-"
-//                                    + getDate()
-//                                    + "-c${variant.versionCode}"
-//                                    + ".apk"))
-//        }
-//    }
-
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
@@ -58,12 +46,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
-}
-
-def getDate() {
-    def date = new Date()
-    def formattedDate = date.format('yyyy-MM-dd-HH-mm')
-    return formattedDate
 }
 
 dependencies {
