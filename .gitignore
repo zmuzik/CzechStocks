@@ -42,9 +42,6 @@ local.properties
 # Gradle cache
 .gradle
 
-#Crashlytics conf file
-app/src/main/res/values/com_crashlytics_export_strings.xml
-
 todo
 zmuzik.keystore
 
