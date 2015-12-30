@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    package="zmuzik.czechstocks"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activities.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.AddStockActivity"
+            android:label="@string/title_activity_add_to_stock_list">
+        </activity>
+        <activity
+            android:name=".activities.AddPortfolioItemActivity"
+            android:label="@string/title_activity_add_portfolio_item">
+        </activity>
+        <activity
+            android:name=".activities.EditPortfolioItemActivity"
+            android:label="@string/title_activity_edit_portfolio_item">
+        </activity>
+        <activity
+            android:name=".activities.StockDetailActivity"
+            android:label="@string/title_activity_stock_detail">
+        </activity>
+        <activity
+            android:name=".activities.StockGraphActivity"
+            android:label="@string/title_activity_stock_detail"
+            android:screenOrientation="landscape">
+        </activity>
+
+        <receiver
+            android:name=".widgets.PortfolioWidgetProvider"
+            android:label="@string/portfolio">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/portfolio_widget_info"/>
+        </receiver>
+
+        <service
+            android:name="zmuzik.czechstocks.widgets.PortfolioWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
+        <receiver
+            android:name=".widgets.QuoteListWidgetProvider"
+            android:label="@string/quotes">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quote_list_widget_info"/>
+        </receiver>
+
+        <service
+            android:name="zmuzik.czechstocks.widgets.QuoteListWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+    </application>
+
+</manifest>
