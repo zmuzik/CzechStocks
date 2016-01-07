@@ -73,7 +73,7 @@ public class PortfolioAdapter extends ArrayAdapter<PortfolioItem> {
             holder.deltaTV.setTextColor(getColor(getProfit(portfolioItem)));
             holder.profitTV.setTextColor(getColor(getProfit(portfolioItem)));
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            // intentionally left blank
         }
     }
 

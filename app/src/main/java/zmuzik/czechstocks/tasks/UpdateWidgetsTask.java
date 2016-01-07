@@ -23,7 +23,6 @@ public class UpdateWidgetsTask extends UpdateDataTask {
             }
         } catch (Exception e) {
             Log.e(TAG, e.toString());
-            Crashlytics.logException(e);
         }
         return null;
     }

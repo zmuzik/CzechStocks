@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 
+import io.fabric.sdk.android.Fabric;
 import retrofit.RestAdapter;
 import zmuzik.czechstocks.dao.DaoMaster;
 import zmuzik.czechstocks.dao.DaoSession;
@@ -52,18 +53,9 @@ public class App extends Application {
         Log.i(TAG, "====================Initializing app====================");
         mApp = this;
         super.onCreate();
-        initCrashlytics();
+        Fabric.with(this, new Crashlytics());
         initServerApi();
         initDb();
-    }
-
-    private void initCrashlytics() {
-        if (isDebuggable()) {
-            Log.d(TAG, "Debug build - Crashlytics disabled");
-        } else {
-            Log.d(TAG, "Release build - starting Crashlytics");
-            Crashlytics.start(this);
-        }
     }
 
     private void initServerApi() {

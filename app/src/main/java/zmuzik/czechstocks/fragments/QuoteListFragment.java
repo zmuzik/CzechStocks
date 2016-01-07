@@ -118,10 +118,16 @@ public class QuoteListFragment extends ListFragment
         long result = 0L;
         try {
             if (items != null && items.size() > 0) {
-                result = items.get(0).getCurrentQuote().getStamp();
+                for (Stock stock : items) {
+                    if (stock != null
+                            && stock.getCurrentQuote() != null
+                            && stock.getCurrentQuote().getStamp() > result) {
+                        result = stock.getCurrentQuote().getStamp();
+                    }
+                }
             }
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            // Intentionally left blank
         }
         return result;
     }

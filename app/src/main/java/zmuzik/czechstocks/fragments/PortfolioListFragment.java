@@ -30,6 +30,7 @@ import zmuzik.czechstocks.activities.AddPortfolioItemActivity;
 import zmuzik.czechstocks.activities.EditPortfolioItemActivity;
 import zmuzik.czechstocks.adapters.PortfolioAdapter;
 import zmuzik.czechstocks.dao.PortfolioItem;
+import zmuzik.czechstocks.dao.Stock;
 import zmuzik.czechstocks.events.CurrentDataUpdatedEvent;
 import zmuzik.czechstocks.events.InternetNotFoundEvent;
 import zmuzik.czechstocks.events.UpdateErrorEvent;
@@ -120,10 +121,17 @@ public class PortfolioListFragment extends ListFragment
         long result = 0L;
         try {
             if (portfolioItems != null && portfolioItems.size() > 0) {
-                result = portfolioItems.get(0).getStock().getCurrentQuote().getStamp();
+                for (PortfolioItem item : portfolioItems) {
+                    if (item != null
+                            && item.getStock() != null
+                            && item.getStock().getCurrentQuote() != null
+                            && item.getStock().getCurrentQuote().getStamp() > result) {
+                        result = item.getStock().getCurrentQuote().getStamp();
+                    }
+                }
             }
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            // intentionally left blank
         }
         return result;
     }
